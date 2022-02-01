@@ -20,9 +20,7 @@ void function FFA_Init()
 
 	PrecacheModel($"models/robots/mobile_hardpoint/mobile_hardpoint.mdl")
 
-	// doesn't work hmmmmmmmmmmmmmmmmmm	
-	// AddPrivateMatchModeSettingEnum( "BatteryYoink", "Number of targets", ["1.0"], "1.0" )
-	// AddPrivateMatchModeSettingEnum("#MODE_SETTING_CATEGORY_RIFFPACK", "ChaosGuns", ["#SETTING_DISABLED", "#SETTING_ENABLED"], "0")
+	WaitFrame()
 
 	thread NPC_Init()
 
@@ -167,6 +165,14 @@ entity function SpawnNPC(string name,string aiName, int amount, int team, vector
 		spawnNpc.EnableBehavior( "Follow" )
 		spawnNpc.SetTitle( "minion")
 	}
+	else{
+		// InitMinimapSettings( spawnNpc )
+		// spawnNpc.Minimap_SetCustomState( spawnNpc.GetObjectiveIndex() )
+		// spawnNpc.Minimap_AlwaysShow( TEAM_MILITIA, null )
+		// spawnNpc.Minimap_AlwaysShow( TEAM_IMC, null )
+		// spawnNpc.Minimap_SetAlignUpright( true )
+	}
+
     }
 	return spawnNpc
 }
@@ -189,6 +195,11 @@ void function SpawnShop(){
 	// highlight = Highlight_SetEnemyHighlight( Prop, "sp_objective_entity" ) this needs untyped :(
 	// HighlightContext_SetRadius( highlight, 10000 )
 	Highlight_SetEnemyHighlight( Prop, "hunted_enemy" )
+
+	// Prop.Minimap_SetCustomState( Prop.GetObjectiveIndex() ) // I guess this doesn't work
+	// Prop.Minimap_AlwaysShow( TEAM_MILITIA, null )
+	// Prop.Minimap_AlwaysShow( TEAM_IMC, null )
+	// Prop.Minimap_SetAlignUpright( true )
 
 	file.trader = Prop
 
@@ -233,7 +244,7 @@ void function Player_jump( entity player )
 			player.AddToPlayerGameStat( PGS_ASSAULT_SCORE, GetPlayerBatteryCount( player ) )
 			print(GetPlayerBatteryCount( player ))
 			// rm battery
-			Rodeo_RemoveAllBatteriesOffPlayer( player )			
+			Rodeo_RemoveAllBatteriesOffPlayer( player )	
 			// sound
 			EmitSoundOnEntityOnlyToPlayer( player, player, "UI_TitanBattery_Pilot_Give_TitanBattery" )
 		}

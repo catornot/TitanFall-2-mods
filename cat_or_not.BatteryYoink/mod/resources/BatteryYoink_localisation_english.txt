@@ -1,0 +1,9 @@
+"lang"
+{
+	"Language" "english"
+	"Tokens"
+	{
+		"MODE_SETTING_CATEGORY_BATTERYYOINK" "BatteryYoink"
+		"number_of_npcs" "Number of NPCs"
+	}
+}
