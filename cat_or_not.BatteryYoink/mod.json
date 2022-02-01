@@ -1,0 +1,6 @@
+{
+	"Name" : "cat_or_not.BatteryYoink",
+	"Description" : "BatteryYoink replaces FFA",
+	"Version": "1.1.0",
+	"LoadPriority": 2
+}
