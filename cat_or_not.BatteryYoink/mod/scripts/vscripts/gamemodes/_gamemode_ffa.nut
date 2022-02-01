@@ -20,8 +20,6 @@ void function FFA_Init()
 
 	PrecacheModel($"models/robots/mobile_hardpoint/mobile_hardpoint.mdl")
 
-	WaitFrame()
-
 	thread NPC_Init()
 
 	PilotBattery_SetMaxCount( 3 )
@@ -44,8 +42,10 @@ void function NPC_Init(){
 			file.current.append( spawner.GetOrigin() )
 		}
 
-		thread spawn_obj()
-		thread spawn_obj()
+		WaitFrame()
+		for ( int r = 0; r != getNpcSpawnAmount(); r += 1 ){
+			thread spawn_obj()
+		}
 	}
 
 	wait(1)
@@ -208,7 +208,7 @@ void function SpawnShop(){
 }
 
 void function MoveShop(){
-	wait(60)
+	wait( getShopMovingTime() )
 	file.trader.Destroy()
 	file.trader = null
 	thread SpawnShop()
