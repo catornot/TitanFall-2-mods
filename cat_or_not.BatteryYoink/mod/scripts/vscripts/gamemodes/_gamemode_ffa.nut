@@ -16,7 +16,6 @@ void function FFA_Init()
 	ClassicMP_ForceDisableEpilogue( true )
 	Riff_ForceTitanAvailability( eTitanAvailability.Never )
 
-	// AddCallback_GameStateEnter( eGameState.WinnerDetermined, OnWinnerDetermined )
 	AddCallback_OnClientConnected( OnPlayerConnected )
 	AddCallback_OnNPCKilled(OnBossNpcKilled)
 	AddCallback_OnPlayerRespawned( PlayerRespawned )
@@ -116,8 +115,6 @@ void function OnBossNpcKilled( entity victim, entity attacker, var damageInfo )
 {
 	for (int a=0 ; a < file.target.len() ; a += 1){
 		if (file.target[a] == victim){
-			// AddTeamScore( attacker.GetTeam(), 1 )
-			// attacker.AddToPlayerGameStat( PGS_ASSAULT_SCORE, 1 )
 
 			file.target.remove( a )
 			entity battery = Rodeo_CreateBatteryPack()
@@ -195,14 +192,8 @@ void function SpawnShop(){
 	DispatchSpawn( Prop )
     SetTeam( Prop, 99 )
 	Prop.SetTitle( "Shop")
-	// highlight = Highlight_SetEnemyHighlight( Prop, "sp_objective_entity" ) this needs untyped :(
-	// HighlightContext_SetRadius( highlight, 10000 )
-	Highlight_SetEnemyHighlight( Prop, "hunted_enemy" )
 
-	// Prop.Minimap_SetCustomState( Prop.GetObjectiveIndex() ) // I guess this doesn't work
-	// Prop.Minimap_AlwaysShow( TEAM_MILITIA, null )
-	// Prop.Minimap_AlwaysShow( TEAM_IMC, null )
-	// Prop.Minimap_SetAlignUpright( true )
+	Highlight_SetEnemyHighlight( Prop, "hunted_enemy" )
 
 	file.trader = Prop
 
@@ -376,7 +367,6 @@ void function AddPlayerToAmped( entity player){
 			in_list = true
 		}
 	}
-	if ( in_list ) print(" someone is in the amped list")
 	if ( ! in_list ) file.amped_players.append( player )
 }
 void function PlayerRespawned( entity player ){
@@ -385,13 +375,11 @@ void function PlayerRespawned( entity player ){
 
 void function PlayerRespawned_thread( entity player ){
 	WaitFrame()
-	print("respawn")
 	foreach( entity p in file.amped_players ){
 		if ( p == player ){
 			if ( IsAlive(player) ){
 				array<entity> weapons = player.GetMainWeapons()
 				GivePlayerAmpedWeapon( player ,weapons[0].GetWeaponClassName() )
-				print("Giving")
 			}
 		}
 	}
