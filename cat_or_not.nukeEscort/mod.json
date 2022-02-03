@@ -1,0 +1,19 @@
+{
+	"Name" : "cat_or_not.nukeEscort",
+	"Description" : "nukeEscort replaces pvp",
+	"Version": "0.1.0",
+	"LoadPriority": 2,
+	"Scripts": [
+		{
+			"Path": "nukeEscort.gnut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "nukeEscort_settings_Init"
+			}
+		}
+	],
+	"Localisation": [
+		"resource/nukeEscort_localisation_%language%.txt"
+	]
+}
+

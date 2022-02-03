@@ -1,0 +1,12 @@
+global function nukeEscort_settings_Init
+
+void function nukeEscort_settings_Init()
+{
+    // AddPrivateMatchModeSettingArbitrary("#MODE_SETTING_CATEGORY_BATTERYYOINK", "number_of_npc", "2")
+    // AddPrivateMatchModeSettingArbitrary("#MODE_SETTING_CATEGORY_BATTERYYOINK", "shop_moving_time", "120")
+}
+
+int function nuuuuuul(){
+    // return GetCurrentPlaylistVarInt("", 2)
+    return 1
+}
