@@ -5,7 +5,7 @@
 	"LoadPriority": 2,
 	"Scripts": [
 		{
-			"Path": "batteryYoink_settings.gnut",
+			"Path": "sh_batteryYoinkSettings.gnut",
 			"RunOn": "SERVER && MP",
 			"ServerCallback": {
 				"After": "batteryYoink_settings_Init"

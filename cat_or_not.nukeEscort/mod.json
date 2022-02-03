@@ -5,7 +5,7 @@
 	"LoadPriority": 2,
 	"Scripts": [
 		{
-			"Path": "nukeEscort.gnut",
+			"Path": "sh_nukeEscort.gnut",
 			"RunOn": "SERVER && MP",
 			"ServerCallback": {
 				"After": "nukeEscort_settings_Init"
