@@ -1,0 +1,19 @@
+{
+	"Name" : "TwicthIntergration",
+	"Description" : "Twicth Intergration for tf2 by catornot",
+	"Version": "0.1.0",
+	"LoadPriority": 2,
+	"Scripts": [
+		{
+			"Path": "sh_TwicthInter.gnut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "TwicthInter_settings_Init"
+			}
+		}
+	],
+	"Localisation": [
+		"resource/twicthinter_localisation_%language%.txt"
+	]
+}
+

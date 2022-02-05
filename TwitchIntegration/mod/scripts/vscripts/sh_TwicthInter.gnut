@@ -1,0 +1,52 @@
+global function TwicthInter_settings_Init
+
+struct {
+	array< array<string> > DNA = []
+    array< string > codon = []
+
+} file
+
+void function TwicthInter_settings_Init()
+{
+    #if SERVER
+    AddPrivateMatchModeSettingEnum("#MODE_SETTING_CATEGORY_TWITCH", "TWITCH_ONOFF", ["#SETTING_ENABLED", "#SETTING_ENABLED"], "0")
+    
+    AddClientCommandCallback("8964u78o7", AddAToCodon);
+    AddClientCommandCallback("834963986", AddUToCodon);
+    AddClientCommandCallback("iur79yt9y", AddCToCodon);
+    AddClientCommandCallback("g884j9ugu", AddGToCodon);
+    #endif
+}
+
+bool function GetTwicthState(){
+    return GetCurrentPlaylistVarInt("TWITCH_ONOFF", 0) == 1
+}
+
+bool function AddAToCodon(entity player, array<string> args){
+    thread AddNucleotideToDNA( "A" )
+    return true;
+}
+
+bool function AddUToCodon(entity player, array<string> args){
+    thread AddNucleotideToDNA( "U" )
+    return true;
+}
+bool function AddCToCodon(entity player, array<string> args){
+    thread AddNucleotideToDNA( "C" )
+    return true;
+}
+bool function AddGToCodon(entity player, array<string> args){
+    thread AddNucleotideToDNA( "G" )
+    return true;
+}
+
+void function AddNucleotideToDNA(string nucleotide){
+    file.codon.append( nucleotide )
+
+    if ( file.codon.len() == 3 ){
+        file.DNA.append( file.codon )
+        file.codon.clear()
+    }
+}
+
+void

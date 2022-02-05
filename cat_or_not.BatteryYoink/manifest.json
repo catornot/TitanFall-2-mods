@@ -1,0 +1,7 @@
+{
+    "name": "BatteryYoink",
+    "version_number": "1.5.0",
+    "website_url": "https://github.com/catornot/TitanFall-2-mods/tree/main/cat_or_not.BatteryYoink",
+    "description": "Steal batteries from players or NPCs and bring them to the shop.",
+    "dependencies": []
+}
