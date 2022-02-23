@@ -1,0 +1,23 @@
+{
+	"Name": "Catornot.AutoGGMod",
+	"Description": "Makes you say a message at the of the macth",
+	"Version": "0.1.0",
+	"LoadPriority": 1,
+	
+	"ConVars": [
+		// Your message
+		{"Name": "Message",
+			"DefaultValue": "gg"
+		}
+	],
+
+	"Scripts": [
+        {
+			"Path": "AutoMessage.nut",
+			"RunOn": "CLIENT",
+			"ClientCallback": {
+				"Before": "InitAutoMessage"
+			}
+		}
+	]
+}

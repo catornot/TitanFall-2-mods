@@ -1,0 +1,37 @@
+{
+	"Name": "Catornot.ColoredChat",
+	"Description": "Allows people to change the color of there chat message\nAdds a wisper command",
+	"Version": "0.1.0",
+	"LoadPriority": 1,
+	
+	"ConVars": [
+		// client side convars
+		{"Name": "MessageColor",
+			"DefaultValue": "0 0 0"
+		},
+		// server side convars
+		{"Name": "ActivateWispering",
+			"DefaultValue": "1"
+		},
+		{"Name": "ActivateColoredChat",
+			"DefaultValue": "1"
+		}
+	],
+
+	"Scripts": [
+        {
+			"Path": "ColoredChat_client.nut",
+			"RunOn": "( CLIENT ) && MP",
+			"ClientCallback": {
+				"Before": "InitClientColoreChat",
+			}
+		},
+		{
+			"Path": "ColoredChat_server.nut",
+			"RunOn": "SERVER",
+			"ServerCallback": {
+				"After": "InitServerColoreChat"
+			}
+		}
+	]
+}

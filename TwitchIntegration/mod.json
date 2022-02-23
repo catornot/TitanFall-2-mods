@@ -5,15 +5,26 @@
 	"LoadPriority": 2,
 	"Scripts": [
 		{
-			"Path": "sh_TwicthInter.gnut",
-			"RunOn": "SERVER && MP",
+			"Path": "sh_twitch_integration.gnut",
+			"RunOn": "MP",
+			"ClientCallback": {
+				"After": "TwicthInter_settings_Init"
+			},
+
 			"ServerCallback": {
 				"After": "TwicthInter_settings_Init"
+			}
+		},
+		{
+			"Path": "sh_twitch_riff.nut",
+			"RunOn": "MP && SERVER",
+			"ServerCallback": {
+				"After": "Init_twitchRiff"
 			}
 		}
 	],
 	"Localisation": [
-		"resource/twicthinter_localisation_%language%.txt"
+		"resource/twitchinter_localisation_%language%.txt"
 	]
 }
 

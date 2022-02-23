@@ -1,0 +1,13 @@
+global function TwicthInter_settings_Init
+global function GetTwicthState
+
+
+void function TwicthInter_settings_Init()
+{
+    AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_TWITCH", "TWITCH_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "1" )
+}
+
+
+bool function GetTwicthState(){
+    return GetCurrentPlaylistVarInt("TWITCH_RIFF", 0) == 1
+}
