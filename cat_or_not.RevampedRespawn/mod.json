@@ -1,0 +1,26 @@
+{
+	"Name" : "cat_or_not.RevampedRespawn",
+	"Description" : "Spawn ticks on death and respawns player with ships",
+	"Version": "1.0.0",
+	"LoadPriority": 2,
+	"Scripts": [
+		{
+			"Path": "sh_TICKSettings.gnut",
+			"RunOn": "MP",
+			"ServerCallback": {
+				"After": "TICK_Init"
+			},
+			"ClientCallback": {
+				"After": "TICK_Init"
+			}
+		},
+		{
+			"Path": "_widow_utility.nut",
+			"RunOn": "SERVER && MP"
+		}
+	],
+	"Localisation": [
+		"resources/tick_localisation_%language%.txt"
+	]
+}
+

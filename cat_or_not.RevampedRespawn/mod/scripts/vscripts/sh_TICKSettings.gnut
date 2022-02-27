@@ -1,0 +1,106 @@
+global function TICK_Init
+// global function GetTICKState
+// global function GetSpawnState
+
+void function TICK_Init()
+{
+    // PrecacheModel($"models/props/generator_coop/generator_coop_medium.mdl")
+    // PrecacheModel($"models/props/generator_coop/generator_coop_rings_animated.mdl")
+    // PrecacheModel($"models/props/generator_coop/generator_coop_rings_medium_animated.mdl")
+    // PrecacheModel($"models/props/generator_coop/generator_coop_small.mdl")
+    // PrecacheModel($"models/lamps/industrial_wall_light.mdl")
+    // PrecacheModel($"models/beacon/beacon_wallrun_panel_01")
+
+    AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "TICK_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+    AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "SPAWN_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+
+    #if SERVER
+
+        AddCallback_OnPlayerKilled( OnPlayerKilled )
+        AddCallback_OnPlayerRespawned( MakeShipSpawn )
+	#endif
+    
+}
+
+bool function GetTICKState(){
+    return GetCurrentPlaylistVarInt("TICK_RIFF", 0) == 1
+}
+bool function GetSpawnState(){
+    return GetCurrentPlaylistVarInt("SPAWN_RIFF", 0) == 1
+}
+
+
+#if SERVER
+
+void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
+{
+    if ( !GetTICKState() )
+        return
+    
+    if ( attacker.GetClassName() == "npc_frag_drone" )
+    {
+        entity player = attacker.GetOwner()
+        player.AddToPlayerGameStat( PGS_PILOT_KILLS, 1 )
+        AddTeamScore( player.GetTeam(), 1 )
+        player.AddToPlayerGameStat( PGS_ASSAULT_SCORE, 1 )
+    }
+
+    int team = victim.GetTeam()
+    vector origin = victim.GetOrigin()
+    
+    entity spawnNpc = CreateNPC( "npc_frag_drone", team, origin, <0,0,0> )
+    SetSpawnOption_AISettings( spawnNpc, "npc_frag_drone" )
+    DispatchSpawn( spawnNpc )
+    spawnNpc.SetOwner( victim )
+}
+void function MakeShipSpawn( entity player )
+{
+    if ( !GetSpawnState() )
+        return
+    
+    if ( <0,0,0> == player.GetOrigin() || !GamePlaying() )
+        return
+
+    thread MakeShipSpawnThreaded( player ) 
+}
+
+void function MakeShipSpawnThreaded( entity player )
+{    
+    // TraceLine( player.GetOrigin(), player.GetOrigin() + <0,0,1000>, player, TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+
+    vector PlayerSpawnpoint = player.GetOrigin()
+
+    WidowStruct widow = CreateWidow( player, PlayerSpawnpoint + <0,0,10000>, <0,0,0> )
+
+    player.SetOrigin( PlayerSpawnpoint + <0,0,10200> )
+
+    waitthread TravelOnX( widow, 500, 5 )
+
+    TeleportWidow( widow, PlayerSpawnpoint + <0,0,2000>, <0,0,0> )
+
+    OpenDoorR( widow )
+
+    waitthread TravelOnZ( widow, 500, -10 )
+
+    OpenDoorL( widow )
+
+    for(;;)
+    {
+        bool NoPilotsInsideHull = true
+        foreach( player in GetPlayerArray() )
+        {
+            if ( !( DistanceSqr( player.GetOrigin(), widow.ship.GetOrigin() ) >= 150000.0 ) )
+            {
+                NoPilotsInsideHull = false
+            }
+        }
+        if ( NoPilotsInsideHull )
+        {
+            WarpOutThenDestroyShip( widow )
+            break
+        }
+        WaitFrame()
+    }
+}
+
+#endif

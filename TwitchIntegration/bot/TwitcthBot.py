@@ -3,12 +3,7 @@ from twitchio.ext import pubsub
 from encoder import encoder
 import twitchio
 
-bot_stuff = {
 
-    "botNickname" : "TF2 madness", # this doesn't work why? idc
-    "botPrefix" : "?",
-    "channel" : ["cat_or_not"],
-}
 
 class Bot(commands.Bot):
 
