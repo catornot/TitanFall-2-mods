@@ -70,13 +70,13 @@ void function MakeShipSpawnThreaded( entity player )
 
     vector PlayerSpawnpoint = player.GetOrigin()
 
-    WidowStruct widow = CreateWidow( player, PlayerSpawnpoint + <0,0,10000>, <0,0,0> )
+    WidowStruct widow = CreateWidow( player, PlayerSpawnpoint + <0,0,10000>, <0,90,0> )
 
     player.SetOrigin( PlayerSpawnpoint + <0,0,10200> )
 
     waitthread TravelOnX( widow, 500, 5 )
 
-    TeleportWidow( widow, PlayerSpawnpoint + <0,0,2000>, <0,0,0> )
+    TeleportWidow( widow, PlayerSpawnpoint + <0,0,2000>, <0,90,0> )
 
     OpenDoorR( widow )
 

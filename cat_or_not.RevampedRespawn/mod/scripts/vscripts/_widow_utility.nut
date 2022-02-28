@@ -10,12 +10,12 @@ global function TravelOnZ
 global function TeleportWidow
 global function WarpOutThenDestroyShip
 
-const vector OffsetFloor = < -200,0,-50 >
-const vector OffsetCeiling = < -200,0,450 >
-const vector OffsetDoorL = < -200,180,200 >
-const vector OffsetDoorR = < -200,-240,200 >
+const vector OffsetFloor = < -200,0,100 >
+const vector OffsetCeiling = < -200,0,380 >
+const vector OffsetDoorR = < -200,100,200 >
+const vector OffsetDoorL = < -200,-100,200 >
 const vector OffsetBack = < -250,0,200 >
-const vector OffsetFront = < 200,0,200 >
+const vector OffsetFront = < 300,0,200 >
 const int BOTHCLOSED = 0
 const int RIGHTOPEN = 1
 const int LEFTOPEN = 2
@@ -25,12 +25,8 @@ const float HullSize = 150000.0
 global struct WidowStruct
 {
 	entity ship
-    entity floor
-    entity ceiling
-    entity doorL
-    entity doorR
-    array<entity> back
-    array<entity> front
+    array<entity> doorL
+    array<entity> doorR
     int DOORSTATE = BOTHCLOSED
 }
 
@@ -65,43 +61,124 @@ WidowStruct function CreateWidow( entity player, vector origin, vector angles )
 
     _CreateFloor( ship )
     _CreateCeiling( ship )
-    CloseDoorR( ship )
-    CloseDoorL( ship )
+    _CreateDoorR( ship )
+    _CreateDoorL( ship )
     _CreateFront( ship )
     _CreateBack( ship )
 
     return ship
 }
 
+vector function _PositionBasedOnAngle( vector CurrentPosition, float angle, vector origin ) //////// aaaaaaaaaaaaaaaaaaaaaaaaa
+{
+	float X = CurrentPosition.x
+	float Y = CurrentPosition.y
+	float offset_X = origin.x
+    float offset_Y = origin.y
+    float radians = angle * 0.017453
+
+    float adjusted_x = (X - offset_X)
+    float adjusted_y = (Y - offset_Y)
+    float cos_rad = cos(radians)
+    float sin_rad = sin(radians)
+    float qx = offset_X + cos_rad * adjusted_x + sin_rad * adjusted_y
+    float qy = offset_Y + -sin_rad * adjusted_x + cos_rad * adjusted_y
+
+    CurrentPosition.x = qx
+    CurrentPosition.y = qy
+
+    return CurrentPosition
+}
+
 
 void function _CreateFloor( WidowStruct widow )
 {
-    widow.floor =_CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetFloor, widow.ship.GetAngles() )
+    array<vector> OffsetArray = [ < 0,-50,0>, < 50,-50,0>, < 100,-50,0>, < 150,-50,0>, < 200,-50,0>, < 250,-50,0>, < 300,-50,0>, < 350,-50,0>, < 400,-50,0>, < 450,-50,0>, < 500,-50,0> ]
+    OffsetArray.extend( [ < 0,0,0>, < 50,0,0>, < 100,0,0>, < 150,0,0>, < 200,0,0>, < 250,0,0>, < 300,0,0>, < 350,0,0>, < 400,0,0>, < 450,0,0>, < 500,0,0> ] )
+    OffsetArray.extend( [ < 0,50,0>, < 50,50,0>, < 100,50,0>, < 150,50,0>, < 200,50,0>, < 250,50,0>, < 300,50,0>, < 350,50,0>, < 400,50,0>, < 450,50,0>, < 500,50,0> ] )
+    
+    foreach( vector Offset in OffsetArray )
+    {
+        vector NewOrigin = _PositionBasedOnAngle( widow.ship.GetOrigin() + OffsetFloor + Offset , widow.ship.GetAngles().y, widow.ship.GetOrigin() )
+        _CreateSarahProp( widow, NewOrigin, <0,90,0> )
+    }
 }
 
 void function _CreateCeiling( WidowStruct widow )
 {
-    widow.ceiling =_CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetCeiling, widow.ship.GetAngles() )
+    array<vector> OffsetArray = [ < 0,-50,0>, < 50,-50,0>, < 100,-50,0>, < 150,-50,0>, < 200,-50,0>, < 250,-50,0>, < 300,-50,0>, < 350,-50,0>, < 400,-50,0>, < 450,-50,0>, < 500,-50,0> ]
+    OffsetArray.extend( [ < 0,0,0>, < 50,0,0>, < 100,0,0>, < 150,0,0>, < 200,0,0>, < 250,0,0>, < 300,0,0>, < 350,0,0>, < 400,0,0>, < 450,0,0>, < 500,0,0> ] )
+    OffsetArray.extend( [ < 0,50,0>, < 50,50,0>, < 100,50,0>, < 150,50,0>, < 200,50,0>, < 250,50,0>, < 300,50,0>, < 350,50,0>, < 400,50,0>, < 450,50,0>, < 500,50,0> ] )
+    
+    foreach( vector Offset in OffsetArray )
+    {
+        vector NewOrigin = _PositionBasedOnAngle( widow.ship.GetOrigin() + OffsetCeiling + Offset , widow.ship.GetAngles().y, widow.ship.GetOrigin() )
+        _CreateSarahProp( widow, NewOrigin, <0,90,0> )
+    }
 }
 
-void function _CreateFront( WidowStruct widow )
+void function _CreateFront( WidowStruct widow ) 
 {
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetFront + < 0,-50,0>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetFront + < 0,-50,100>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetFront + <0,50,0>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetFront + <0,50,100>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetFront + <0,0,0>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetFront + <0,0,100>, widow.ship.GetAngles() + <0,90,0> )
+    array<vector> OffsetArray = [ < 0,-50,0>, < 0,-50,100>, <0,50,0>, <0,50,100>, <0,0,0>, <0,0,100> ]
+    
+    foreach( vector Offset in OffsetArray )
+    {
+        vector NewOrigin = _PositionBasedOnAngle( widow.ship.GetOrigin() + OffsetFront + Offset, widow.ship.GetAngles().y, widow.ship.GetOrigin() )
+        _CreateSarahProp( widow, NewOrigin, <0,90,0> )
+    }
 }
 
 void function _CreateBack( WidowStruct widow )
 {
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetBack + <0,-50,0>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetBack + <0,-50,100>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetBack + <0,50,0>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetBack + <0,50,100>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetBack + <0,0,0>, widow.ship.GetAngles() + <0,90,0> )
-    _CreateSarahProp( widow, widow.ship.GetOrigin() + OffsetBack + <0,0,100>, widow.ship.GetAngles() + <0,90,0> )
+    array<vector> OffsetArray = [ < 0,-50,0>, < 0,-50,100>, <0,50,0>, <0,50,100>, <0,0,0>, <0,0,100> ]
+    
+    foreach( vector Offset in OffsetArray )
+    {
+        vector NewOrigin = _PositionBasedOnAngle( widow.ship.GetOrigin() + OffsetBack + Offset, widow.ship.GetAngles().y, widow.ship.GetOrigin() )
+        _CreateSarahProp( widow, NewOrigin, <0,90,0> )
+    }
+}
+
+void function _CreateDoorR( WidowStruct widow )
+{
+    array<vector> OffsetArray = [ < 0,0,0>, < 50,0,0>, < 100,0,0>, < 150,0,0>, < 200,0,0>, < 250,0,0>, < 300,0,0>, < 350,0,0>, < 400,0,0>, < 450,0,0>, < 500,0,0> ]
+    OffsetArray.extend( [ < 0,0,100>, < 50,0,100>, < 100,0,100>, < 150,0,100>, < 200,0,100>, < 250,0,100>, < 300,0,100>, < 350,0,100>, < 400,0,100>, < 450,0,100>, < 500,0,100> ] )
+    
+    foreach( vector Offset in OffsetArray )
+    {
+        vector NewOrigin = _PositionBasedOnAngle( widow.ship.GetOrigin() + OffsetDoorR + Offset, widow.ship.GetAngles().y, widow.ship.GetOrigin() )
+        widow.doorR.append( _CreateSarahProp( widow, NewOrigin, <0,90,0> ) )
+    }
+}
+
+void function _CreateDoorL( WidowStruct widow )
+{
+    array<vector> OffsetArray = [ < 0,0,0>, < 50,0,0>, < 100,0,0>, < 150,0,0>, < 200,0,0>, < 250,0,0>, < 300,0,0>, < 350,0,0>, < 400,0,0>, < 450,0,0>, < 500,0,0> ]
+    OffsetArray.extend( [ < 0,0,100>, < 50,0,100>, < 100,0,100>, < 150,0,100>, < 200,0,100>, < 250,0,100>, < 300,0,100>, < 350,0,100>, < 400,0,100>, < 450,0,100>, < 500,0,100> ] )
+    
+    foreach( vector Offset in OffsetArray )
+    {
+        vector NewOrigin = _PositionBasedOnAngle( widow.ship.GetOrigin() + OffsetDoorL + Offset, widow.ship.GetAngles().y, widow.ship.GetOrigin() )
+        widow.doorL.append( _CreateSarahProp( widow, NewOrigin, <0,90,0> ) )
+    }
+}
+
+void function _DestroyDoorR( WidowStruct widow )
+{
+    foreach( entity door in widow.doorR )
+    {
+        door.Destroy()
+    }
+    widow.doorR.clear()
+}
+
+void function _DestroyDoorL( WidowStruct widow )
+{
+    foreach( entity door in widow.doorL )
+    {
+        door.Destroy()
+    }
+    widow.doorL.clear()
 }
 
 entity function _CreateSarahProp( WidowStruct widow, vector origin, vector angles )
@@ -123,24 +200,7 @@ entity function _CreateSarahProp( WidowStruct widow, vector origin, vector angle
     return Prop
 }
 
-entity function _CreateTitanProp( WidowStruct widow, vector origin, vector angles )
-{
-    entity Prop = CreateEntity( "prop_dynamic" )
-    
-	Prop.SetValueForModelKey( $"models/titans/medium/titan_medium_ajax.mdl" )
-	Prop.kv.solid = SOLID_BBOX
-    Prop.kv.rendercolor = "81 130 151"
-	Prop.SetOrigin( origin )
-	Prop.SetAngles( angles )
-    Prop.SetParent( widow.ship )
 
-	Prop.SetBlocksRadiusDamage( true )
-	DispatchSpawn( Prop )
-
-    Prop.Hide()
-
-    return Prop
-}
 
 /*
 ██╗   ██╗████████╗██╗██╗     ██╗████████╗██╗███████╗███████╗
@@ -158,18 +218,18 @@ void function CloseDoorL( WidowStruct widow )
     switch ( widow.DOORSTATE )
     {
         case BOTHCLOSED:
-            widow.doorL = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorL, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorL( widow )
             break
 		case RIGHTOPEN:
-            widow.doorL = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorL, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorL( widow )
             break
         case LEFTOPEN:
-            widow.doorL = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorL, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorL( widow )
             widow.ship.Anim_Play( "wd_doors_closing" )
             widow.DOORSTATE = BOTHCLOSED
             break
         case BOTHOPEN:
-            widow.doorL = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorL, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorL( widow )
             widow.ship.Anim_Play( "wd_doors_closing_L" )
             widow.ship.Anim_Play( "wd_doors_opening_R" )
             widow.DOORSTATE = RIGHTOPEN
@@ -182,14 +242,12 @@ void function OpenDoorL( WidowStruct widow )
     switch ( widow.DOORSTATE )
     {
         case BOTHCLOSED:
-            widow.doorL.Destroy()
-            widow.doorL = null
+            _DestroyDoorL( widow )
             widow.ship.Anim_Play( "wd_doors_opening_L" )
             widow.DOORSTATE = LEFTOPEN
             break
 		case RIGHTOPEN:
-            widow.doorL.Destroy()
-            widow.doorL = null
+            _DestroyDoorL( widow )
             widow.ship.Anim_Play( "wd_doors_opening" )
             widow.DOORSTATE = BOTHOPEN
             break
@@ -205,18 +263,18 @@ void function CloseDoorR( WidowStruct widow )
     switch ( widow.DOORSTATE )
     {
         case BOTHCLOSED:
-            widow.doorR = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorR, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorR( widow )
             break
 		case RIGHTOPEN:
-            widow.doorR = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorR, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorR( widow )
             widow.ship.Anim_Play( "wd_doors_closing" )
             widow.DOORSTATE = BOTHCLOSED
             break
         case LEFTOPEN:
-            widow.doorR = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorR, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorR( widow )
             break
         case BOTHOPEN:
-            widow.doorR = _CreateTitanProp( widow, widow.ship.GetOrigin() + OffsetDoorR, widow.ship.GetAngles() + <90,0,0> )
+            _CreateDoorR( widow )
             widow.ship.Anim_Play( "wd_doors_closing_R" )
             widow.ship.Anim_Play( "wd_doors_opening_L" )
             widow.DOORSTATE = LEFTOPEN
@@ -229,16 +287,14 @@ void function OpenDoorR( WidowStruct widow )
     switch ( widow.DOORSTATE )
     {
         case BOTHCLOSED:
-            widow.doorR.Destroy()
-            widow.doorR = null
+            _DestroyDoorR( widow )
             widow.ship.Anim_Play( "wd_doors_opening_R" )
             widow.DOORSTATE = RIGHTOPEN
             break
 		case RIGHTOPEN:
             break
         case LEFTOPEN:
-            widow.doorR.Destroy()
-            widow.doorR = null
+            _DestroyDoorR( widow )
             widow.ship.Anim_Play( "wd_doors_opening" )
             widow.DOORSTATE = BOTHOPEN
             break
@@ -356,7 +412,5 @@ void function WarpOutThenDestroyShip( WidowStruct widow )
 
     CloseDoorL( widow )
     CloseDoorR( widow )
-    widow.floor.Destroy()
-    widow.ceiling.Destroy()
     widow.ship.Destroy()
 }
