@@ -9,6 +9,10 @@ global function TravelOnY
 global function TravelOnZ
 global function TeleportWidow
 global function WarpOutThenDestroyShip
+global function FollowOnX
+global function FollowOnY
+global function FollowOnZ
+global function SpawnFollowingShip
 
 const vector OffsetFloor = < -200,0,100 >
 const vector OffsetCeiling = < -200,0,380 >
@@ -20,7 +24,7 @@ const int BOTHCLOSED = 0
 const int RIGHTOPEN = 1
 const int LEFTOPEN = 2
 const int BOTHOPEN = 3
-const float HullSize = 150000.0
+const float HullSize = 180000.0
 
 global struct WidowStruct
 {
@@ -28,6 +32,7 @@ global struct WidowStruct
     array<entity> doorL
     array<entity> doorR
     int DOORSTATE = BOTHCLOSED
+    bool following = false
 }
 
 /*
@@ -40,7 +45,7 @@ global struct WidowStruct
                                           
 */
 
-WidowStruct function CreateWidow( entity player, vector origin, vector angles )
+WidowStruct function CreateWidow( vector origin, vector angles )
 {
     WidowStruct ship
 
@@ -55,7 +60,7 @@ WidowStruct function CreateWidow( entity player, vector origin, vector angles )
 
 	ship.ship.SetBlocksRadiusDamage( true )
 	DispatchSpawn( ship.ship )
-    SetTeam( ship.ship, player.GetTeam() )
+    SetTeam( ship.ship, TEAM_BOTH )
 
     ship.ship.Anim_Play( "wd_doors_closed_idle" )
 
@@ -212,6 +217,13 @@ entity function _CreateSarahProp( WidowStruct widow, vector origin, vector angle
                                                                                                 
 */
 
+void function SpawnFollowingShip( entity player )
+{
+    WidowStruct widow = CreateWidow( <0,0,500> + player.GetOrigin(), <0,90,0> )
+
+    thread FollowOnX( widow, player )
+}
+
 
 void function CloseDoorL( WidowStruct widow )
 {
@@ -314,6 +326,76 @@ void function doorCycle( WidowStruct widow, float Time )
         else{
             CloseDoorL( widow )
         }
+    }
+}
+
+void function FollowOnX( WidowStruct widow, entity Target )
+{
+    widow.following = true
+    float TDistance
+    for(;;)
+    {
+        if ( !widow.following )
+            break
+            
+        TDistance = Target.GetOrigin().x - widow.ship.GetOrigin().x
+        widow.ship.SetOrigin( widow.ship.GetOrigin() + Vector(TDistance,0,0) )
+        
+        foreach( player in GetPlayerArray() )
+        {
+            if ( DistanceSqr( player.GetOrigin(), widow.ship.GetOrigin() ) <= HullSize )
+            {
+                player.SetOrigin( player.GetOrigin() + Vector(TDistance,0,0) )
+            }
+        }
+
+        WaitFrame()
+    }
+}
+void function FollowOnY( WidowStruct widow, entity Target )
+{
+    widow.following = true
+    float TDistance
+    for(;;)
+    {
+        if ( !widow.following )
+            break
+            
+        TDistance = Target.GetOrigin().y - widow.ship.GetOrigin().y
+        widow.ship.SetOrigin( widow.ship.GetOrigin() + Vector(0,TDistance,0) )
+        
+        foreach( player in GetPlayerArray() )
+        {
+            if ( DistanceSqr( player.GetOrigin(), widow.ship.GetOrigin() ) <= HullSize )
+            {
+                player.SetOrigin( player.GetOrigin() + Vector(0,TDistance,0) )
+            }
+        }
+
+        WaitFrame()
+    }
+}
+void function FollowOnZ( WidowStruct widow, entity Target )
+{
+    widow.following = true
+    float TDistance
+    for(;;)
+    {
+        if ( !widow.following )
+            break
+            
+        TDistance = Target.GetOrigin().z - widow.ship.GetOrigin().z
+        widow.ship.SetOrigin( widow.ship.GetOrigin() + Vector(0,0,TDistance) )
+        
+        foreach( player in GetPlayerArray() )
+        {
+            if ( DistanceSqr( player.GetOrigin(), widow.ship.GetOrigin() ) <= HullSize )
+            {
+                player.SetOrigin( player.GetOrigin() + Vector(0,0,TDistance) )
+            }
+        }
+
+        WaitFrame()
     }
 }
 

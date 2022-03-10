@@ -16,10 +16,10 @@
 			}
 		},
 		{
-			"Path": "sh_twitch_riff.nut",
-			"RunOn": "MP && SERVER",
-			"ServerCallback": {
-				"After": "Init_twitchRiff"
+			"Path": "ClientUInInput.nut",
+			"RunOn": "( CLIENT ) && MP",
+			"ClientCallback": {
+				"Before": "ClientInit"
 			}
 		}
 	],

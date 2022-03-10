@@ -1,23 +1,20 @@
 global function TICK_Init
-// global function GetTICKState
-// global function GetSpawnState
+
 
 void function TICK_Init()
 {
-    // PrecacheModel($"models/props/generator_coop/generator_coop_medium.mdl")
-    // PrecacheModel($"models/props/generator_coop/generator_coop_rings_animated.mdl")
-    // PrecacheModel($"models/props/generator_coop/generator_coop_rings_medium_animated.mdl")
-    // PrecacheModel($"models/props/generator_coop/generator_coop_small.mdl")
-    // PrecacheModel($"models/lamps/industrial_wall_light.mdl")
-    // PrecacheModel($"models/beacon/beacon_wallrun_panel_01")
 
     AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "TICK_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
     AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "SPAWN_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+    AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "SPAWN_RIFF2", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
 
     #if SERVER
-
         AddCallback_OnPlayerKilled( OnPlayerKilled )
         AddCallback_OnPlayerRespawned( MakeShipSpawn )
+        AddCallback_EntitiesDidLoad( SpawnSomeCars )
+        AddCallback_OnClientConnected( OnPlayerConnected )
+
+        AddClientCommandCallback( "DropShip", PutInDropship )
 	#endif
     
 }
@@ -25,8 +22,11 @@ void function TICK_Init()
 bool function GetTICKState(){
     return GetCurrentPlaylistVarInt("TICK_RIFF", 0) == 1
 }
-bool function GetSpawnState(){
+bool function GetWidowSpawnState(){
     return GetCurrentPlaylistVarInt("SPAWN_RIFF", 0) == 1
+}
+bool function GetDropShipSpawnState(){
+    return GetCurrentPlaylistVarInt("SPAWN_RIFF2", 0) == 1
 }
 
 
@@ -39,10 +39,15 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
     
     if ( attacker.GetClassName() == "npc_frag_drone" )
     {
+        try {
+        AddTeamScore( attacker.GetTeam(), 1 )
         entity player = attacker.GetOwner()
         player.AddToPlayerGameStat( PGS_PILOT_KILLS, 1 )
-        AddTeamScore( player.GetTeam(), 1 )
         player.AddToPlayerGameStat( PGS_ASSAULT_SCORE, 1 )
+        }
+        catch( exception ){
+
+        }
     }
 
     int team = victim.GetTeam()
@@ -54,23 +59,108 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
     spawnNpc.SetOwner( victim )
 }
 void function MakeShipSpawn( entity player )
-{
-    if ( !GetSpawnState() )
-        return
-    
+{    
     if ( <0,0,0> == player.GetOrigin() || !GamePlaying() )
         return
-
-    thread MakeShipSpawnThreaded( player ) 
+    if ( player == null )
+        return
+    if ( GetWidowSpawnState() )
+        thread MakeShipWidowSpawnThreaded( player )
+    if ( GetDropShipSpawnState() )
+        thread MakeShipDropShipSpawnThreaded( player )
 }
 
-void function MakeShipSpawnThreaded( entity player )
-{    
+void function SpawnSomeCars()
+{
+    entity car1
+
+    car1 = CreateEntity( "prop_dynamic" )
+    
+	car1.SetValueForModelKey( $"models/vehicle/vehicle_truck_modular/vehicle_truck_modular_closed_bed.mdl" )
+	car1.kv.solid = SOLID_VPHYSICS
+    car1.kv.rendercolor = "81 130 151"
+    car1.kv.renderamt = 255
+	car1.SetOrigin( < -4767,-2725,0.5> )
+	car1.SetAngles( <0,0,0> )
+
+	car1.SetBlocksRadiusDamage( true )
+	DispatchSpawn( car1 )
+
+    car1 = CreateEntity( "prop_dynamic" )
+    
+	car1.SetValueForModelKey( $"models/vehicles_r2/vehicles/samson/samson.mdl" )
+	car1.kv.solid = SOLID_VPHYSICS
+    car1.kv.rendercolor = "81 130 151"
+    car1.kv.renderamt = 255
+	car1.SetOrigin( < -4667,-2725,0.5> )
+	car1.SetAngles( <0,0,0> )
+
+	car1.SetBlocksRadiusDamage( true )
+	DispatchSpawn( car1 )
+
+    entity prop_dynamic = CreateEntity( "prop_dynamic" );
+
+    prop_dynamic.SetValueForModelKey( $"models/vehicle/vehicle_truck_modular/vehicle_truck_modular_closed_bed.mdl" );
+	prop_dynamic.kv.fadedist = 1000;
+	prop_dynamic.kv.renderamt = 255;
+	prop_dynamic.kv.rendercolor = "255 255 255";
+	prop_dynamic.kv.solid = SOLID_VPHYSICS; // 0 = no collision, 2 = bounding box, 6 = use vPhysics, 8 = hitboxes only
+	SetTeam( prop_dynamic, TEAM_BOTH );	// need to have a team other then 0 or it won't take impact damage
+
+	prop_dynamic.SetOrigin( < -4567,-2725,0.5> );
+	prop_dynamic.SetAngles( <0,0,0> );
+	DispatchSpawn( prop_dynamic );
+
+    prop_dynamic = CreateEntity( "prop_dynamic" );
+
+    prop_dynamic.SetValueForModelKey( $"models/vehicle/vehicle_w3_hatchback/tire_w3_hatch_bnw.mdl" );
+	prop_dynamic.kv.fadedist = 1000;
+	prop_dynamic.kv.renderamt = 255;
+	prop_dynamic.kv.rendercolor = "255 255 255";
+	prop_dynamic.kv.solid = SOLID_VPHYSICS; // 0 = no collision, 2 = bounding box, 6 = use vPhysics, 8 = hitboxes only
+	SetTeam( prop_dynamic, TEAM_BOTH );	// need to have a team other then 0 or it won't take impact damage
+
+	prop_dynamic.SetOrigin( < -4467,-2725,0.5> );
+	prop_dynamic.SetAngles( <0,0,0> );
+	DispatchSpawn( prop_dynamic );
+}
+
+bool function PutInDropship(entity player, array<string> args)
+{
+    vector InitialLocation = player.GetOrigin()
+
+    DropShipStruct dropship = SpawnDropShipRidable( InitialLocation + <0,0,500>, <0,0,0>, player )
+    thread MakePlayerDriveDropShip( player, dropship )
+    
+    return true
+}
+
+void function OnPlayerConnected( entity player )
+{
+	AddButtonPressedPlayerInputCallback( player, IN_DUCK , PlayerMoveDuck)
+	AddButtonPressedPlayerInputCallback( player, IN_JUMP , PlayerMoveJump )
+    AddButtonPressedPlayerInputCallback( player, IN_FORWARD, PlayerMoveFORWARD ) 
+    AddButtonPressedPlayerInputCallback( player, IN_BACK, PlayerMoveBACK )
+    AddButtonPressedPlayerInputCallback( player, IN_MOVELEFT, PlayerMoveLEFT )
+    AddButtonPressedPlayerInputCallback( player, IN_MOVERIGHT, PlayerMoveRIGHT )
+
+    AddButtonReleasedPlayerInputCallback( player, IN_DUCK , PlayerStopDuck)
+	AddButtonReleasedPlayerInputCallback( player, IN_JUMP , PlayerStopJump )
+    AddButtonReleasedPlayerInputCallback( player, IN_FORWARD, PlayerStopFORWARD ) 
+    AddButtonReleasedPlayerInputCallback( player, IN_BACK, PlayerStopBACK )
+    AddButtonReleasedPlayerInputCallback( player, IN_MOVELEFT, PlayerStopLEFT ) 
+    AddButtonReleasedPlayerInputCallback( player, IN_MOVERIGHT, PlayerStopRIGHT ) 
+}
+
+void function MakeShipWidowSpawnThreaded( entity player )
+{
+    if ( player == null )
+        return
     // TraceLine( player.GetOrigin(), player.GetOrigin() + <0,0,1000>, player, TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
 
     vector PlayerSpawnpoint = player.GetOrigin()
 
-    WidowStruct widow = CreateWidow( player, PlayerSpawnpoint + <0,0,10000>, <0,90,0> )
+    WidowStruct widow = CreateWidow( PlayerSpawnpoint + <0,0,10000>, <0,90,0> )
 
     player.SetOrigin( PlayerSpawnpoint + <0,0,10200> )
 
@@ -101,6 +191,40 @@ void function MakeShipSpawnThreaded( entity player )
         }
         WaitFrame()
     }
+}
+
+void function MakeShipDropShipSpawnThreaded( entity player )
+{    
+
+    if ( player == null )
+        return
+
+    // TraceLine( player.GetOrigin(), player.GetOrigin() + <0,0,1000>, player, TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+
+    vector PlayerSpawnpoint = player.GetOrigin()
+    
+    float y = 2000
+    float offsetZ = sqrt( ( pow(y,3) / pow(y,9) ) + 2000*y )
+    float offsetX = sqrt( ( pow(y,3) / pow(y,9) ) + 2000*y ) - 100
+    vector SpawnPoint = PlayerSpawnpoint + <offsetX,y,offsetZ>
+    DropShipStruct dropship = SpawnDropShipRespawn( SpawnPoint, <0,0,0> )
+    
+    thread MakePlayerRideDropShipL( player, dropship )
+
+    waitthread DropshipDescend( dropship, PlayerSpawnpoint + <0,0,200>, 0.3 )
+
+    player.ClearParent()
+
+    for(;;)
+    {
+        if ( ( DistanceSqr( player.GetOrigin(), dropship.ship.GetOrigin() ) >= 25000.0 ) )
+        {
+            break
+        }
+        WaitFrame()
+    }
+    waitthread DropshipAscend( dropship, SpawnPoint, 3.2 )
+    WarpOutThenDestroyDropShip( dropship )
 }
 
 #endif
