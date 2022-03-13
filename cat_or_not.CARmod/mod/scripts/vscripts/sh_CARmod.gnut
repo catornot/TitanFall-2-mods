@@ -1,0 +1,121 @@
+global function CAR_Init
+
+
+void function CAR_Init()
+{
+
+    // AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "TICK_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+
+    #if SERVER
+        AddCallback_EntitiesDidLoad( SpawnSomeCars )
+        AddCallback_OnClientConnected( OnPlayerConnected )
+
+        AddClientCommandCallback( "CAR", SummonCAR )
+		AddClientCommandCallback( "DropShip", PutInDropship )
+	#endif
+    
+}
+
+// bool function GetTICKState(){
+//     return GetCurrentPlaylistVarInt("TICK_RIFF", 0) == 1
+// }
+
+
+#if SERVER
+
+void function SpawnSomeCars()
+{
+    entity car1
+
+    car1 = CreateEntity( "prop_dynamic" )
+    
+	car1.SetValueForModelKey( $"models/vehicle/vehicle_truck_modular/vehicle_truck_modular_closed_bed.mdl" )
+	car1.kv.solid = SOLID_VPHYSICS
+    car1.kv.rendercolor = "81 130 151"
+    car1.kv.renderamt = 255
+	car1.SetOrigin( < -4767,-2725,0.5> )
+	car1.SetAngles( <0,0,0> )
+
+	car1.SetBlocksRadiusDamage( true )
+	DispatchSpawn( car1 )
+
+    car1 = CreateEntity( "prop_dynamic" )
+    
+	car1.SetValueForModelKey( $"models/vehicles_r2/vehicles/samson/samson.mdl" )
+	car1.kv.solid = SOLID_VPHYSICS
+    car1.kv.rendercolor = "81 130 151"
+    car1.kv.renderamt = 255
+	car1.SetOrigin( < -4667,-2725,0.5> )
+	car1.SetAngles( <0,0,0> )
+
+	car1.SetBlocksRadiusDamage( true )
+	DispatchSpawn( car1 )
+
+    entity prop_dynamic = CreateEntity( "prop_dynamic" );
+
+    prop_dynamic.SetValueForModelKey( $"models/vehicle/vehicle_truck_modular/vehicle_truck_modular_closed_bed.mdl" );
+	prop_dynamic.kv.fadedist = 1000;
+	prop_dynamic.kv.renderamt = 255;
+	prop_dynamic.kv.rendercolor = "255 255 255";
+	prop_dynamic.kv.solid = SOLID_VPHYSICS; // 0 = no collision, 2 = bounding box, 6 = use vPhysics, 8 = hitboxes only
+	SetTeam( prop_dynamic, TEAM_BOTH );	// need to have a team other then 0 or it won't take impact damage
+
+	prop_dynamic.SetOrigin( < -4567,-2725,0.5> );
+	prop_dynamic.SetAngles( <0,0,0> );
+	DispatchSpawn( prop_dynamic );
+
+    prop_dynamic = CreateEntity( "prop_dynamic" );
+
+    prop_dynamic.SetValueForModelKey( $"models/vehicle/vehicle_w3_hatchback/tire_w3_hatch_bnw.mdl" );
+	prop_dynamic.kv.fadedist = 1000;
+	prop_dynamic.kv.renderamt = 255;
+	prop_dynamic.kv.rendercolor = "255 255 255";
+	prop_dynamic.kv.solid = SOLID_VPHYSICS; // 0 = no collision, 2 = bounding box, 6 = use vPhysics, 8 = hitboxes only
+	SetTeam( prop_dynamic, TEAM_BOTH );	// need to have a team other then 0 or it won't take impact damage
+
+	prop_dynamic.SetOrigin( < -4467,-2725,0.5> );
+	prop_dynamic.SetAngles( <0,0,0> );
+	DispatchSpawn( prop_dynamic );
+
+	SpawnCAR( < -4067,-2725,0.5> )
+}
+
+bool function SummonCAR(entity player, array<string> args)
+{
+    // vector InitialLocation = player.GetOrigin()
+
+    SpawnCAR( player.GetOrigin() )
+    
+    return true
+}
+
+bool function PutInDropship(entity player, array<string> args)
+{
+    vector InitialLocation = player.GetOrigin()
+
+    DropShipStruct dropship = SpawnDropShipRidable( InitialLocation + <0,0,500>, <0,0,0>, player )
+    thread MakePlayerDriveDropShip( player, dropship )
+    
+    return true
+}
+
+void function OnPlayerConnected( entity player )
+{
+    AddPlayerToKeysList( player )
+
+	AddButtonPressedPlayerInputCallback( player, IN_DUCK , PlayerMoveDuckC )
+	AddButtonPressedPlayerInputCallback( player, IN_JUMP , PlayerMoveJumpC )
+    AddButtonPressedPlayerInputCallback( player, IN_FORWARD, PlayerMoveFORWARDC ) 
+    AddButtonPressedPlayerInputCallback( player, IN_BACK, PlayerMoveBACKC )
+    AddButtonPressedPlayerInputCallback( player, IN_MOVELEFT, PlayerMoveLEFTC )
+    AddButtonPressedPlayerInputCallback( player, IN_MOVERIGHT, PlayerMoveRIGHTC )
+
+    AddButtonReleasedPlayerInputCallback( player, IN_DUCK , PlayerStopDuckC )
+	AddButtonReleasedPlayerInputCallback( player, IN_JUMP , PlayerStopJumpC )
+    AddButtonReleasedPlayerInputCallback( player, IN_FORWARD, PlayerStopFORWARDC ) 
+    AddButtonReleasedPlayerInputCallback( player, IN_BACK, PlayerStopBACKC )
+    AddButtonReleasedPlayerInputCallback( player, IN_MOVELEFT, PlayerStopLEFTC ) 
+    AddButtonReleasedPlayerInputCallback( player, IN_MOVERIGHT, PlayerStopRIGHTC )
+}
+
+#endif

@@ -1,0 +1,45 @@
+{
+	"Name" : "cat_or_not.RevampedRespawn",
+	"Description" : "Spawn ticks on death and respawns player with ships",
+	"Version": "1.1.0",
+	"RequiredOnClient": true,
+	"LoadPriority": 3,
+	"Scripts": [
+		{
+			"Path": "sh_CARmod.gnut",
+			"RunOn": "MP",
+			"ServerCallback": {
+				"After": "CAR_Init"
+			},
+			"ClientCallback": {
+				"After": "CAR_Init"
+			}
+		},
+		// {
+		// 	"Path": "_dropship_drivable.nut",
+		// 	"RunOn": "SERVER && MP"
+		// },
+		{
+			"Path": "precache_some_stuff.gnut",
+			"RunOn": "(CLIENT || SERVER) && MP",
+			"ServerCallback": {
+				"After": "PrecacheStuff"
+			},
+			"ClientCallback": {
+				"After": "PrecacheStuff"
+			}
+		},
+		{
+			"Path": "CAR_drivable.nut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "_dropship_drivable.nut",
+			"RunOn": "SERVER && MP"
+		}
+	],
+	"Localisation": [
+		"resources/CAR_localisation_%language%.txt"
+	]
+}
+

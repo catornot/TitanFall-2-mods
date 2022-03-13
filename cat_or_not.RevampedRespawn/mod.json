@@ -2,7 +2,7 @@
 	"Name" : "cat_or_not.RevampedRespawn",
 	"Description" : "Spawn ticks on death and respawns player with ships",
 	"Version": "1.1.0",
-	"LoadPriority": 1,
+	"LoadPriority": 2,
 	"Scripts": [
 		{
 			"Path": "sh_TICKSettings.gnut",
@@ -21,20 +21,6 @@
 		{
 			"Path": "_fd_dropship_utility.nut",
 			"RunOn": "SERVER && MP"
-		},
-		{
-			"Path": "_dropship_drivable.nut",
-			"RunOn": "SERVER && MP"
-		},
-		{
-			"Path": "precache_some_stuff.nut",
-			"RunOn": "(CLIENT || SERVER) && MP",
-			"ServerCallback": {
-				"After": "PrecacheStuff"
-			},
-			"ClientCallback": {
-				"After": "PrecacheStuff"
-			}
 		}
 	],
 	"Localisation": [
