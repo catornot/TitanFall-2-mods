@@ -2,8 +2,15 @@ from twitchio.ext import commands
 from twitchio.ext import pubsub
 from encoder import encoder
 import twitchio
+from BotKey import *
 
-
+bot_stuff = {
+    "client_id" : Client_id,
+    "client_secret" : Client_secret,
+    "oauth" : Oauth,
+    "botPrefix" : BotPrefix,
+    "channel" : Channel,
+}
 
 class Bot(commands.Bot):
 

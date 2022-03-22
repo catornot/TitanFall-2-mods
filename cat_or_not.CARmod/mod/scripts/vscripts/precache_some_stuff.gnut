@@ -3,28 +3,37 @@ global function PrecacheStuff
 const array<asset> models = [
     $"models/vehicles_r2/vehicles/samson/samson.mdl",
     $"models/vehicle/vehicle_truck_modular/vehicle_truck_modular_closed_bed.mdl",
-    $"models/vehicle/vehicle_w3_hatchback/tire_w3_hatch_bnw.mdl"
+    $"models/vehicle/vehicle_w3_hatchback/tire_w3_hatch_bnw.mdl",
+    $"models/robotics_r2/turret_plasma/plasma_turret_pc_1.mdl",
+    $"models/robotics_r2/turret_plasma/plasma_turret_pc_2.mdl",
+    $"models/robotics_r2/turret_plasma/plasma_turret_pc_3.mdl",
+    $"models/robotics_r2/turret_rocket/rocket_turret_posed.mdl",
+    $"models/CARs/CAR2",
+    $"models/weapons/sentry_turret/sentry_turret.mdl"
 
 ]
 
 void function PrecacheStuff()
 {
-    // #if SERVER
+    #if SERVER
     print( "-------------------------" )
     print( "-------------------------" )
     print( "-------------------------" )
     foreach( asset model in models )
     {
-        // print( "Before :" + ModelIsPrecached( model ) )
-        // if ( !ModelIsPrecached( model ) )
-        // {
+        print( "Before :" + ModelIsPrecached( model ) )
+        if ( !ModelIsPrecached( model ) )
+        {
             PrecacheModel( model )
-        // }
-        // print( "After :" + ModelIsPrecached( model ) )
+        }
+        print( "After :" + ModelIsPrecached( model ) )
         print( model )
     }
+    // PrecacheWeapon( "mp_weapon_gunship_missile" )
+    // PrecacheWeapon( "mp_weapon_satchel_nuke" )
+    // PrecacheWeapon( "mp_weapon_smr_nuke" )
     print( "-------------------------" )
     print( "-------------------------" )
     print( "-------------------------" )
-    // #endif
+    #endif
 }

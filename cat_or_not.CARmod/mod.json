@@ -1,7 +1,7 @@
 {
-	"Name" : "cat_or_not.RevampedRespawn",
-	"Description" : "Spawn ticks on death and respawns player with ships",
-	"Version": "1.1.0",
+	"Name" : "cat_or_not.CAR mod",
+	"Description" : "Makes CAR drivable",
+	"Version": "0.0.6",
 	"RequiredOnClient": true,
 	"LoadPriority": 3,
 	"Scripts": [
@@ -34,7 +34,7 @@
 			"RunOn": "SERVER && MP"
 		},
 		{
-			"Path": "_dropship_drivable.nut",
+			"Path": "turret_drivable.nut",
 			"RunOn": "SERVER && MP"
 		}
 	],
