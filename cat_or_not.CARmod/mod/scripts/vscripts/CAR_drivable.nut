@@ -33,13 +33,16 @@ const float EmbarkRadius = 15000.0
 const vector originalOffsetPoint = <0,50,0>
 const vector originalOffsetCam = < 0,-400,200>
 const vector rayOffset = <0,0,30>
-const vector rayClimbOffset = <0,0,20>
+const vector rayClimbOffset1 = <0,0,80>
+const vector rayClimbOffset2 = <0,0,60>
+const vector rayClimbMax = <10,10,1>
+const vector rayClimbMin = < -10,-10,0>
 const vector turret_offset = <0,-100,50>
 
-const array<vector> wheeloffsets = [ <30,100,0>, < -30,100,0>, <30,-100,0>, < -30,-100,0> ]
+const array<vector> wheeloffsets = [ <30,100,20>, < -30,100,20>, <30,-100,20>, < -30,-100,20> ]
 
 const float fallingSpeed = 50.0
-const float risingSpeed = 20.0
+const float risingSpeed = 30.0
 
 global struct CARstruct
 {
@@ -154,7 +157,6 @@ void function CarUpdate( CARstruct CAR )
             {
                 canMoveF = CanMoveF( CAR )
                 canMoveB = CanMoveB( CAR )
-                ProcessRising( CAR, [keys[KF],keys[KB]], [canMoveF,canMoveB] )
             }
 
             if ( keys[KF] && keys[KL] && canMoveF )
@@ -260,12 +262,12 @@ void function CarUpdate( CARstruct CAR )
 
 void function OnCARohNoItGetsDamagedWhatDoWeDoDoWeDieIDKmaybePetarknowsLetsAskHimNiceFunctionNameYouGotHereThought( entity car, var damageInfo )
 {
-    print( DamageInfo_GetDamage( damageInfo ) )
+    // print( DamageInfo_GetDamage( damageInfo ) )
 
     if ( car in file.cars )
     {
         file.cars[car].health -= DamageInfo_GetDamage( damageInfo )
-        print( file.cars[car].health )
+        // print( file.cars[car].health )
         if ( file.cars[car].health < 0 )
             return
     }
@@ -310,66 +312,51 @@ function SetDriverForCAR( car, player )
 
 bool function CanMoveB( CARstruct CAR )
 {
-    try {
-    TraceResults traceResult = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, -CAR.offsetlocation * 3 + CAR.CARmover.GetOrigin() + rayOffset, [ CAR.car, CAR.camera, CAR.player, CAR.CamMover, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
-    
-    vector otheroffset = _PositionBasedOnAngle( originalOffsetPoint + CAR.car.GetOrigin(), -CAR.car.GetAngles().y + 10, CAR.car.GetOrigin() ) - CAR.car.GetOrigin()
-    TraceResults traceResult2 = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, -otheroffset * 3 + CAR.CARmover.GetOrigin() + rayOffset, [ CAR.car, CAR.camera, CAR.player, CAR.CamMover, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+    TraceResults traceResult
+    vector NewRayOffset
+    foreach( float angle in [10.0,0.0,-10.0] )
+    {
+        NewRayOffset = _PositionBasedOnAngle( originalOffsetPoint , -CAR.car.GetAngles().y + angle, <0,0,0> )
+        traceResult = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, rayOffset + CAR.CARmover.GetOrigin() + NewRayOffset * -4, [ CAR.car, CAR.turret, CAR.CARmover ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
 
-    otheroffset = _PositionBasedOnAngle( originalOffsetPoint + CAR.car.GetOrigin(), -CAR.car.GetAngles().y - 10, CAR.car.GetOrigin() ) - CAR.car.GetOrigin()
-    TraceResults traceResult3 = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, -otheroffset * 3 + CAR.CARmover.GetOrigin() + rayOffset, [ CAR.car, CAR.camera, CAR.player, CAR.CamMover, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
-    
-    if ( traceResult.hitEnt == null && traceResult2.hitEnt == null && traceResult3.hitEnt == null )
-    {
-        return true
-    }
-    else if ( ( traceResult.hitEnt.IsNPC() || traceResult2.hitEnt.IsNPC() || traceResult3.hitEnt.IsNPC() ) || ( traceResult.hitEnt.IsPlayer() || traceResult2.hitEnt.IsPlayer() || traceResult3.hitEnt.IsPlayer() ) )
-    {
-        foreach ( TraceResults result in [ traceResult, traceResult2, traceResult3 ] )
+        // print( "b" + traceResult.hitEnt )
+        
+        if ( traceResult.hitEnt != null )
         {
-            if ( result.hitEnt.IsNPC() || result.hitEnt.IsPlayer() )
-                result.hitEnt.Die()
+            TryRise( CAR, traceResult.endPos )
+
+            if ( traceResult.hitEnt.IsPlayer() || traceResult.hitEnt.IsNPC() )
+                traceResult.hitEnt.Die()
+                
+            return false
         }
     }
-
-    return false
-    }
-    catch ( exception )
-    {
-        return false
-    }
+    return true
 }
 bool function CanMoveF( CARstruct CAR )
 {
-    try {
-    TraceResults traceResult = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, CAR.offsetlocation * 3 + CAR.CARmover.GetOrigin() + rayOffset, [ CAR.car, CAR.camera, CAR.player, CAR.CamMover, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
-    
-    vector otheroffset = _PositionBasedOnAngle( originalOffsetPoint + CAR.car.GetOrigin(), -CAR.car.GetAngles().y + 10, CAR.car.GetOrigin() ) - CAR.car.GetOrigin()
-    TraceResults traceResult2 = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, otheroffset * 3 + CAR.CARmover.GetOrigin() + rayOffset, [ CAR.car, CAR.camera, CAR.player, CAR.CamMover, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+    TraceResults traceResult
+    vector NewRayOffset
+    bool CanRise = false
+    foreach( float angle in [10.0,0.0,-10.0] )
+    {
+        NewRayOffset = _PositionBasedOnAngle( originalOffsetPoint, -CAR.car.GetAngles().y + angle, <0,0,0> )
+        traceResult = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, rayOffset +  CAR.CARmover.GetOrigin() + NewRayOffset * 4, [ CAR.car, CAR.turret, CAR.CARmover ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
 
-    otheroffset = _PositionBasedOnAngle( originalOffsetPoint + CAR.car.GetOrigin(), -CAR.car.GetAngles().y - 10, CAR.car.GetOrigin() ) - CAR.car.GetOrigin()
-    TraceResults traceResult3 = TraceLine( CAR.CARmover.GetOrigin() + rayOffset, otheroffset * 3 + CAR.CARmover.GetOrigin() + rayOffset, [ CAR.car, CAR.camera, CAR.player, CAR.CamMover, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
-    
-    
-    if ( traceResult.hitEnt == null && traceResult2.hitEnt == null && traceResult3.hitEnt == null )
-    {
-        return true
-    }
-    else if ( ( traceResult.hitEnt.IsNPC() || traceResult2.hitEnt.IsNPC() || traceResult3.hitEnt.IsNPC() ) || ( traceResult.hitEnt.IsPlayer() || traceResult2.hitEnt.IsPlayer() || traceResult3.hitEnt.IsPlayer() ) )
-    {
-        foreach ( TraceResults result in [ traceResult, traceResult2, traceResult3 ] )
+        // print( "f" + traceResult.hitEnt )
+
+        if ( traceResult.hitEnt != null )
         {
-            if ( result.hitEnt.IsNPC() || result.hitEnt.IsPlayer() )
-                result.hitEnt.Die()
+            
+            CanRise = TryRise( CAR, traceResult.endPos )
+
+            if ( traceResult.hitEnt.IsPlayer() || traceResult.hitEnt.IsNPC() )
+                traceResult.hitEnt.Die()
+
+            return false || CanRise
         }
     }
-
-    return false
-    }
-    catch ( exception )
-    {
-        return false
-    }
+    return !(false || CanRise)
 }
 
 void function ProcessFalling( CARstruct CAR )
@@ -413,7 +400,7 @@ bool function IsFalling( CARstruct CAR )
     foreach( vector wheeloffset in wheeloffsets )
     {
         NewWheeloffset = _PositionBasedOnAngle( wheeloffset, -CAR.car.GetAngles().y, <0,0,0> )
-        traceResult = TraceLine( CAR.CARmover.GetOrigin() + NewWheeloffset, CAR.CARmover.GetOrigin() + NewWheeloffset - <0,0,30>, [ CAR.car, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+        traceResult = TraceLine( CAR.CARmover.GetOrigin() + NewWheeloffset, CAR.CARmover.GetOrigin() + NewWheeloffset - <0,0,50>, [ CAR.car, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
 
         if ( traceResult.hitEnt != null )
         {
@@ -423,38 +410,34 @@ bool function IsFalling( CARstruct CAR )
     return true
 }
 
-void function ProcessRising( CARstruct CAR, array<bool> keys, array<bool> canMove )
-{
-    print(CanRise( CAR, 1 ) && canMove[0] && keys[0] && !CAR.IsFalling)
-    if ( CanRise( CAR, 1 ) && canMove[0] && keys[0] && !CAR.IsFalling )
-    {
-        CAR.vertical_offset = <0,0,risingSpeed>
-    }
-    else if ( CanRise( CAR, -1 ) && canMove[1] && keys[1] && !CAR.IsFalling )
-    {
-        CAR.vertical_offset = <0,0,risingSpeed>
-    } 
-    else if ( !CAR.IsFalling )
-    {
-        CAR.vertical_offset = <0,0,0>
-    }
-}
-
-bool function CanRise( CARstruct CAR, int direction )
+bool function TryRise( CARstruct CAR, vector position )
 {
     TraceResults traceResult
-    vector NewRayClimbOffset
+    bool rose = false
     foreach( float angle in [10.0,0.0,-10.0] )
     {
-        NewRayClimbOffset = _PositionBasedOnAngle( rayClimbOffset + CAR.offsetlocation * direction, -CAR.car.GetAngles().y + angle, <0,0,0> )
-        traceResult = TraceLine( CAR.car.GetOrigin() + NewRayClimbOffset * 3, CAR.car.GetOrigin() + NewRayClimbOffset * 3, [ CAR.car, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+        traceResult = TraceHull( position + rayClimbOffset2, rayClimbOffset1 + position, rayClimbMin, rayClimbMax, [ CAR.car, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+        
+        // print( traceResult.hitEnt  )
+        // print( CAR.car.GetOrigin() + position + rayClimbOffset2 )
 
-        if ( traceResult.hitEnt != null )
-        {
-            return true
-        }
+        if ( traceResult.hitEnt == null )
+            rose = true
+        else
+            rose = false
     }
-    return false
+
+    if ( !rose )
+    {
+        CAR.vertical_offset = <0,0,0>
+        return false
+    }
+    else
+    {
+        CAR.vertical_offset = <0,0,risingSpeed>
+        return true
+    }
+    unreachable   
 }
 
 void function IncreaseAcceleration( CARstruct CAR )

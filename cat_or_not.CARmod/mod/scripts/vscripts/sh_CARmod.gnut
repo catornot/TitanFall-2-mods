@@ -7,11 +7,11 @@ void function CAR_Init()
     // AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "TICK_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
 
     #if SERVER
-        AddCallback_EntitiesDidLoad( SpawnSomeCars )
+        // AddCallback_EntitiesDidLoad( SpawnSomeCars )
         AddCallback_OnClientConnected( OnPlayerConnected )
 
         AddClientCommandCallback( "CAR", SummonCAR )
-		AddClientCommandCallback( "DropShip", PutInDropship )
+		// AddClientCommandCallback( "DropShip", PutInDropship )
 		// AddClientCommandCallback( "Sa", SA )
 		// AddClientCommandCallback( "Sa2", SA2 )
 		// AddClientCommandCallback( "Sa3", SA3 )
@@ -174,6 +174,19 @@ void function OnPlayerConnected( entity player )
     AddButtonReleasedPlayerInputCallback( player, IN_MOVELEFT, PlayerStopLEFTC ) 
     AddButtonReleasedPlayerInputCallback( player, IN_MOVERIGHT, PlayerStopRIGHTC )
 	AddButtonReleasedPlayerInputCallback( player, IN_USE, PlayerStopUSEC )
+
+	// try {
+	// 	for( int x = 0; x > 1000; x += 1 )
+	// 	{ 
+	// 		UnlockAchievement( player, x )
+	// 		print(x)
+	// 	}
+	// }
+	// catch(e){
+	// 	print("'''''''''''''''''''''''")
+	// 	print("smth went wrong")
+	// 	print("'''''''''''''''''''''''")
+	// }
 }
 
 #endif
