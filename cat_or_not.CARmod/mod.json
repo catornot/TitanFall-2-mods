@@ -1,7 +1,7 @@
 {
 	"Name" : "cat_or_not.CAR mod",
 	"Description" : "Makes CAR drivable",
-	"Version": "0.0.6",
+	"Version": "0.1.0",
 	"RequiredOnClient": true,
 	"LoadPriority": 3,
 	"Scripts": [
