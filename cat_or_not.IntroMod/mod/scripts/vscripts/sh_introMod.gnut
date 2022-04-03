@@ -1,0 +1,45 @@
+global function Intro_Init
+global function GetIntroRiff
+global function GetMarvinRiff
+
+
+void function Intro_Init()
+{
+	AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "intro_riff", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+	AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "intro_marvin_riff", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+
+    #if SERVER
+        // AddCallback_OnClientConnected( OnPlayerConnected )
+		ClassicMP_SetLevelIntro( CustomIntro_Setup, CustomIntro_GetLength() )
+		// AddClientCommandCallback( "Nade", FireNades )
+	#endif
+    
+}
+
+bool function GetIntroRiff(){
+    return GetCurrentPlaylistVarInt("intro_riff", 0) == 1
+}
+
+bool function GetMarvinRiff(){
+    return GetCurrentPlaylistVarInt("intro_marvin_riff", 0) == 1
+}
+
+#if SERVER
+
+bool function FireNades( entity player, array<string> args )
+{
+	entity weapon = GetPrimaryWeapons( player )[0]
+	entity nade
+	for( int x = 0; x < 10; x += 1 )
+	{
+		nade = weapon.FireWeaponGrenade( player.GetOrigin(), player.GetForwardVector() * 10, player.GetForwardVector() * 10, 1, damageTypes.explosive, damageTypes.explosive, false, true, true )
+		
+		Grenade_Init( nade, weapon )
+		nade.SetOwner( player )
+	}
+	// nade.s.impactFuse <- true
+
+	return true
+}
+
+#endif

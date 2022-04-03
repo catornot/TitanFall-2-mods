@@ -1,0 +1,26 @@
+{
+	"Name" : "cat_or_not.Intro Mod",
+	"Description" : "custom intro for pilots",
+	"Version": "0.0.1",
+	"LoadPriority": 0,
+	"Scripts": [
+		{
+			"Path": "sh_introMod.gnut",
+			"RunOn": "MP",
+			"ServerCallback": {
+				"After": "Intro_Init"
+			},
+			"ClientCallback": {
+				"After": "Intro_Init"
+			}
+		},
+		{
+			"Path": "intro_stuff.nut",
+			"RunOn": "SERVER && MP"
+		}
+	],
+	"Localisation": [
+		"resources/custom_intro_localisation_%language%.txt"
+	]
+}
+
