@@ -123,7 +123,7 @@ void function CarUpdate( CARstruct CAR )
     array<bool> keys
     bool canMoveF
     bool canMoveB
-    while( IsValid( CAR.car ) && CAR.health > 0.0 )
+    while( IsValid( CAR.car ) && CAR.health > 0.0 && IsValid( CAR.turret ) )
     {
         foreach( entity player in GetPlayerArray() )
         {
@@ -246,6 +246,12 @@ void function CarUpdate( CARstruct CAR )
         CAR.car.UnsetUsable()
         wait 0.3
 
+        ClearChildren( CAR.car )
+        CAR.car.SetScriptName( "CAR ded" )
+        
+        if ( !IsValid(CAR.turret) )
+            return
+
         if ( CAR.turret.GetOwner() != null )
         {
             entity player = CAR.turret.GetOwner()
@@ -254,14 +260,16 @@ void function CarUpdate( CARstruct CAR )
         }
         wait 0.2
         CAR.turret.Die()
-
-        ClearChildren( CAR.car )
-        CAR.car.SetScriptName( "CAR ded" )
     }
 }
 
 void function OnCARohNoItGetsDamagedWhatDoWeDoDoWeDieIDKmaybePetarknowsLetsAskHimNiceFunctionNameYouGotHereThought( entity car, var damageInfo )
 {
+    entity attacker = DamageInfo_GetAttacker( damageInfo )
+
+    if ( !( attacker.IsPlayer() || attacker.IsNPC() ) )
+        return
+
     // print( DamageInfo_GetDamage( damageInfo ) )
 
     if ( car in file.cars )
@@ -271,8 +279,10 @@ void function OnCARohNoItGetsDamagedWhatDoWeDoDoWeDieIDKmaybePetarknowsLetsAskHi
         if ( file.cars[car].health < 0 )
             return
     }
-    entity attacker = DamageInfo_GetAttacker( damageInfo )
-    attacker.NotifyDidDamage( car, 0, DamageInfo_GetDamagePosition( damageInfo ), DamageInfo_GetCustomDamageType( damageInfo ), DamageInfo_GetDamage( damageInfo ), DamageInfo_GetDamageFlags( damageInfo ), DamageInfo_GetHitGroup( damageInfo ), DamageInfo_GetWeapon( damageInfo ), DamageInfo_GetDistFromAttackOrigin( damageInfo ) )
+    
+    if ( attacker.IsPlayer() && IsValid( attacker ) ) {
+        attacker.NotifyDidDamage( car, 0, DamageInfo_GetDamagePosition( damageInfo ), DamageInfo_GetCustomDamageType( damageInfo ), DamageInfo_GetDamage( damageInfo ), DamageInfo_GetDamageFlags( damageInfo ), DamageInfo_GetHitGroup( damageInfo ), DamageInfo_GetWeapon( damageInfo ), DamageInfo_GetDistFromAttackOrigin( damageInfo ) )
+    }
 }
 
 function SetDriverForCAR( car, player )
@@ -325,8 +335,15 @@ bool function CanMoveB( CARstruct CAR )
         {
             TryRise( CAR, traceResult.endPos )
 
-            if ( traceResult.hitEnt.IsPlayer() || traceResult.hitEnt.IsNPC() )
-                traceResult.hitEnt.Die()
+            try{
+            if ( traceResult.hitEnt.IsPlayer() || traceResult.hitEnt.IsNPC() ) {
+                if ( IsValid(traceResult.hitEnt) )
+                    traceResult.hitEnt.Die()
+            }
+            }
+            catch(e){
+                
+            }
                 
             return false
         }
@@ -349,9 +366,16 @@ bool function CanMoveF( CARstruct CAR )
         {
             
             CanRise = TryRise( CAR, traceResult.endPos )
+            
+            try{
+            if ( traceResult.hitEnt.IsPlayer() || traceResult.hitEnt.IsNPC() ) {
+                if ( IsValid(traceResult.hitEnt) )
+                    traceResult.hitEnt.Die()
+            }
+            }
+            catch( e ){
 
-            if ( traceResult.hitEnt.IsPlayer() || traceResult.hitEnt.IsNPC() )
-                traceResult.hitEnt.Die()
+            }
 
             return false || CanRise
         }
@@ -400,7 +424,7 @@ bool function IsFalling( CARstruct CAR )
     foreach( vector wheeloffset in wheeloffsets )
     {
         NewWheeloffset = _PositionBasedOnAngle( wheeloffset, -CAR.car.GetAngles().y, <0,0,0> )
-        traceResult = TraceLine( CAR.CARmover.GetOrigin() + NewWheeloffset, CAR.CARmover.GetOrigin() + NewWheeloffset - <0,0,50>, [ CAR.car, CAR.CARmover, CAR.turret ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
+        traceResult = TraceLine( CAR.CARmover.GetOrigin() + NewWheeloffset, CAR.CARmover.GetOrigin() + NewWheeloffset - <0,0,50>, [ CAR.car, CAR.CARmover ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE )
 
         if ( traceResult.hitEnt != null )
         {
