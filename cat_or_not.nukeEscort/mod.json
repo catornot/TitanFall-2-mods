@@ -9,6 +9,9 @@
 			"RunOn": "SERVER && MP",
 			"ServerCallback": {
 				"After": "nukeEscort_settings_Init"
+			},
+			"ClientCallback": {
+				"After": "nukeEscort_settings_Init"
 			}
 		}
 	],
