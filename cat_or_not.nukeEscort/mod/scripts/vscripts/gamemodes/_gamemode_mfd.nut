@@ -3,7 +3,7 @@ global function GamemodeMfd_Init
 
 const table<str,vector> NukeTitanSpawnLocation =
 {
-	"mp_box": <0,0,100>
+	"mp_box": <0,0,1>
 }
 
 struct {
