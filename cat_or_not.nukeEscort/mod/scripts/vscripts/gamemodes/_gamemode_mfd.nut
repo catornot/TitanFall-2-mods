@@ -61,3 +61,4 @@ void function StartGamemode()
 
 // might be usuful
 // player.SetPlayerGameStat( PGS_ELIMINATED, 1 )
+// PGS_DEFENSE_SCORE will be used to track the amount of time a player is defeding/attacking the tian 
