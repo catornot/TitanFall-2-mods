@@ -7,11 +7,23 @@ const table<str,vector> NukeTitanSpawnLocation =
 }
 
 struct {
+	entity nukeTitan
+	entity harvester
 } file
 
 void function GamemodeMfd_Init()
 {
 	Riff_ForceTitanAvailability( eTitanAvailability.Never )
+
+	GameMode_SetName( "mdf", "Nuke Escort" )
+	GameMode_SetIcon( "mdf", $"ui/menu/playlist/tdm" )
+	GameMode_SetDefaultScoreLimits( "mdf", 100, 100 )
+	GameMode_SetDesc( "mdf", "Nuke titan tries to destroy the harvester" )
+	GameMode_SetGameModeAnnouncement( "mdf", "Nuke Escort" )
+	GameMode_SetGameModeDefendAnnouncement( "mdf", "Defend the harvester from the nuke titan" )
+	GameMode_SetDefendDesc( "mdf", "Defending team defends the harvester from the nuke titan" )
+	GameMode_SetGameModeAttackAnnouncement( "mdf", "Escort The nuke tian to the harvester" )
+	GameMode_SetAttackDesc( "mdf", "Attacking team escorts The nuke tian to the harvester" )
 
 	AddCallback_OnPlayerKilled( GiveScoreForPlayerKill )
 
@@ -35,13 +47,13 @@ void function StartGamemode()
 	if ( GetMapName() in NukeTitanSpawnLocation )
 		spawnPosition = NukeTitanSpawnLocation[ GetMapName() ]
 
-	entity nukeTitan = CreateNPCTitan( "npc_titan_ogre", TEAM_MILITIA, spawnPosition, <0,0,0>, [] ) // why do I need []
-	SetSpawnOption_NPCTitan( nukeTitan, TITAN_HENCH )
-	SetSpawnOption_AISettings( nukeTitan, "npc_titan_ogre" )
-    SetSpawnOption_Titanfall( nukeTitan )
+	file.nukeTitan = CreateNPCTitan( "npc_titan_ogre", TEAM_MILITIA, spawnPosition, <0,0,0>, [] ) // why do I need []
+	SetSpawnOption_NPCTitan( file.nukeTitan, TITAN_HENCH )
+	SetSpawnOption_AISettings( file.nukeTitan, "npc_titan_ogre" )
+    SetSpawnOption_Warpfall( file.nukeTitan )
     // spawnNpc.ai.titanSpawnLoadout.setFile = name // good idea wold be to set a loadout
 	// OverwriteLoadoutWithDefaultsForSetFile( nukeTitan.ai.titanSpawnLoadout )
-	DispatchSpawn( nukeTitan )
+	DispatchSpawn( file.nukeTitan )
 
 	// TODO : add target
 	// then we spawn a target
