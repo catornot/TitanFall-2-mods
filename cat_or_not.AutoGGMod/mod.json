@@ -14,7 +14,7 @@
 	"Scripts": [
         {
 			"Path": "AutoMessage.nut",
-			"RunOn": "CLIENT",
+			"RunOn": "CLIENT && MP",
 			"ClientCallback": {
 				"Before": "InitAutoMessage"
 			}

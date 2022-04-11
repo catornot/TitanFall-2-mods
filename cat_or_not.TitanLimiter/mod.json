@@ -1,0 +1,25 @@
+{
+	"Name" : "cat_or_not.TitanLimit",
+	"Description" : "Adds a limit to how many titans there can be",
+	"Version": " titan",
+	"LoadPriority": 2,
+	
+	"ConVars": [
+
+		{
+			"Name": "TitanLimit",
+			"DefaultValue": "3"
+		}
+	],
+
+	"Scripts": [
+		{
+			"Path": "TitanLimit.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "Init_TitanLimit"
+			}
+		}
+	]
+}
+
