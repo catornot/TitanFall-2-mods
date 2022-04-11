@@ -49,7 +49,7 @@ void function StartGamemode()
 
 	file.nukeTitan = CreateNPCTitan( "npc_titan_ogre", TEAM_MILITIA, spawnPosition, <0,0,0>, [] ) // why do I need []
 	SetSpawnOption_NPCTitan( file.nukeTitan, TITAN_HENCH )
-	SetSpawnOption_AISettings( file.nukeTitan, "npc_titan_ogre" )
+	SetSpawnOption_AISettings( file.nukeTitan, "npc_titan_ogre_minigun_nuke" )
     SetSpawnOption_Warpfall( file.nukeTitan )
     // spawnNpc.ai.titanSpawnLoadout.setFile = name // good idea wold be to set a loadout
 	// OverwriteLoadoutWithDefaultsForSetFile( nukeTitan.ai.titanSpawnLoadout )
