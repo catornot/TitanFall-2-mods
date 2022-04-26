@@ -1,13 +1,19 @@
 global function DecodeDNA
 global function ArrayToString
 
-const table< string, int > nucleotideToNumber
+const table< string, int > nucleotideToNumber // this is base 4
 {
     "A" : 0,
     "U" : 1,
     "C" : 2,
     "G" : 3
 }
+
+const table< int, string > numberToString // this is base 10 and its ascii but smaller
+{
+    
+} 
+// we may have chr and ord
 
 void functionref( array< string > ) function DecodeDNA( string DNA )
 {
