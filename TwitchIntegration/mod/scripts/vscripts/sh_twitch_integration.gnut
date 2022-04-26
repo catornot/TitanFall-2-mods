@@ -2,8 +2,8 @@ global function TwicthInter_settings_Init
 
 struct {
 	array< array<string> > DNA = []
-    array< string > codon = []
-
+    array<string> codon = []
+    array<entity>ClientsWRui
 } file
 
 
@@ -72,6 +72,9 @@ bool function AddPlayertoRuiUpdateList( entity player, array<string> args )
         GetConVarString("C_nucleo")
     ]
     ServerToClientStringCommand( player, commands )
+    
+    file.ClientsWRui.append( player )
+
     return true
 }
 

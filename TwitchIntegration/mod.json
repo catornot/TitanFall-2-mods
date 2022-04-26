@@ -37,8 +37,12 @@
 			}
 		},
 		{
-			"Path": "ClientUInInput.nut",
-			"RunOn": "( CLIENT ) && MP",
+			"Path": "decoder.nut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "ClientHandler.nut",
+			"RunOn": "CLIENT && MP",
 			"ClientCallback": {
 				"Before": "ClientInit"
 			}
