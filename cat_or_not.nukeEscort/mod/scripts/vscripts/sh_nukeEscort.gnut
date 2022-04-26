@@ -4,19 +4,21 @@ void function nukeEscort_settings_Init()
 {
     // AddPrivateMatchModeSettingArbitrary("#MODE_SETTING_CATEGORY_BATTERYYOINK", "number_of_npc", "2")
     // AddPrivateMatchModeSettingArbitrary("#MODE_SETTING_CATEGORY_BATTERYYOINK", "shop_moving_time", "120")
+	
+    GameMode_SetName( MARKED_FOR_DEATH , "Nuke Escort" )
+	GameMode_SetIcon( MARKED_FOR_DEATH , $"ui/menu/playlist/tdm" )
+	GameMode_SetDefaultScoreLimits( MARKED_FOR_DEATH , 100, 100 )
+	GameMode_SetDesc( MARKED_FOR_DEATH , "Nuke titan tries to destroy the harvester" )
+	GameMode_SetDefendDesc( MARKED_FOR_DEATH , "Defending team defends the harvester from the nuke titan" )
+	GameMode_SetGameModeAttackAnnouncement( MARKED_FOR_DEATH , "Escort The nuke tian to the harvester" )
+	GameMode_SetAttackDesc( MARKED_FOR_DEATH , "Attacking team escorts The nuke tian to the harvester" )
+	
+	
 
-    GameMode_SetName( "mdf", "Nuke Escort" )
-	GameMode_SetIcon( "mdf", $"ui/menu/playlist/tdm" )
-	GameMode_SetDefaultScoreLimits( "mdf", 100, 100 )
-	GameMode_SetDesc( "mdf", "Nuke titan tries to destroy the harvester" )
-	GameMode_SetGameModeAnnouncement( "mdf", "Nuke Escort" )
-	GameMode_SetGameModeDefendAnnouncement( "mdf", "Defend the harvester from the nuke titan" )
-	GameMode_SetDefendDesc( "mdf", "Defending team defends the harvester from the nuke titan" )
-	GameMode_SetGameModeAttackAnnouncement( "mdf", "Escort The nuke tian to the harvester" )
-	GameMode_SetAttackDesc( "mdf", "Attacking team escorts The nuke tian to the harvester" )
-}
+	// if ( IsLobby() )
+	// 	return
 
-int function nuuuuuul(){
-    // return GetCurrentPlaylistVarInt("", 2)
-    return 1
+	// GameMode_SetGameModeAnnouncement( MARKED_FOR_DEATH , "Nuke Escort" )
+	// GameMode_SetGameModeDefendAnnouncement( MARKED_FOR_DEATH , "Defend the harvester from the nuke titan" )
+
 }
