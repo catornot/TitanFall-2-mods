@@ -3,6 +3,27 @@
 	"Description" : "Twicth Intergration for tf2 by catornot",
 	"Version": "0.1.0",
 	"LoadPriority": 2,
+
+	"ConVars": [
+
+		{
+			"Name": "A_nucleo",
+			"DefaultValue": "gkjreiughieu"
+		},
+		{
+			"Name": "U_nucleo",
+			"DefaultValue": "erbgubgjhgeo"
+		},
+		{
+			"Name": "G_nucleo",
+			"DefaultValue": "fuygbfuefuiuf"
+		},
+		{
+			"Name": "C_nucleo",
+			"DefaultValue": "ghejkgbgeyyyu"
+		}
+	],
+
 	"Scripts": [
 		{
 			"Path": "sh_twitch_integration.gnut",

@@ -1,7 +1,11 @@
 global function ClientInit
 
 struct{
-    var rui = null 
+    var rui = null
+    string A = "gkjreiughieu"
+    string T = "fndwjbfiupwh"
+    string G = "wiuehbuifhfu"
+    string C = "hewjgfiywvii"
 } file
 
 void function ClientInit()
@@ -10,11 +14,21 @@ void function ClientInit()
 
     file.rui = RuiCreate($"ui/cockpit_console_text_top_right.rpak", topology, RUI_DRAW_COCKPIT, 0)
 
-    // AddClientCommandCallback("SetText", SetTextCommand)
-    // AddClientCommandCallback("ResetText", SetTextCommand)
+    AddServerToClientStringCommandCallback("SetText", SetTextCommand)
+    AddServerToClientStringCommandCallback("ResetText", SetTextCommand)
+
+    AddServerToClientStringCommandCallback("SetCommands", SetCommands)
 
     thread RuiSetup()
     thread ButtonsInit()
+
+    thread SendClientAlert()
+}
+
+void function SendClientAlert()
+{
+    wait 10
+    GetLocalClientPlayer().ClientCommand( "IHaveRui0101" )
 }
 
 void function ButtonsInit(){
@@ -26,16 +40,16 @@ void function ButtonsInit(){
 }
 
 void function P_pressed( entity player){
-    GetPlayerArray()
+    GetLocalClientPlayer().ClientCommand( file.A )
 }
 void function L_pressed( entity player){
-    GetPlayerArray()
+    GetLocalClientPlayer().ClientCommand( file.T )
 }
 void function M_pressed( entity player){
-    GetLocalClientPlayer().ClientCommand( GetConVarString("AddGToCodon") )
+    GetLocalClientPlayer().ClientCommand( file.G ) // GetConVarString("AddGToCodon" )
 }
 void function O_pressed( entity player ){
-    GetLocalClientPlayer().ClientCommand( GetConVarString("AddGToCodon") )
+    GetLocalClientPlayer().ClientCommand( file.C ) // GetConVarString("AddGToCodon")
 }
 
 // if nuclei == "A":
@@ -48,16 +62,28 @@ void function O_pressed( entity player ){
 //     nuclei = "M"
 // else:
 
-// void function SetTextCommand(entity player, array<string> args)
-// {
-//     print("SetText: was kalled with " + args)
-//     RuiSetString(rui, "msgText", format( "%s %s", "Next Event :", args[0] ) ) 
-// }
-// void function ResetTextCommand(entity player, array<string> args)
-// {
-//     print("ResetText: was kalled with " + args)
-//     RuiSetString(rui, "msgText", format( "%s %s", "Next Event : Waiting" ) )
-// }
+void function SetCommands( array<string> args )
+{
+    // it goes A,U,G,C
+    if ( args.len() == 4 )
+    {
+        file.A = args[0]
+        file.T = args[1]
+        file.G = args[2]
+        file.C = args[3]
+    }
+}
+
+void function SetTextCommand( array<string> args )
+{
+    print( "SetText: was kalled with " + args[0] )
+    RuiSetString( rui, "msgText", format( "%s %s", "Next Event :", args[0] ) ) 
+}
+void function ResetTextCommand( array<string> args )
+{
+    print( "ResetText: was kalled with " + args[0] )
+    RuiSetString( rui, "msgText", format( "%s %s", "Next Event : Waiting" ) )
+}
 
 
 void function RuiSetup()
@@ -90,5 +116,3 @@ void function RuiRun()
     //     WaitFrame()
     // }
 }
-
-//trigger_hurt
