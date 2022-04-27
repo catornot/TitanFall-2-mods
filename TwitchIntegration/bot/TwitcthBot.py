@@ -17,7 +17,7 @@ class Bot(commands.Bot):
     def __init__(self):
         super().__init__(
             token = bot_stuff["oauth"],
-            prefix = bot_stuff["botPrefix"], 
+            prefix = bot_stuff["botPrefix"],
             initial_channels = bot_stuff["channel"],
         )
 
@@ -30,30 +30,38 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         if message.echo:
             return
-        
+
         print(message.content)
 
         await self.handle_commands(message)
-    
+
     @commands.command()
     async def apply(self, ctx: commands.Context):
         message = ctx.message.raw_data.split("?apply")[1][1:]
-        data = self.Encoder.get_based_on_id(message)
+        message = message.split(" ")
+        data = self.Encoder.get_based_on_id(message[0])[0]
         print(data)
         print(message)
         if data == None:
             return
-        if len(data) != 1:
-            return
-        
-        # sequence = data[0]
+
         sequence = data
+        for char in data:
+            if char == ';':
+                if len( message ) < 2:
+                    print("dadad")
+                    return
+                else:
+                    sequence = data.replace( ";", message[1] )
+
+        sequence = self.Encoder.functionToSequence( data )
+        print( sequence )
         self.Encoder.send_code(sequence)
 
     @commands.command()
     async def help(self, ctx: commands.Context):
         await ctx.reply('https://github.com/catornot/TitanFall-2-mods/tree/main/TwitchIntegration/bot#readme')
-    
+
 
 if __name__ == '__main__':
     bot = Bot()

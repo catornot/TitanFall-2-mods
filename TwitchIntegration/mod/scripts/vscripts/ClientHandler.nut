@@ -15,7 +15,7 @@ void function ClientInit()
     file.rui = RuiCreate($"ui/cockpit_console_text_top_right.rpak", topology, RUI_DRAW_COCKPIT, 0)
 
     AddServerToClientStringCommandCallback("SetText", SetTextCommand)
-    AddServerToClientStringCommandCallback("ResetText", SetTextCommand)
+    AddServerToClientStringCommandCallback("ResetText", ResetTextCommand)
 
     AddServerToClientStringCommandCallback("SetCommands", SetCommands)
 
@@ -27,7 +27,7 @@ void function ClientInit()
 
 void function SendClientAlert()
 {
-    wait 10
+    wait 1
     GetLocalClientPlayer().ClientCommand( "IHaveRui0101" )
 }
 
@@ -77,12 +77,12 @@ void function SetCommands( array<string> args )
 void function SetTextCommand( array<string> args )
 {
     print( "SetText: was kalled with " + args[0] )
-    RuiSetString( rui, "msgText", format( "%s %s", "Next Event :", args[0] ) ) 
+    RuiSetString( file.rui, "msgText", format( "%s %s", "Next Event :", args[0] ) ) 
 }
 void function ResetTextCommand( array<string> args )
 {
     print( "ResetText: was kalled with " + args[0] )
-    RuiSetString( rui, "msgText", format( "%s %s", "Next Event : Waiting" ) )
+    RuiSetString( file.rui, "msgText", format( "%s %s", "Next Event : Waiting" ) )
 }
 
 

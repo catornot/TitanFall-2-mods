@@ -21,11 +21,29 @@ void function TwicthInter_settings_Init()
         AddClientCommandCallback( "wiuehbuifhfu" , AddGToCodon)
 
         AddClientCommandCallback( "IHaveRui0101" , AddPlayertoRuiUpdateList)
+
+        thread Test()
     }
     #endif
 }
 
 #if SERVER
+
+void function Test()
+{
+    wait 10
+    foreach( entity player in file.ClientsWRui )
+    {
+        ServerToClientStringCommand( player, "SetText test" )
+    }
+    
+    wait 10
+
+    foreach( entity player in file.ClientsWRui )
+    {
+        ServerToClientStringCommand( player, "ResetText" )
+    }
+}
 
 bool function GetTwicthState(){
     return GetCurrentPlaylistVarInt("TWITCH_RIFF", 0) == 1
@@ -71,7 +89,7 @@ bool function AddPlayertoRuiUpdateList( entity player, array<string> args )
         GetConVarString("G_nucleo"),
         GetConVarString("C_nucleo")
     ]
-    ServerToClientStringCommand( player, commands )
+    ServerToClientStringCommand( player, ArrayToString( commands, true ) )
     
     file.ClientsWRui.append( player )
 

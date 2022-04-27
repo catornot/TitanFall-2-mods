@@ -1,19 +1,80 @@
+global function Init_Decoder
 global function DecodeDNA
 global function ArrayToString
 
-const table< string, int > nucleotideToNumber // this is base 4
-{
-    "A" : 0,
-    "U" : 1,
-    "C" : 2,
-    "G" : 3
+table< int, string > Special_char
+
+enum nucleotideToNumber { // this is base 4
+    A
+    U
+    C
+    G
 }
 
-const table< int, string > numberToString // this is base 10 and its ascii but smaller
+enum numberToString { // this is base 10 and its ascii but smaller
+   a
+   b
+   c
+   d
+   e
+   f
+   g
+   h
+   i
+   j
+   k
+   l
+   m
+   n
+   o
+   p
+   q
+   r
+   s
+   t
+   u
+   v
+   w
+   x
+   y
+   z
+   A
+   B
+   C
+   D
+   E
+   F
+   G
+   H
+   I
+   J
+   K
+   L
+   M
+   N
+   O
+   P
+   Q
+   R
+   S
+   T
+   U
+   V
+   W
+   X
+   Y
+   Z
+   Special_Quot
+   Special_Parenthesis_Left
+   Special_Parenthesis_Right
+}
+
+void function Init_Decoder()
 {
-    
-} 
-// we may have chr and ord
+    Special_char['"'] <- "Special_Quot"
+    Special_char['('] <- "Special_Parenthesis_Left"
+    Special_char[')'] <- "Special_Parenthesis_Right"
+}
 
 void functionref( array< string > ) function DecodeDNA( string DNA )
 {
@@ -23,14 +84,18 @@ void functionref( array< string > ) function DecodeDNA( string DNA )
 string function ArrayToString( array<string> Array, bool spaces = false )
 {
     string str
-    string space = ' '
-    if ( !spaces )
-        space = ''
+    if ( !spaces ) // const can't be empty they said >:(
+    {
+        foreach( string line in Array )
+        {
+            str = format( "%s%s", str, line )
+        }
+        return str
+    }
 
     foreach( string line in Array )
     {
-        str = format( "%s%s%s", ArrayToString, space, line )
+        str = format( "%s %s", str, line )
     }
-
     return str
 }
