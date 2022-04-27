@@ -4,15 +4,18 @@ struct {
 	array< array<string> > DNA = []
     array<string> codon = []
     array<entity>ClientsWRui
+    int LastEvenTime = Time()
+    void functionref() CleanUpFunc
 } file
 
 
 void function TwicthInter_settings_Init()
 {
     AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_TWITCH", "TWITCH_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "1" )
+    AddPrivateMatchModeSettingArbitrary( "#MODE_SETTING_CATEGORY_TWITCH", "TWITCH_COOLDOWN", "60" )
 
     #if SERVER
-    if ( !GetTwicthState() ){
+    if ( GetTwicthState() ){
         // generateRandomCommandNames()
 
         AddClientCommandCallback( "gkjreiughieu" , AddAToCodon)
@@ -23,6 +26,8 @@ void function TwicthInter_settings_Init()
         AddClientCommandCallback( "IHaveRui0101" , AddPlayertoRuiUpdateList)
 
         thread Test()
+
+        thread TwicthRequestsThink()
     }
     #endif
 }
@@ -47,6 +52,10 @@ void function Test()
 
 bool function GetTwicthState(){
     return GetCurrentPlaylistVarInt("TWITCH_RIFF", 0) == 1
+}
+
+int function GetTwicthCoolDown(){
+    return GetCurrentPlaylistVarInt("TWITCH_COOLDOWN", 60)
 }
 
 
@@ -95,6 +104,18 @@ bool function AddPlayertoRuiUpdateList( entity player, array<string> args )
     file.ClientsWRui.append( player )
 
     return true
+}
+
+void function TwicthRequestsThink()
+{
+    for(;;)
+    {
+        if ( LastEvenTime + 60 < Time() )
+        {
+            CleanUpFunc() 
+        }
+        wait 0.05
+    }
 }
 
 #endif
