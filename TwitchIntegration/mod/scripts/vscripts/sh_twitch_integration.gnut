@@ -84,6 +84,7 @@ bool function AddPlayertoRuiUpdateList( entity player, array<string> args )
     // it goes A,U,G,C
     array< string > commands = 
     [
+        "SetCommands"
         GetConVarString("A_nucleo"),
         GetConVarString("U_nucleo"),
         GetConVarString("G_nucleo"),
