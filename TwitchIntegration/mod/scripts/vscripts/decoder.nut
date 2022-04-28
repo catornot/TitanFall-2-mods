@@ -73,8 +73,10 @@ string function DecodeDNA( string DNA )
 {
     print(DNA)
     string strFunction = ""
-    array< int > base4s
-    int base4 = 0
+    array< string > base4s
+    string base4
+    int num
+    int number
     string strBase4 = ""
     
     // nucleotide to base4
@@ -82,23 +84,29 @@ string function DecodeDNA( string DNA )
     {
         if ( index % 3 == 0 )
         {
-            base4 = 0
             base4s.append( base4 )
+            base4 = ""
         }
         print( DNA[DNA.len() - 1 - index] )
         print( DNA.len() - 1 - index )
-        base4 += ( nucleotideToNumber[ format("%c", DNA[DNA.len() - 1 - index] )  ] * pow( 10, 0 ) ).tointeger()
+        num = nucleotideToNumber[ format("%c", DNA[DNA.len() - 1 - index] )  ]
+        print("num " + num)
+        base4 += format( " %d", num )
     }
 
     // base4 to letter
     foreach( base4 in base4s )
     {
-        strBase4 = base4.tostring()
-        // for( int x = 0; x < strBase4.len() ; x++ )
-        // {
-        //     format("%c", strBase4[x] ).tointeger
-        // }
-        print( strBase4 )
+        array<string> strBase4 = split( base4, " " )
+        number = 0
+        for( int x = 0; x < strBase4.len() ; x++ )
+        {
+            num = strBase4[strBase4.len() - 1 - x].tointeger()
+            number += (num * pow( 4,x ) ).tointeger()
+        }
+        strFunction += format( "%c", numberToChar[number] )
+        print( format( "%c", numberToChar[number] ) )
+        PrintArray( strBase4 )
     }
 
 
@@ -128,4 +136,15 @@ string function ArrayToString( array<string> Array, bool spaces = false )
         str = format( "%s %s", str, line )
     }
     return str
+}
+
+void function PrintArray( array<string> Array )
+{
+    string str
+
+    foreach( string line in Array )
+    {
+        str = format( "%s %s", str, line )
+    }
+    print( str )
 }

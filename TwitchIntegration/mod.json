@@ -6,10 +6,6 @@
 
 	"ConVars": [
 		{
-			"Name": "SEND_DNA",
-			"DefaultValue": "SENDDNA"
-		},
-		{
 			"Name": "StreamerUID",
 			"DefaultValue": "1004329002322"
 		}

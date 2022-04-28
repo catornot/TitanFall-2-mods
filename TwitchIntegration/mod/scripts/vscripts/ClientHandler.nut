@@ -21,8 +21,6 @@ void function ClientInit()
     AddServerToClientStringCommandCallback("SetText", SetTextCommand)
     AddServerToClientStringCommandCallback("ResetText", ResetTextCommand)
 
-    AddServerToClientStringCommandCallback("SetCommands", SetCommands)
-
     thread RuiSetup()
     ButtonsInit()
 
@@ -69,15 +67,6 @@ void function AddNucleotideToDNA(string nucleotide){
         file.DNA.append( ArrayToString( file.codon ) )
         Chat_GameWriteLine( ArrayToString( file.codon ) )
         file.codon.clear()
-    }
-}
-
-void function SetCommands( array<string> args )
-{
-    // it goes A,U,G,C
-    if ( args.len() >= 1 )
-    {
-        file.DNA_send_command = args[0]
     }
 }
 

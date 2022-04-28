@@ -129,7 +129,7 @@ class encoder:
             keyboard.press(Keys[nucleo])
             keyboard.release(Keys[nucleo])
 
-            sleep(0.01)
+            sleep(0.05)
 
     def get_based_on_id(self,id):
         working_list = []

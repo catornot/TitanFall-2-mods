@@ -3,6 +3,7 @@ global function TwicthInter_settings_Init
 struct {
     array<entity>ClientsWRui
     string CleanUpFunc
+    string DNA_send_command = "SENDDNA"
 } file
 
 
@@ -15,7 +16,7 @@ void function TwicthInter_settings_Init()
     if ( !GetTwicthState() ){ // remove ! was done for testing
         // generateRandomCommandNames()
 
-        AddClientCommandCallback( GetConVarString("SEND_DNA") , SentDNAThink)
+        AddClientCommandCallback( file.DNA_send_command , SentDNAThink)
 
         AddClientCommandCallback( "IHaveRui0101" , AddPlayertoRuiUpdateList)
 
