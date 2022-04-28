@@ -1,11 +1,8 @@
 global function TwicthInter_settings_Init
 
 struct {
-	array< array<string> > DNA = []
-    array<string> codon = []
     array<entity>ClientsWRui
-    int LastEvenTime = Time()
-    void functionref() CleanUpFunc
+    string CleanUpFunc
 } file
 
 
@@ -15,21 +12,32 @@ void function TwicthInter_settings_Init()
     AddPrivateMatchModeSettingArbitrary( "#MODE_SETTING_CATEGORY_TWITCH", "TWITCH_COOLDOWN", "60" )
 
     #if SERVER
-    if ( GetTwicthState() ){
+    if ( !GetTwicthState() ){ // remove ! was done for testing
         // generateRandomCommandNames()
 
-        AddClientCommandCallback( "gkjreiughieu" , AddAToCodon)
-        AddClientCommandCallback( "fndwjbfiupwh" , AddUToCodon)
-        AddClientCommandCallback( "hewjgfiywvii" , AddCToCodon)
-        AddClientCommandCallback( "wiuehbuifhfu" , AddGToCodon)
+        AddClientCommandCallback( GetConVarString("SEND_DNA") , SentDNAThink)
 
         AddClientCommandCallback( "IHaveRui0101" , AddPlayertoRuiUpdateList)
 
-        thread Test()
+        // thread Test()
 
         thread TwicthRequestsThink()
     }
     #endif
+}
+
+void function aaaaaaaaaaaa()
+{
+    wait 10
+
+    string longstring = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    for( int x = 0; x < longstring.len(); x++ )
+    {
+        print( longstring[x] )
+    }
+
+    print( longstring.len() )
 }
 
 #if SERVER
@@ -58,34 +66,17 @@ int function GetTwicthCoolDown(){
     return GetCurrentPlaylistVarInt("TWITCH_COOLDOWN", 60)
 }
 
-
-
-bool function AddAToCodon( entity player, array<string> args ){
-    thread AddNucleotideToDNA( "A" )
-    return true;
-}
-bool function AddUToCodon( entity player, array<string> args ){
-    thread AddNucleotideToDNA( "U" )
-    return true;
-}
-bool function AddCToCodon( entity player, array<string> args ){
-    thread AddNucleotideToDNA( "C" )
-    return true;
-}
-bool function AddGToCodon( entity player, array<string> args ){
-    thread AddNucleotideToDNA( "G" )
-    return true;
-}
-
-void function AddNucleotideToDNA(string nucleotide){
-    file.codon.append( nucleotide )
-
-    SendHudMessage( GetPlayerArray()[0], nucleotide, -1, 0.2, 255, 255, 0, 0, 0.15, 20, 0.15 )
-
-    if ( file.codon.len() == 3 ){
-        file.DNA.append( file.codon )
-        file.codon.clear()
+bool function SentDNAThink( entity player, array<string> args )
+{
+    print( player.GetUID() == GetConVarString("StreamerUID") )
+    print( args.len() == 1  )
+    if ( player.GetUID() == GetConVarString("StreamerUID") && args.len() == 1 )
+    {
+        string FunctionStr = DecodeDNA( args[0] )
+        ServerCommand( format( "script %s", FunctionStr ) )
+        file.CleanUpFunc = StringReplace( FunctionStr, "Start", "Clean", true, true )
     }
+    return true
 }
 
 bool function AddPlayertoRuiUpdateList( entity player, array<string> args )
@@ -94,10 +85,7 @@ bool function AddPlayertoRuiUpdateList( entity player, array<string> args )
     array< string > commands = 
     [
         "SetCommands"
-        GetConVarString("A_nucleo"),
-        GetConVarString("U_nucleo"),
-        GetConVarString("G_nucleo"),
-        GetConVarString("C_nucleo")
+        GetConVarString("SEND_DNA")
     ]
     ServerToClientStringCommand( player, ArrayToString( commands, true ) )
     
@@ -108,14 +96,9 @@ bool function AddPlayertoRuiUpdateList( entity player, array<string> args )
 
 void function TwicthRequestsThink()
 {
-    for(;;)
-    {
-        if ( LastEvenTime + 60 < Time() )
-        {
-            CleanUpFunc() 
-        }
-        wait 0.05
-    }
+    wait GetTwicthCoolDown()
+    ServerCommand( format( "script %s", file.CleanUpFunc ) )
+
 }
 
 #endif

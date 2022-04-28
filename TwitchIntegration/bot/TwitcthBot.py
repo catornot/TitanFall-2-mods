@@ -3,6 +3,7 @@ from twitchio.ext import pubsub
 from encoder import encoder
 import twitchio
 from BotKey import *
+from time import sleep
 
 bot_stuff = {
     "client_id" : Client_id,
@@ -49,13 +50,14 @@ class Bot(commands.Bot):
         for char in data:
             if char == ';':
                 if len( message ) < 2:
-                    print("dadad")
+                    print("not enough arguments")
                     return
                 else:
                     sequence = data.replace( ";", message[1] )
 
-        sequence = self.Encoder.functionToSequence( data )
+        sequence = self.Encoder.functionToSequence( data ) + "GGG"
         print( sequence )
+        sleep( 5 )
         self.Encoder.send_code(sequence)
 
     @commands.command()

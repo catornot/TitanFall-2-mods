@@ -1,3 +1,5 @@
+from pynput.keyboard import Key
+
 class Config:
     def __init__(self, function:str, id:str):
         self._id = id
@@ -16,3 +18,9 @@ Configs = [
 
 ]
 
+Keys = {
+    "A" : Key.f4,
+    "U" : Key.f5,
+    "G" : Key.f6,
+    "C" : Key.f7
+}

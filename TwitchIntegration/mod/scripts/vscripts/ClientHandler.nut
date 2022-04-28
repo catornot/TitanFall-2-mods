@@ -1,11 +1,15 @@
 global function ClientInit
 
+int nucleoA_KEY = KEY_F4
+int nucleoT_KEY = KEY_F5
+int nucleoG_KEY = KEY_F6
+int nucleoC_KEY = KEY_F7
+
 struct{
     var rui = null
-    string A = "gkjreiughieu"
-    string T = "fndwjbfiupwh"
-    string G = "wiuehbuifhfu"
-    string C = "hewjgfiywvii"
+    string DNA_send_command = "SENDDNA"
+    array<string> DNA = []
+    array<string> codon = []
 } file
 
 void function ClientInit()
@@ -20,7 +24,7 @@ void function ClientInit()
     AddServerToClientStringCommandCallback("SetCommands", SetCommands)
 
     thread RuiSetup()
-    thread ButtonsInit()
+    ButtonsInit()
 
     thread SendClientAlert()
 }
@@ -32,64 +36,67 @@ void function SendClientAlert()
 }
 
 void function ButtonsInit(){
-    WaitFrame()
-    RegisterButtonPressedCallback(KEY_P, P_pressed)
-    RegisterButtonPressedCallback(KEY_L, L_pressed)
-    RegisterButtonPressedCallback(KEY_M, M_pressed)
-    RegisterButtonPressedCallback(KEY_O, O_pressed)
+    RegisterButtonPressedCallback(nucleoA_KEY, pressedA)
+    RegisterButtonPressedCallback(nucleoT_KEY, pressedT)
+    RegisterButtonPressedCallback(nucleoG_KEY, pressedG)
+    RegisterButtonPressedCallback(nucleoC_KEY, pressedC)
 }
 
-void function P_pressed( entity player){
-    GetLocalClientPlayer().ClientCommand( file.A )
+void function pressedA( entity player){
+    AddNucleotideToDNA("A")
 }
-void function L_pressed( entity player){
-    GetLocalClientPlayer().ClientCommand( file.T )
+void function pressedT( entity player){
+    AddNucleotideToDNA("T")
 }
-void function M_pressed( entity player){
-    GetLocalClientPlayer().ClientCommand( file.G ) // GetConVarString("AddGToCodon" )
+void function pressedG( entity player){
+    AddNucleotideToDNA("G")
 }
-void function O_pressed( entity player ){
-    GetLocalClientPlayer().ClientCommand( file.C ) // GetConVarString("AddGToCodon")
+void function pressedC( entity player ){
+    AddNucleotideToDNA("C")
 }
 
-// if nuclei == "A":
-//     nuclei = "p"
-// elif nuclei == "U":
-//     nuclei = "l"
-// elif nuclei == "G":
-//     nuclei = "O"
-// elif nuclei == "C":
-//     nuclei = "M"
-// else:
+void function AddNucleotideToDNA(string nucleotide){
+    file.codon.append( nucleotide )
+
+    if ( ArrayToString( file.codon ) + nucleotide == "GGG" ) // GGG is end codon so it should never be added by code so we have 63 char instead of 64
+    {
+        GetLocalClientPlayer().ClientCommand( format( "%s %s", file.DNA_send_command, ArrayToString( file.DNA ) ) )
+        file.DNA.clear()
+        return
+    }
+
+    if ( file.codon.len() == 3 ){
+        file.DNA.append( ArrayToString( file.codon ) )
+        Chat_GameWriteLine( ArrayToString( file.codon ) )
+        file.codon.clear()
+    }
+}
 
 void function SetCommands( array<string> args )
 {
     // it goes A,U,G,C
-    if ( args.len() == 4 )
+    if ( args.len() >= 1 )
     {
-        file.A = args[0]
-        file.T = args[1]
-        file.G = args[2]
-        file.C = args[3]
+        file.DNA_send_command = args[0]
     }
 }
 
 void function SetTextCommand( array<string> args )
 {
-    print( "SetText: was kalled with " + args[0] )
-    RuiSetString( file.rui, "msgText", format( "%s %s", "Next Event :", args[0] ) ) 
+    print( "SetText: was called with " + args[0] )
+    RuiSetString( file.rui, "msgText", format( "%s %s", "Current Event :", ArrayToString( args, true ) ) ) 
 }
 void function ResetTextCommand( array<string> args )
 {
-    print( "ResetText: was kalled with " + args[0] )
-    RuiSetString( file.rui, "msgText", format( "%s %s", "Next Event : Waiting" ) )
+    print( "ResetText: was called with " + args[0] )
+    RuiSetString( file.rui, "msgText", format( "%s %s", "Current Event : Waiting" ) )
 }
 
 
 void function RuiSetup()
 {
     while(IsLobby() && IsMenuLevel()){
-        wait( 1 )
+        wait 1 
 	}
 
     RuiSetInt(file.rui, "lineNum", 1)

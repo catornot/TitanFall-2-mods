@@ -5,22 +5,13 @@
 	"LoadPriority": 2,
 
 	"ConVars": [
-
 		{
-			"Name": "A_nucleo",
-			"DefaultValue": "gkjreiughieu"
+			"Name": "SEND_DNA",
+			"DefaultValue": "SENDDNA"
 		},
 		{
-			"Name": "U_nucleo",
-			"DefaultValue": "erbgubgjhgeo"
-		},
-		{
-			"Name": "G_nucleo",
-			"DefaultValue": "fuygbfuefuiuf"
-		},
-		{
-			"Name": "C_nucleo",
-			"DefaultValue": "ghejkgbgeyyyu"
+			"Name": "StreamerUID",
+			"DefaultValue": "1004329002322"
 		}
 	],
 
@@ -38,7 +29,7 @@
 		},
 		{
 			"Path": "decoder.nut",
-			"RunOn": "SERVER && MP"
+			"RunOn": "(SERVER || CLIENT) && MP"
 		},
 		{
 			"Path": "ClientHandler.nut",

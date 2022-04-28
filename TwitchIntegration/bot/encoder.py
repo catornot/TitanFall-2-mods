@@ -1,5 +1,5 @@
 from msilib import sequence
-from Config import Configs
+from Config import Configs, Keys
 from pynput.keyboard import Key, Controller
 from time import sleep
 import math
@@ -114,20 +114,20 @@ class encoder:
 
     def send_code( self, sequence ):
         keyboard= Controller()
-        for nuclei in sequence:
-            if nuclei == "A":
-                key = "p"
-            elif nuclei == "U":
-                key = "l"
-            elif nuclei == "G":
-                key = "o"
-            elif nuclei == "C":
-                key = "m"
+        for nucleo in sequence:
+            if nucleo == "A":
+                key = "f14"
+            elif nucleo == "U":
+                key = "f15"
+            elif nucleo == "G":
+                key = "f16"
+            elif nucleo == "C":
+                key = "f17"
             else:
                 raise "Unhandled"
 
-            keyboard.press(key)
-            keyboard.release(key)
+            keyboard.press(Keys[nucleo])
+            keyboard.release(Keys[nucleo])
 
             sleep(0.01)
 
