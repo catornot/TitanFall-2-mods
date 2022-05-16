@@ -98,7 +98,6 @@ void function MakeHpBar( entity player ) // kinda bad but it forced me to
     for( int x = 0; x < file.hp[player]; x++ )
     {
         bar = format( "%s%s", bar, "-" )
-        print( file.hp[player] )
     }
 
     SendHudMessage( player, format( "[%s]", bar ), -1, 0.2, 86, 45, 233, 0, 0, 1000, 0 )
