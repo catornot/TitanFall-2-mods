@@ -1,0 +1,107 @@
+global function MoveOrDie_Init
+
+struct
+{
+    table <entity,int> hp
+    table <entity,float> last_dmged
+} file
+
+void function MoveOrDie_Init()
+{
+    AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_MOD", "moveOrDie_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+    AddPrivateMatchModeSettingArbitrary( "#MODE_SETTING_CATEGORY_MOD", "moveOrDie_hp", "10" )
+    AddPrivateMatchModeSettingArbitrary( "#MODE_SETTING_CATEGORY_MOD", "moveOrDie_regen", "5" )
+
+    #if SERVER
+        AddCallback_GameStateEnter( eGameState.Playing, StartMoveOrDie )
+        AddCallback_OnClientConnected( OnPlayerConnected )
+        AddCallback_OnPlayerRespawned( OnPlayerRespawned )
+	#endif
+    
+}
+
+bool function GetMODRiffState(){
+    return GetCurrentPlaylistVarInt("moveOrDie_RIFF", 0) == 1
+}
+
+int function GetHeathAmount(){
+    return GetCurrentPlaylistVarInt("moveOrDie_dmg", 10)
+}
+
+int function GetRegenTime(){
+    return GetCurrentPlaylistVarInt("moveOrDie_dmg", 5)
+}
+
+
+#if SERVER
+
+void function StartMoveOrDie()
+{
+    if ( !GetMODRiffState() && !IsLobby() )
+        return
+    
+    thread MoveOrDie()
+}
+
+void function MoveOrDie()
+{
+    for(;;)
+    {
+        foreach( entity player in GetPlayerArray() )
+        {
+            if ( IsAlive( player ) && IsValid( player ) && player.GetVelocity() == <0,0,0> && player in file.hp )
+            {
+                if ( file.hp[player] <= 0 )
+                    player.TakeDamage( player.GetHealth(), player, player, { scriptType = DF_GIB, damageType = DMG_MELEE_ATTACK, damageSourceId = eDamageSourceId.bleedout, origin = player.GetOrigin(), force = <0,0,0> } )
+
+                file.hp[player] -= 1
+                file.last_dmged[player] = Time()
+
+                MakeHpBar( player )
+            }
+            else if ( IsAlive( player ) && IsValid( player ) && player.GetVelocity() != <0,0,0> && player in file.hp )
+            {
+                if ( file.last_dmged[player] + GetRegenTime().tofloat() <= Time() && file.hp[player] < GetHeathAmount() )
+                {
+                    file.hp[player] += 1
+                    MakeHpBar( player )
+                }
+            }
+        }
+        WaitFrame()
+    }
+}
+
+void function OnPlayerConnected( entity player )
+{
+    if ( !GetMODRiffState() && !IsLobby() )
+        return
+
+    file.hp[player] <- GetHeathAmount()
+    file.last_dmged[player] <- 0.0
+}
+
+void function OnPlayerRespawned( entity player )
+{
+    if ( !GetMODRiffState() && !IsLobby() )
+        return
+
+    file.hp[player] = GetHeathAmount()
+    file.last_dmged[player] = 0.0
+
+    MakeHpBar( player )
+}
+
+void function MakeHpBar( entity player ) // kinda bad but it forced me to
+{
+    string bar = ""
+    for( int x = 0; x < file.hp[player]; x++ )
+    {
+        bar = format( "%s%s", bar, "-" )
+        print( file.hp[player] )
+    }
+
+    SendHudMessage( player, format( "[%s]", bar ), -1, 0.2, 86, 45, 233, 0, 0, 1000, 0 )
+}
+
+#endif

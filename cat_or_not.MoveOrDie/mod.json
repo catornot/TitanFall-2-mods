@@ -1,0 +1,22 @@
+{
+	"Name" : "cat_or_not.MoveOrDie",
+	"Description" : "If you don't move you die",
+	"Version": "0.0.1",
+	"LoadPriority": 2,
+	"Scripts": [
+		{
+			"Path": "sh_MoveOrDie.gnut",
+			"RunOn": "MP",
+			"ServerCallback": {
+				"After": "MoveOrDie_Init"
+			},
+			"ClientCallback": {
+				"After": "MoveOrDie_Init"
+			}
+		}
+	],
+	"Localisation": [
+		"resources/MOD_localisation_%language%.txt"
+	]
+}
+
