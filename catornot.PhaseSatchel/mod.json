@@ -1,0 +1,43 @@
+{
+	"Name" : "PhaseSatchel",
+	"Description" : "makes satchels phase you and holo pilots explode on death",
+	"Version": "0.1.0",
+	"RequiredOnClient": false,
+	"LoadPriority": 3,
+	"Scripts": [
+		{
+			"Path": "sh_PhaseSatchel.nut",
+			"RunOn": "MP",
+			"ServerCallback": {
+				"After": "PhaseSatchel_init"
+			},
+			"ClientCallback": {
+				"After": "PhaseSatchel_init"
+			}
+
+		},
+		{
+			"Path": "ui/ui_confirmation_dialogue.nut",
+			"RunOn": "UI"
+		},
+		{
+			"Path": "cl_confirmation_dialogue.nut",
+			"RunOn": "CLIENT",
+			"ClientCallback": {
+				"After": "conClient_Init"
+			}
+		},
+		{
+			"Path": "_nuke_map.nut",
+			"RunOn": "SERVER",
+			"ServerCallback": {
+				"After": "NukeMap_Init"
+			}
+		}
+
+	],
+	"Localisation": [
+		"resource/SatchelStuff_localisation_%language%.txt"
+	]
+}
+
