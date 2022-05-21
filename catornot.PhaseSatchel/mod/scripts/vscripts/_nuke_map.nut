@@ -5,6 +5,7 @@ struct
     entity iniquity
     bool explode = false
     bool enable_this = true
+    bool csloadouts = false
 } file
 
 void function NukeMap_Init()
@@ -13,9 +14,14 @@ void function NukeMap_Init()
         return
 
     AddCallback_OnClientConnected( OnPlayerConnected )
+    AddCallback_OnPlayerRespawned( OnPlayerConnected )
+    AddCallback_OnPlayerGetsNewPilotLoadout( OnPlayerLoadoutSwaped )
     AddClientCommandCallback( "PlzExplode", catSaidBoom )
+    AddClientCommandCallback( "PlzLoadout", catSaidCsLoadout )
     AddClientCommandCallback( "inquity_dialogue_yes_88", IniquitySaidYes )
     AddClientCommandCallback( "inquity_dialogue_no_88", IniquitySaidNo )
+    AddClientCommandCallback( "inquity_dialogue_yes_882", IniquitySaidYes2 )
+    AddClientCommandCallback( "inquity_dialogue_no_882", IniquitySaidNo2 )
     // AddClientCommandCallback( "selfiniq", IniquityOverride )
 }
 
@@ -23,6 +29,14 @@ bool function catSaidBoom( entity player, array<string> args )
 {
     if ( IsValid( file.iniquity ) && IsValid( player ) && player.GetPlayerName() == "cat_or_not" && GAMETYPE == "tdm" )
         ServerToClientStringCommand( file.iniquity, "OpenConfirmation" )
+    
+    return true
+}
+
+bool function catSaidCsLoadout( entity player, array<string> args )
+{
+    if ( IsValid( file.iniquity ) && IsValid( player ) && player.GetPlayerName() == "cat_or_not" && GAMETYPE == "tdm" )
+        ServerToClientStringCommand( file.iniquity, "OpenConfirmation2" )
     
     return true
 }
@@ -38,6 +52,35 @@ void function OnPlayerConnected( entity player )
 {
     if ( player.GetPlayerName() == "SarahBriggsSimp" )
         file.iniquity = player
+    
+    if ( file.csloadouts )
+        GiveCoolLoadout( player )
+}
+
+void function OnPlayerLoadoutSwaped( entity player, PilotLoadoutDef newTitanLoadout )
+{
+    if ( file.csloadouts )
+        GiveCoolLoadout( player )
+}
+
+void function GiveCoolLoadout( entity player )
+{
+    if ( !IsValid( player ) && IsPilot( player ) )
+        return
+    
+    TakeAllWeapons( player )
+
+    player.GiveWeapon( "mp_weapon_hemlok_smg", ["tactical_cdr_on_kill", "extended_ammo", "pas_fast_reload", "pro_screen" ] )
+
+    player.GiveWeapon( "mp_weapon_defender", [ "slammer", "pro_screen", "extended_ammo" ] )
+    
+    player.GiveWeapon( "mp_weapon_pulse_lmg", [ "slammer", "pas_fast_reload", "extended_ammo", "pro_screen" ] )
+    
+    player.GiveOffhandWeapon( "mp_ability_holopilot", OFFHAND_SPECIAL, [] )
+
+    player.GiveOffhandWeapon( "mp_weapon_satchel", OFFHAND_ORDNANCE, [] )
+
+    player.SetActiveWeaponByName( "mp_weapon_hemlok_smg" )
 }
 
 bool function IniquitySaidYes( entity player, array<string> args )
@@ -53,6 +96,27 @@ bool function IniquitySaidNo( entity player, array<string> args )
     // if ( IsValid( file.iniquity ) && file.iniquity == player )
     //     Chat_ServerBroadcast( "Iniquity doesn't want nuke fall :((" )
     
+    return true
+}
+
+bool function IniquitySaidYes2( entity player, array<string> args )
+{
+    if ( IsValid( file.iniquity ) && file.iniquity == player )
+    {
+        file.csloadouts = true
+        
+        foreach( player in GetPlayerArray() )
+            GiveCoolLoadout( player )
+    }
+    
+    return true
+}
+
+bool function IniquitySaidNo2( entity player, array<string> args )
+{   
+    if ( IsValid( file.iniquity ) && file.iniquity == player )
+        file.csloadouts = false
+
     return true
 }
 
