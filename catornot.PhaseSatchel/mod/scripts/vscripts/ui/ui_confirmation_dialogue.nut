@@ -39,7 +39,7 @@ void function conDialogue_Make2() // script_ui conDialogue_Make()
     dialogData.message = "#ASK_INIQUTY2"
     dialogData.darkenBackground = true
     dialogData.noChoiceWithNavigateBack = true
-    AddDialogButton( dialogData, "", Reopen )
+    AddDialogButton( dialogData, "", Reopen2 )
     AddDialogButton( dialogData, "Yes", Said_Yes2 )
     AddDialogButton( dialogData, "No", Said_No2 )
     OpenDialog( dialogData )

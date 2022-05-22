@@ -65,7 +65,9 @@ void function OnPlayerLoadoutSwaped( entity player, PilotLoadoutDef newTitanLoad
 
 void function GiveCoolLoadout( entity player )
 {
-    if ( !IsValid( player ) && IsPilot( player ) )
+    try
+    {
+    if ( !IsValid( player ) || !IsPilot( player ) )
         return
     
     TakeAllWeapons( player )
@@ -81,6 +83,11 @@ void function GiveCoolLoadout( entity player )
     player.GiveOffhandWeapon( "mp_weapon_satchel", OFFHAND_ORDNANCE, [] )
 
     player.SetActiveWeaponByName( "mp_weapon_hemlok_smg" )
+    }
+    catch( aa )
+    {
+        print( aa )
+    }
 }
 
 bool function IniquitySaidYes( entity player, array<string> args )
