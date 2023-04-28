@@ -1,13 +1,32 @@
 {
 	"Name": "Catornot.AutoGGMod",
-	"Description": "Makes you say a message at the of the macth",
-	"Version": "0.1.0",
-	"LoadPriority": 1,
+	"Description": "Makes you say a message at the of the match",
+	"Version": "0.2.0",
+	"LoadPriority": 2,
 	
 	"ConVars": [
-		// Your message
-		{"Name": "Message",
-			"DefaultValue": "gg"
+		{
+			// The message that gets sent at the start of the game
+			"Name": "auto_message_start_text",
+			"DefaultValue": ""
+		},
+		{
+			// The message that gets sent when switching sides in round-based gamemodes - NOT IMPLEMENTED
+			"Name": "auto_message_half_text",
+			"DefaultValue": "gh",
+			"Flags": 16777216
+		},
+		{
+			// The message that gets sent at the end of the game
+			"Name": "auto_message_end_text",
+			"DefaultValue": "gg",
+			"Flags": 16777216
+		},
+		{
+			// How many seconds after game ends to wait before sending the message
+			"Name": "auto_message_wait_time",
+			"DefaultValue": "0",
+			"Flags": 16777216
 		}
 	],
 
@@ -17,6 +36,13 @@
 			"RunOn": "CLIENT && MP",
 			"ClientCallback": {
 				"Before": "InitAutoMessage"
+			}
+		},
+		{
+			"Path": "AutoMessageModHookup.nut",
+			"RunOn": "UI",
+			"UICallback": {
+				"Before": "AutoMessageModHookup"
 			}
 		}
 	]
