@@ -1,0 +1,14 @@
+global function Shared_mp_mirror_city
+
+void function Shared_mp_mirror_city()
+{
+    if ( GetMapName() != "mp_mirror_city" )
+        return
+    
+    AddCallback_OnRegisteringCustomNetworkVars( RegisterNetworkVars )
+}
+
+void function RegisterNetworkVars()
+{
+
+}

@@ -1,0 +1,40 @@
+global function RCONCommand
+
+void function RCONCommand()
+{
+	#if SERVER
+	AddClientCommandCallback("rcon", RCON);
+	#endif
+}
+
+bool function RCON(entity player, array<string> args)
+{
+	#if SERVER
+	
+	hasRCONAdmin = false;
+	CheckRCONAdmin(player)
+	if (hasRCONAdmin == false)
+	{
+		print("Admin permission not detected.");
+		return true;
+	}
+	
+	if (args.len() == 0)
+	{
+		print("Give a valid argument.");
+		print("Example: rcon <arguments>");
+		return true;
+	}
+	string newString = "";
+	
+	foreach (string arguments in args)
+	{
+		newString += (arguments.tostring() + " ");
+	}
+	
+	print("rcon " + newString);
+	
+	ServerCommand(newString);
+	#endif
+	return true;
+}

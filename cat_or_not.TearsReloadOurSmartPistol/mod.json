@@ -1,0 +1,16 @@
+{
+	"Name" : "cat_or_not.TearsReloadOurSmartPistol",
+	"Description" : "when start complaining about smart pistol it reloads :trol:",
+	"Version": "1.0.0",
+	"LoadPriority": 2,
+	"Scripts": [
+		{
+			"Path": "tears.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"Before": "initSmartPistolTears"
+			}
+		}
+	]
+}
+

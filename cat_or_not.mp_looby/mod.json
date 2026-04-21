@@ -1,0 +1,26 @@
+{
+	"Name" : "catornot.mp_looby",
+	"Description": "Makes mp_lobby playable",
+	"Version": "0.0.0",
+	"LoadPriority": 2,
+	"RequiredOnClient": true,
+	"Scripts": [
+		{
+			"Path": "AddLooby.gnut",
+			"RunOn": "( CLIENT || SERVER ) && MP",
+			"ServerCallback": {
+				"After": "AddLooby"
+			},
+			"ClientCallback": {
+				"After": "AddLooby"
+			}
+		},
+		{
+			"Path": "MakeRoom.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "RoomInit"
+			}
+		}
+	]
+}

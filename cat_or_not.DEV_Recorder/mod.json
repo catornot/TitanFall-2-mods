@@ -1,0 +1,20 @@
+{
+	"Name" : "cat_or_not.DEV_Recorder",
+	"Description" : "tools to record player movement",
+	"Version": "0.0.0",
+	"LoadPriority": 2,
+	
+	"ConVars": [
+	],
+
+	"Scripts": [
+		{
+			"Path": "Recorder.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "Init_Recorder"
+			}
+		}
+	]
+}
+

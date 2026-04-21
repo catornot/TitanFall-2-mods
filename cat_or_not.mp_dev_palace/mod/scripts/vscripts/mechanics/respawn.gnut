@@ -1,0 +1,93 @@
+global function InitRespawnManager
+global function SetHazardCheckpoint
+global function SetCheckpoint
+global function RespawnPlayerHazard
+global function RespawnPlayerCheckpoint
+
+const float RESPAWN_WAIT_HAZARD = 1.0;
+const float RESPAWN_WAIT = 3.0;
+
+struct Checkpoint {
+    vector origin
+    vector angles
+}
+
+struct {
+    // string is uid
+    table<string,Checkpoint> hazardCheckpoint
+    table<string,Checkpoint> checkpoint
+} file
+
+void function InitRespawnManager()
+{
+    SetRespawnsEnabled( false )
+    LoadSavedCheckpoint()
+}
+
+void function LoadSavedCheckpoint()
+{
+    // todo with a plugin
+}
+
+void function SetHazardCheckpoint( string uid, vector newOrigin, vector newAngles )
+{
+    Checkpoint checkpoint
+    checkpoint.origin = newOrigin
+    checkpoint.angles = newAngles
+
+    file.hazardCheckpoint[uid] <- checkpoint
+}
+
+void function SetCheckpoint( string uid, vector newOrigin, vector newAngles )
+{
+    Checkpoint checkpoint
+    checkpoint.origin = newOrigin
+    checkpoint.angles = newAngles
+
+    file.checkpoint[uid] <- checkpoint
+}
+
+void function RespawnPlayerHazard( entity player )
+{
+    thread RespawnPlayerHazardThreaded( player )
+}
+
+void function RespawnPlayerHazardThreaded( entity player )
+{
+    EndSignal( player, "OnRespawnPlayer" )
+    EndSignal( player, "OnDestroy" )
+
+    wait RESPAWN_WAIT_HAZARD
+
+    Checkpoint checkpoint = file.hazardCheckpoint[player.GetUID()]
+    
+    player.SetOrigin( checkpoint.origin )
+    player.SnapEyeAngles( checkpoint.angles )
+
+    wait 1
+
+    DoRespawnPlayer( player, null )
+}
+
+void function RespawnPlayerCheckpoint( entity player )
+{
+    thread RespawnPlayerCheckpointThreaded( player )
+}
+
+void function RespawnPlayerCheckpointThreaded( entity player )
+{
+    EndSignal( player, "OnRespawnPlayer" )
+    EndSignal( player, "OnDestroy" )
+
+    wait RESPAWN_WAIT
+
+    Checkpoint checkpoint = file.checkpoint[player.GetUID()]
+    
+    player.SetOrigin( checkpoint.origin )
+    player.SnapEyeAngles( checkpoint.angles )
+
+    wait 1
+
+    DoRespawnPlayer( player, null )
+}
+

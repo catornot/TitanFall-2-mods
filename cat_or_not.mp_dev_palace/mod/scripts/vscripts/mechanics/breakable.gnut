@@ -1,0 +1,44 @@
+global function InitBreakableWalls
+
+const string EDITOR_CLASS_BREAKABLE = "breakable"
+const int BREAKABLE_HEALTH = 300
+const vector DESTROYED_WALL_POS = <100000,100000,100000>
+
+void function InitBreakableWalls()
+{
+    AddSpawnCallbackEditorClass( "func_brush_lightweight", EDITOR_CLASS_BREAKABLE, SetupBreakableWall )
+}
+
+void function SetupBreakableWall( entity wall )
+{
+    wall.SetMaxHealth( BREAKABLE_HEALTH )
+	wall.SetHealth( BREAKABLE_HEALTH )
+	wall.SetTakeDamageType( DAMAGE_YES )
+    wall.SetDamageNotifications( true )
+
+    AddEntityCallback_OnDamaged( wall, WallOnDamaged )
+}
+
+void function WallOnDamaged( entity wall, var damageInfo )
+{
+	float damage = DamageInfo_GetDamage( damageInfo )
+    float newHealth = wall.GetHealth() - damage
+    entity attacker = DamageInfo_GetAttacker( damageInfo )
+
+    if ( damage >= wall.GetHealth() - damage )
+    {
+        wall.Hide()
+        wall.kv.solid = 0
+        wall.SetTakeDamageType( DAMAGE_NO )
+        wall.SetDamageNotifications( false )
+
+        DamageInfo_SetDamage( damageInfo, 0 )
+    }
+    
+    EmitSoundOnEntity( wall, "breakable_glass" )
+    
+    if ( !attacker.IsPlayer() )
+        return
+
+    attacker.NotifyDidDamage( wall, 0, wall.GetOrigin(), 0, damage, DF_NO_HITBEEP, 0, null, 0 )
+}

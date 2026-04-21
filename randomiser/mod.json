@@ -1,0 +1,28 @@
+{
+	"Name" : "Randomiser",
+	"Description" : "Randomiser",
+	"Version": "0.3.0",
+	"LoadPriority": 1,
+
+	"Scripts": [
+		{
+			"Path": "sh_randomiser.gnut",
+			"RunOn": "MP",
+			"ClientCallback": {
+				"After": "Randomiser_Init"
+			},
+
+			"ServerCallback": {
+				"After": "Randomiser_Init"
+			}
+		},
+		{
+			"Path": "sh_randomiser_smart_core.gnut",
+			"RunOn": "MP"
+		}
+	],
+
+	"Localisation": [
+		"resource/randomiser_localisation_%language%.txt"
+	]
+}

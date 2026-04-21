@@ -1,0 +1,14 @@
+// have death from the envirment respawn players at the start of the room
+// and from enemies you respawn at checkpoints
+global function InitDeathManager
+
+void function InitDeathManager()
+{
+    AddCallback_OnPlayerKilled( OnPlayerDied )
+}
+
+void function OnPlayerDied( entity player, entity attacker, var damageInfo )
+{
+    // todo: determine if hazard
+    RespawnPlayerHazard( player )
+}

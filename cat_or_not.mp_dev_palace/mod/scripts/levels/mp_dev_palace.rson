@@ -1,0 +1,28 @@
+
+IsTestMap: false
+
+When: "SERVER"
+Scripts:
+[
+	_mp_dev_palace.nut
+	_mp_dev_palace_utils.gnut
+	specific/hubroom.gnut
+	mechanics/death.gnut
+	mechanics/respawn.gnut
+	mechanics/rooms.gnut
+	mechanics/breakable.gnut
+	mechanics/player.gnut
+	mechanics/dev_palace_precache.gnut
+]
+
+When: "SERVER || CLIENT"
+Scripts:
+[
+	sh_mp_dev_palace.gnut
+]
+
+When: "CLIENT"
+Scripts:
+[
+	cl_mp_dev_palace.nut
+]

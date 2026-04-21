@@ -1,0 +1,36 @@
+untyped
+global function AddLooby
+
+void function AddLooby()
+{
+	#if MP
+	SpawnSpawnref()
+	#endif
+
+    if ( !IsLobby() )
+		return
+	
+	AddPrivateMatchMap( "mp_looby" )
+}
+#if MP
+void function SpawnSpawnref()
+{
+	PrecacheModel( $"models/vistas/planet_blue_sun.mdl" )
+	PrecacheModel( $"models/vistas/kodai_sky.mdl" )
+
+	for( int x; x < 100; x++ )
+		CreateScriptRef( <x*10,0,-3007.97> ).SetScriptName( "info_player_start" )
+
+	if ( GetMapName() != "mp_looby" && !IsLobby()  )
+		return
+
+	CreatePropDynamic( $"models/vistas/planet_blue_sun.mdl", <0,0,-1000> ).kv.modelscale = 100
+	CreatePropDynamic( $"models/vistas/kodai_sky.mdl", <0,0,-1000> ).kv.modelscale = 100
+
+	// print( GetEnt( "skybox_cam_level" ).GetOrigin() )
+
+	// CreateEntity( "skybox_cam_level" ).SetModel( $"models/vistas/planet_blue_sun.mdl" )
+
+	// ActivateSkyBox()
+}
+#endif

@@ -1,0 +1,13 @@
+"titan_base"
+{
+	"global"
+	{
+		ClassMods
+		{
+			core_health_upgrade
+			{
+				health			5000++	[$mp]
+			}
+		}
+	}
+}

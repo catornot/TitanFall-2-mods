@@ -1,0 +1,7 @@
+{
+	"Name" : "4skirmish",
+	"Description" : "4 team skirmish",
+	"Version": "0.1.0",
+	"RequiredOnClient": false,
+	"LoadPriority": 3,
+}

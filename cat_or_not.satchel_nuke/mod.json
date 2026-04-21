@@ -1,0 +1,8 @@
+{
+	"Name" : "cat_or_not.satchel nukes",
+	"Description" : "Adds a nuke >:)",
+	"Version": "0.0.1",
+	"RequiredOnClient": true,
+	"LoadPriority": 3,
+}
+

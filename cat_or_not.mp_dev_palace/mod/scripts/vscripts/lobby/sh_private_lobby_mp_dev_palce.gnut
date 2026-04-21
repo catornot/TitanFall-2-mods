@@ -1,0 +1,11 @@
+global function PrivateLobbyAddMpDevPalaceMap
+
+void function PrivateLobbyAddMpDevPalaceMap()
+{
+	AddCallback_OnCustomGamemodesInit( AddMapToPrivateMatchWhenReady )
+}
+
+void function AddMapToPrivateMatchWhenReady()
+{
+	AddPrivateMatchMap( "mp_map" )
+}

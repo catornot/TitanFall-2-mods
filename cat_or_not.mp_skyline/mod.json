@@ -1,0 +1,20 @@
+{
+	"Name" : "cat_or_not.mp_skyline",
+	"Description": "",
+	"Version": "0.0.1",
+	"LoadPriority": 2,
+	"RequiredOnClient": true,
+	
+	"Scripts": [
+		{
+			"Path": "lobby/sh_private_lobby_mp_skyline.gnut",
+			"RunOn": "( CLIENT || SERVER ) && MP",
+			"ClientCallback": {
+				"Before": "PrivateLobbyAddMpSkylineMap",
+			},
+			"ServerCallback": {
+				"Before": "PrivateLobbyAddMpSkylineMap",
+			},
+		}
+	]
+}

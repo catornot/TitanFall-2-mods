@@ -1,0 +1,7 @@
+{
+  "Name": "cat_or_not.mp_couloire",
+  "Description": "",
+  "Version": "1.0.0",
+  "LoadPriority": 1,
+  "ConVars": []
+}

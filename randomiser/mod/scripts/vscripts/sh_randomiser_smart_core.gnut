@@ -1,0 +1,177 @@
+untyped
+
+global function OnWeaponPrimaryAttack_randomiser_smart_core
+global function OnWeaponPrimaryAttack_randomiser_smart_core_leadwall
+global function OnWeaponPrimaryAttack_randomiser_smart_core_meteor
+global function OnWeaponPrimaryAttack_randomiser_smart_core_particle_accelerator
+global function OnWeaponPrimaryAttack_randomiser_smart_core_rocketeer_rocketstream
+global function OnWeaponPrimaryAttack_randomiser_smart_core_sniper
+global function OnWeaponPrimaryAttack_randomiser_smart_core_sticky_40mm
+
+var function OnWeaponPrimaryAttack_randomiser_smart_core(entity weapon, WeaponPrimaryAttackParams attackParams) {
+    int damageFlags = weapon.GetWeaponDamageFlags()
+
+	if (weapon.HasMod("Smart_Core")) {
+		SmartAmmo_SetAllowUnlockedFiring(weapon, true)
+		SmartAmmo_SetUnlockAfterBurst(weapon, false)
+
+		return SmartAmmo_FireWeapon(weapon, attackParams, DF_BULLET | DF_STOPS_TITAN_REGEN | DF_GIB, damageTypes.largeCaliber | DF_STOPS_TITAN_REGEN)
+	} else {
+		weapon.FireWeaponBullet(attackParams.pos, attackParams.dir, 1, damageFlags)
+
+		return 1
+	}
+	unreachable
+}
+
+var function OnWeaponPrimaryAttack_randomiser_smart_core_leadwall(entity weapon, WeaponPrimaryAttackParams attackParams) {
+	if (weapon.HasMod("Smart_Core")) {
+		return RandomiserSmartAmmo_FireWeapon(weapon, attackParams, OnWeaponPrimaryAttack_titanweapon_leadwall)
+	} else {
+		return OnWeaponPrimaryAttack_titanweapon_leadwall(weapon, attackParams)
+	}
+	unreachable
+}
+
+var function OnWeaponPrimaryAttack_randomiser_smart_core_meteor(entity weapon, WeaponPrimaryAttackParams attackParams) {
+	if (weapon.HasMod("Smart_Core")) {
+		return RandomiserSmartAmmo_FireWeapon(weapon, attackParams, OnWeaponPrimaryAttack_Meteor)
+	} else {
+		return OnWeaponPrimaryAttack_Meteor(weapon, attackParams)
+	}
+	unreachable
+}
+
+var function OnWeaponPrimaryAttack_randomiser_smart_core_particle_accelerator(entity weapon, WeaponPrimaryAttackParams attackParams) {
+	if (weapon.HasMod("Smart_Core")) {
+		return RandomiserSmartAmmo_FireWeapon(weapon, attackParams, OnWeaponPrimaryAttack_titanweapon_particle_accelerator)
+	} else {
+		return OnWeaponPrimaryAttack_titanweapon_particle_accelerator(weapon, attackParams)
+	}
+	unreachable
+}
+
+var function OnWeaponPrimaryAttack_randomiser_smart_core_rocketeer_rocketstream(entity weapon, WeaponPrimaryAttackParams attackParams) {
+	if (weapon.HasMod("Smart_Core")) {
+		return RandomiserSmartAmmo_FireWeapon(weapon, attackParams, OnWeaponPrimaryAttack_TitanWeapon_Rocketeer_RocketStream)
+	} else {
+		return OnWeaponPrimaryAttack_TitanWeapon_Rocketeer_RocketStream(weapon, attackParams)
+	}
+	unreachable
+}
+
+var function OnWeaponPrimaryAttack_randomiser_smart_core_sniper(entity weapon, WeaponPrimaryAttackParams attackParams) {
+	if (weapon.HasMod("Smart_Core")) {
+		return RandomiserSmartAmmo_FireWeapon(weapon, attackParams, OnWeaponPrimaryAttack_titanweapon_sniper)
+	} else {
+		return OnWeaponPrimaryAttack_titanweapon_sniper(weapon, attackParams)
+	}
+	unreachable
+}
+
+var function OnWeaponPrimaryAttack_randomiser_smart_core_sticky_40mm(entity weapon, WeaponPrimaryAttackParams attackParams) {
+	if (weapon.HasMod("Smart_Core")) {
+		return RandomiserSmartAmmo_FireWeapon(weapon, attackParams, OnWeaponPrimaryAttack_titanweapon_40mm)
+	} else {
+		return OnWeaponPrimaryAttack_titanweapon_40mm(weapon, attackParams)
+	}
+	unreachable
+}
+
+typedef OriginalFireWeaponCallback var functionref(entity, WeaponPrimaryAttackParams)
+var function RandomiserSmartAmmo_FireWeapon(entity weapon, WeaponPrimaryAttackParams attackParams, OriginalFireWeaponCallback fireWeaponCallback) {
+	if (!IsValid(weapon)) {
+		return 0
+    }
+
+	if (!weapon.SmartAmmo_IsEnabled()) {
+		if (!SmartAmmo_GetAllowUnlockedFiring(weapon)) {
+			SmartAmmo_SetWeaponFireFailedTime(weapon)
+			return 0
+		}
+	}
+
+	#if CLIENT
+		if (IsWatchingReplay())
+			return 0 // temp fix for SmartAmmo_GetStoredTargets not returning the same list during kill replay
+	#endif
+
+	array<entity> storedTargets = weapon.SmartAmmo_GetStoredTargets()
+	var targets = weapon.SmartAmmo_GetTargets()
+
+	var targetFracs = {}
+	var targetActiveShots = {}
+
+	foreach (target in targets) {
+		if (target.fraction < 1.0) {
+			continue
+        }
+
+		targetFracs[target.ent] <- target.fraction
+		targetActiveShots[target.ent] <- target.activeShot
+	}
+
+	if ( attackParams.burstIndex == 0 ) {
+		weapon.SmartAmmo_StoreTargets()
+		storedTargets = weapon.SmartAmmo_GetStoredTargets()
+
+		var maxTargetedBurst = SmartAmmo_GetMaxTargetedBurst(weapon)
+
+		var burstCount = 0
+		if (weapon.GetWeaponSettingBool(eWeaponVar.smart_ammo_alt_lock_style)) {
+			var chargeFrac = 1 - weapon.GetWeaponChargeFraction()
+			var shotFrac = 1 / maxTargetedBurst.tofloat()
+
+			if (chargeFrac < shotFrac) {
+				return 0
+            }
+		}
+
+		foreach (target in storedTargets) {
+			Assert(target in targetFracs)
+
+			burstCount += floor(targetFracs[target])
+		}
+
+		burstCount = min(maxTargetedBurst, burstCount)
+
+		if ( burstCount <= 0 )
+			burstCount = 0
+
+		weapon.SetWeaponBurstFireCount(burstCount)
+	}
+
+	array<entity> expandedStoredTargets = []
+
+	foreach (target in storedTargets) {
+		var burstCount
+
+		if (target in targetFracs) {
+			burstCount = floor(targetFracs[target])
+        } else {
+			burstCount = 1
+        }
+
+		for (int index = 0; index < burstCount; index++) {
+			expandedStoredTargets.append(target)
+		}
+	}
+
+	// Figure out the target we should be shooting this round
+	entity target = null
+	if (expandedStoredTargets.len() > 0) {
+		int index = attackParams.burstIndex % expandedStoredTargets.len()
+		target = expandedStoredTargets[index]
+	}
+
+	// Tried to shoot at a target but it's no longer valid. Don't do anything
+	if (target != null && !IsValid(target)) {
+		return 0
+    }
+
+	if (target) {
+    	attackParams.dir = Normalize(weapon.SmartAmmo_GetFirePosition(target, attackParams.burstIndex) - attackParams.pos)
+	}
+
+	return fireWeaponCallback(weapon, attackParams)
+}

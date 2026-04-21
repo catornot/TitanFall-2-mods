@@ -1,0 +1,6 @@
+global function DevPalacePrecache
+
+void function DevPalacePrecache()
+{
+    PrecacheModel( $"models/humans/grunts/imc_grunt_shield_captain.mdl" )
+}

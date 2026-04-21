@@ -1,0 +1,11 @@
+global function PrivateLobbyAddMpSkylineMap
+
+void function PrivateLobbyAddMpSkylineMap()
+{
+	AddCallback_OnCustomGamemodesInit( AddMapToPrivateMatchWhenReady )
+}
+
+void function AddMapToPrivateMatchWhenReady()
+{
+	AddPrivateMatchMap( "mp_skyline" )
+}

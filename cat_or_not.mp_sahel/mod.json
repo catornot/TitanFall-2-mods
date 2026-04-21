@@ -1,0 +1,30 @@
+{
+    "Name": "cat_or_not.mp_sahel",
+    "Description": "",
+    "Version": "1.0.0",
+    "LoadPriority": 1,
+    "ConVars": [],
+    "RequiredOnClient": true,
+    "Scripts": [
+        {
+            "Path": "lobby/sh_private_lobby_mp_sahel.gnut",
+            "RunOn": "(SERVER || CLIENT) && MP",
+            "ServerCallback": {
+                "Before": "PrivateLobbyAddMpSahelMap"
+            },
+            "ClientCallback": {
+                "Before": "PrivateLobbyAddMpSahelMap"
+            }
+        },
+        {
+            "Path": "sh_mp_sahel.gnut",
+            "RunOn": "(SERVER || CLIENT) && MP",
+            "ServerCallback": {
+                "Before": "Shared_mp_sahel"
+            },
+            "ClientCallback": {
+                "Before": "Shared_mp_sahel"
+            }
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+
+IsTestMap: false
+
+When: "SERVER"
+Scripts:
+[
+	mp_criss_cross.nut
+]
+
+When: "SERVER || CLIENT"
+Scripts:
+[
+]
+
+When: "CLIENT"
+Scripts:
+[
+	mp_criss_cross.nut
+]

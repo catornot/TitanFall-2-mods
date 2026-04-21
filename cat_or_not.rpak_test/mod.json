@@ -1,0 +1,10 @@
+{
+	"Name" : "cat_or_not.rpak_test",
+	"Description": "m",
+	"Version": "1.0.0",
+	"LoadPriority": 0,
+	"RequiredOnClient": true,
+	
+	"Scripts": [
+	]
+}

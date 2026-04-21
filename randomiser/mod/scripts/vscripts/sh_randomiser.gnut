@@ -1,0 +1,366 @@
+global function Randomiser_Init
+
+void function Randomiser_Init() {
+	PrecacheModel( $"models/titans/buddy/titan_buddy.mdl" )
+	PrecacheModel( $"models/weapons/arms/buddypov.mdl" )
+	PrecacheParticleSystem( $"P_BT_eye_SM" )
+
+	AddPrivateMatchModeSettingEnum("#MODE_SETTING_CATEGORY_RANDOMISER", "randomiser_pilots", ["#SETTING_DISABLED", "#SETTING_ENABLED"], "0")
+	AddPrivateMatchModeSettingEnum("#MODE_SETTING_CATEGORY_RANDOMISER", "randomiser_titans", ["#SETTING_DISABLED", "#SETTING_ENABLED"], "0")
+	AddPrivateMatchModeSettingEnum("#MODE_SETTING_CATEGORY_RANDOMISER", "randomiser_no_limits", ["#SETTING_DISABLED", "#SETTING_ENABLED"], "0")
+	//AddPrivateMatchModeSettingEnum("#MODE_SETTING_CATEGORY_RANDOMISER", "randomiser_no_limits_pilots_weapons_for_titans", ["#SETTING_DISABLED", "#SETTING_ENABLED"], "0")
+
+	#if SERVER
+		AddCallback_OnPlayerRespawned(GivePlayerRandomiser)
+		AddCallback_OnUpdateDerivedPlayerTitanLoadout(ApplyTitanRandomiser)
+	#endif
+}
+
+// Enabled Functions
+	bool function RandomiserPilotsEnabled() {
+		return GetCurrentPlaylistVarInt("randomiser_pilots", 0) == 1
+	}
+
+	bool function RandomiserTitansEnabled() {
+		return GetCurrentPlaylistVarInt("randomiser_titans", 0) == 1
+	}
+
+	bool function RandomiserNoLimitsEnabled() {
+		return GetCurrentPlaylistVarInt("randomiser_no_limits", 0) == 1
+	}
+
+	// bool function RandomiserNoLimitsPWFTEnabled() {
+	// 	return GetCurrentPlaylistVarInt("randomiser_no_limits_pilots_weapons_for_titans", 0) == 1
+	// }
+
+// Weapons
+	array<string> pilotWeapons = [
+		"mp_weapon_alternator_smg",
+		"mp_weapon_arc_launcher",
+		"mp_weapon_autopistol",
+		"mp_weapon_car",
+		"mp_weapon_defender",
+		"mp_weapon_dmr",
+		"mp_weapon_doubletake",
+		"mp_weapon_epg",
+		"mp_weapon_esaw",
+		"mp_weapon_g2",
+		"mp_weapon_hemlok",
+		"mp_weapon_hemlok_smg",
+		"mp_weapon_lmg",
+		"mp_weapon_lstar",
+		"mp_weapon_mastiff",
+		"mp_weapon_mgl",
+		"mp_weapon_pulse_lmg",
+		"mp_weapon_r97",
+		"mp_weapon_rocket_launcher",
+		"mp_weapon_rspn101",
+		"mp_weapon_rspn101_og",
+		"mp_weapon_semipistol",
+		"mp_weapon_shotgun",
+		"mp_weapon_shotgun_pistol",
+		"mp_weapon_smart_pistol",
+		"mp_weapon_smr",
+		"mp_weapon_sniper",
+		"mp_weapon_softball",
+		"mp_weapon_vinson",
+		"mp_weapon_wingman",
+		"mp_weapon_wingman_n"
+	]
+
+	array<string> titanWeapons = [
+		"mp_titanweapon_leadwall",
+		"mp_titanweapon_meteor",
+		"mp_titanweapon_particle_accelerator",
+		"mp_titanweapon_predator_cannon",
+		"mp_titanweapon_rocketeer_rocketstream",
+		"mp_titanweapon_sniper",
+		"mp_titanweapon_sticky_40mm",
+		"mp_titanweapon_xo16_shorty",
+		"mp_titanweapon_xo16_vanguard"
+	]
+
+	string function RandomiserGetRandomPilotWeapon() {
+		array<string> weapons = clone pilotWeapons
+
+		if (RandomiserNoLimitsEnabled()) {
+			weapons.extend(titanWeapons)
+		}
+
+		return weapons[RandomInt(weapons.len())]
+	}
+
+	string function RandomiserGetRandomTitanWeapon() {
+		array<string> weapons = clone titanWeapons
+
+		// if (RandomiserNoLimitsPWFTEnabled()) {
+		// 	weapons.extend(pilotWeapons)
+		// }
+
+		return weapons[RandomInt(weapons.len())]
+	}
+
+// Offhands
+	array<string> pilotOffhands = [
+		"mp_ability_cloak",
+		"mp_ability_grapple",
+		"mp_ability_heal",
+		"mp_ability_holopilot",
+		"mp_ability_shifter",
+		"mp_weapon_deployable_cover",
+		"mp_weapon_frag_drone",
+		"mp_weapon_frag_grenade",
+		"mp_weapon_grenade_electric_smoke",
+		"mp_weapon_grenade_emp",
+		"mp_weapon_grenade_gravity",
+		"mp_weapon_grenade_sonar",
+		"mp_weapon_satchel",
+		"mp_weapon_thermite_grenade"
+	]
+
+	array<string> titanOffhands = [
+		"mp_titanability_hover",
+		"mp_titanweapon_arc_wave",
+		"mp_titanweapon_flame_wall",
+		"mp_titanweapon_dumbfire_rockets",
+		"mp_titanweapon_salvo_rockets",
+		"mp_titanweapon_stun_laser"
+	]
+
+	// Can only have one of these each because the npc titan shits itself otherwise.
+	array<string> titanDefenses = [
+		"mp_titanability_basic_block",
+		"mp_titanability_particle_wall",
+		"mp_titanweapon_heat_shield",
+		"mp_titanweapon_vortex_shield"
+	]
+
+	array<string> titanTacticals = [
+		"mp_titanability_phase_dash",
+		"mp_titanability_slow_trap",
+		"mp_titanability_smoke",
+		"mp_titanability_sonar_pulse",
+		"mp_titanability_tether_trap",
+		"mp_titanability_rearm"
+	]
+
+	string function RandomiserGetRandomPilotOffhand(array<string> last_offhands) {
+		array<string> offhands = clone pilotOffhands
+
+		if (RandomiserNoLimitsEnabled()) {
+			offhands.extend(titanOffhands)
+			offhands.extend(titanDefenses)
+			offhands.extend(titanTacticals)
+		}
+
+		foreach (offhand in last_offhands) {
+			offhands.removebyvalue(offhand)
+		}
+
+		return offhands[RandomInt(offhands.len())]
+	}
+
+	string function RandomiserGetRandomTitanOffhand(array<string> bonus_offhands, array<string> last_offhands) {
+		array<string> offhands = clone titanOffhands
+		offhands.extend(bonus_offhands)
+
+		if (RandomiserNoLimitsEnabled()) {
+			offhands.extend(pilotOffhands)
+		}
+
+		foreach (offhand in last_offhands) {
+			offhands.removebyvalue(offhand)
+		}
+
+		return offhands[RandomInt(offhands.len())]
+	}
+
+// Melee
+	array<string> pilotMelees = [
+		"melee_pilot_emptyhanded",
+		"melee_pilot_arena",
+		"melee_pilot_sword",
+		"melee_pilot_kunai"
+	]
+
+	array<string> titanMelees = [
+		"melee_titan_punch_ion",
+		"melee_titan_punch_legion",
+		"melee_titan_punch_northstar",
+		"melee_titan_punch_scorch",
+		"melee_titan_punch_tone",
+		"melee_titan_punch_vanguard",
+		"melee_titan_sword"
+	]
+
+	string function RandomiserGetRandomPilotMelee() {
+		array<string> melees = clone pilotMelees
+
+		if (RandomiserNoLimitsEnabled()) {
+			melees.extend(titanMelees)
+		}
+
+		return melees[RandomInt(melees.len())]
+	}
+
+	string function RandomiserGetRandomTitanMelee() {
+		array<string> melees = clone titanMelees
+
+		// if (RandomiserNoLimitsPWFTEnabled()) {
+		// 	melees.extend(pilotMelees)
+		// }
+
+		return melees[RandomInt(melees.len())]
+	}
+
+// Titan Chassis
+	array< array< array<string> > > titanChassis = [
+		[
+			["ion"],
+			["titan_atlas_stickybomb", "titan_atlas_ion_prime"],
+			["execution_ion", "execution_ion_prime", "execution_tone", "execution_tone_prime", "execution_vanguard"]
+		],
+		[
+			["scorch"],
+			["titan_ogre_meteor", "titan_ogre_scorch_prime"],
+			["execution_scorch", "execution_scorch_prime", "execution_legion", "execution_legion_prime"]
+		],
+		[
+			["northstar"],
+			["titan_stryder_sniper", "titan_stryder_northstar_prime"],
+			["execution_northstar", "execution_northstar_prime", "execution_ronin", "execution_ronin_prime"]
+		],
+		[
+			["ronin"],
+			["titan_stryder_leadwall", "titan_stryder_ronin_prime"],
+			["execution_ronin", "execution_ronin_prime", "execution_northstar"]
+		],
+		[
+			["tone"],
+			["titan_atlas_tracker", "titan_atlas_tone_prime"],
+			["execution_tone", "execution_tone_prime", "execution_ion", "execution_ion_prime", "execution_vanguard"]
+		],
+		[
+			["legion"],
+			["titan_ogre_minigun", "titan_ogre_legion_prime"],
+			["execution_legion", "execution_legion_prime", "execution_scorch", "execution_scorch_prime"]
+		],
+		[
+			["vanguard"],
+			["titan_atlas_vanguard"],
+			["execution_vanguard", "execution_ion", "execution_ion_prime", "execution_tone", "execution_tone_prime"]
+		]
+	]
+
+	array<string> function RandomiserGetRandomTitanChassis() {
+		array< array<string> > randomClassData = titanChassis[RandomInt(titanChassis.len())]
+
+		string randomTitanClass = randomClassData[0][RandomInt(randomClassData[0].len())]
+
+		int randomSetNumber = RandomInt(randomClassData[1].len())
+		string randomSetFile = randomClassData[1][randomSetNumber]
+		string primeStatus = randomSetNumber == 1 ? "titan_is_prime" : "titan_is_not_prime"
+
+		string randomExecution = randomClassData[2][RandomInt(randomClassData[2].len())]
+
+		return [randomTitanClass, randomSetFile, primeStatus, randomExecution]
+	}
+
+// Titan Cores
+	array<string> titanCores = [
+		"mp_titancore_flame_wave",
+		"mp_titancore_flight_core",
+		"mp_titancore_laser_cannon",
+		"mp_titancore_salvo_core",
+		"mp_titancore_shift_core",
+		"mp_titancore_upgrade",
+		"mp_titancore_siege_mode"
+	]
+
+	string function RandomiserGetRandomTitanCore() {
+		return titanCores[RandomInt(titanCores.len())]
+	}
+
+#if SERVER
+	void function GivePlayerRandomiser(entity player) {
+		if (RandomiserPilotsEnabled()) {
+			int loadoutIndex = GetActivePilotLoadoutIndex(player)
+			PilotLoadoutDef loadout = GetPilotLoadoutFromPersistentData(player, loadoutIndex)
+
+			string burncardRef = GetSelectedBurnCardRef(player)
+			BurnReward burnReward = BurnReward_GetByRef(burncardRef)
+
+			array<string> offhandExclusions = []
+			offhandExclusions.append(burnReward.weaponName)
+
+			if (burncardRef == "burnmeter_random_foil") {
+				foreach (burnReward in burn.allCards) {
+					offhandExclusions.append(burnReward.weaponName)
+				}
+			}
+
+			loadout.primary = RandomiserGetRandomPilotWeapon()
+			loadout.primaryAttachments = []
+			loadout.primaryMods = []
+
+			loadout.secondary = RandomiserGetRandomPilotWeapon()
+			loadout.secondaryMods = []
+
+			loadout.weapon3 = RandomiserGetRandomPilotWeapon()
+			loadout.weapon3Mods = []
+
+			loadout.special = RandomiserGetRandomPilotOffhand(offhandExclusions)
+			offhandExclusions.append(loadout.special)
+			loadout.ordnance = RandomiserGetRandomPilotOffhand(offhandExclusions)
+
+			loadout.melee = RandomiserGetRandomPilotMelee()
+			loadout.meleeMods = []
+
+			GivePilotLoadout(player, loadout)
+		}
+	}
+
+	void function ApplyTitanRandomiser(entity player, TitanLoadoutDef loadout) {
+		if (RandomiserTitansEnabled()) {
+			array<string> chassis = RandomiserGetRandomTitanChassis()
+
+			loadout.name = "???"
+
+			loadout.titanClass = chassis[0]
+			loadout.setFile = chassis[1]
+			loadout.isPrime = chassis[2]
+			loadout.titanExecution = chassis[3]
+
+			array<string> offhandExclusions = []
+			if (loadout.titanExecution == "execution_northstar_prime") {
+				offhandExclusions.append("mp_titanweapon_salvo_rockets")
+			}
+
+			loadout.primary = RandomiserGetRandomTitanWeapon()
+			loadout.primaryMod = ""
+			loadout.primaryMods = []
+
+			loadout.special = RandomiserGetRandomTitanOffhand(titanDefenses, offhandExclusions)
+			loadout.specialMods = []
+			offhandExclusions.append(loadout.special)
+
+			loadout.antirodeo = RandomiserGetRandomTitanOffhand(titanTacticals, offhandExclusions)
+			loadout.antirodeoMods = []
+			offhandExclusions.append(loadout.antirodeo)
+
+			loadout.ordnance = RandomiserGetRandomTitanOffhand([], offhandExclusions)
+			loadout.ordnanceMods = []
+
+			loadout.coreAbility = RandomiserGetRandomTitanCore()
+
+			loadout.passive1 = "pas_enhanced_titan_ai"
+			loadout.passive2 = "pas_hyper_core"
+			loadout.passive3 = "pas_bubbleshield"
+			loadout.passive4 = "pas_vanguard_core1"
+			loadout.passive5 = "pas_vanguard_core5"
+			loadout.passive6 = "pas_vanguard_core8"
+
+			loadout.melee = RandomiserGetRandomTitanMelee()
+		}
+	}
+#endif

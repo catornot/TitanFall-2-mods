@@ -1,0 +1,92 @@
+// handles entering rooms and spawning enemies
+
+global function InitRoomManager
+global function EnteredNewRoom
+global function EnteredNewRoomString
+// perhaps the room trigger should be here instead
+
+const string EDITOR_CLASS_ROOM_SPAWNER = "room_spawner"
+const string EDITOR_CLASS_ROOM = "room_ent"
+
+// "link_to_guid_0" "name" link to name
+// "link_guid" "name" ent's link name
+
+struct {
+    string current_room
+    table< string,array<entity> > spawner_for_room
+} file
+
+void function InitRoomManager()
+{
+    AddSpawnCallbackEditorClass( "script_ref", EDITOR_CLASS_ROOM, AddRoom )
+
+    AddCallback_EntitiesDidLoad( AddRoomSpawners )
+}
+
+void function AddRoom( entity spawner )
+{
+    file.spawner_for_room[spawner.GetScriptName()] <- []
+}
+
+void function AddRoomSpawners()
+{
+    printt( "room spawners" )
+
+    foreach ( string classname in [ "npc_soldier", "npc_drone" ] )
+    {
+        foreach( entity ent in GetSpawnerArrayByClassName( classname ) )
+        {
+            table kvs = ent.GetSpawnEntityKeyValues()
+
+            if ( kvs["editorclass"] != EDITOR_CLASS_ROOM_SPAWNER )
+                continue
+            
+            AddRoomSpawner( ent )
+        }
+    }
+
+}
+
+void function AddRoomSpawner( entity spawner )
+{
+    if ( !IsSpawner( spawner ) )
+        return
+    
+    table kvs = spawner.GetSpawnEntityKeyValues()
+    
+    array<entity> room = GetEntArrayByScriptName( expect string( kvs["script_noteworthy"] ) )
+
+    if ( room.len() == 0 )
+    {
+        printt( "spawner ", spawner, " has no room" )
+        return
+    }
+
+    file.spawner_for_room[room[0].GetScriptName()].append(spawner)
+}
+
+void function EnteredNewRoom( entity room_ent )
+{
+    file.current_room = room_ent.GetScriptName()
+
+    foreach( entity spawner in file.spawner_for_room[file.current_room] )
+    {
+        entity ent = spawner.SpawnEntity()
+        DispatchSpawn( ent )
+
+        SetTeam( ent, TEAM_IMC )
+    }
+}
+
+void function EnteredNewRoomString( string room )
+{
+    file.current_room = room
+
+    foreach( entity spawner in file.spawner_for_room[room] )
+    {
+        entity ent = spawner.SpawnEntity()
+        DispatchSpawn( ent )
+
+        SetTeam( ent, TEAM_IMC )
+    }
+}

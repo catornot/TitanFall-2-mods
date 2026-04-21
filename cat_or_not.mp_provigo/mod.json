@@ -1,0 +1,30 @@
+{
+    "Name": "cat_or_not.mp_provigo",
+    "Description": "the provigo store in titanfall 2",
+    "Version": "1.0.0",
+    "LoadPriority": 3,
+    "RequiredOnClient": true,
+    "ConVars": [],
+    "Scripts": [
+        {
+            "Path": "sh_mp_provigo.gnut",
+            "RunOn": "( CLIENT || SERVER ) && MP",
+            "ClientCallback": {
+                "Before": "Shared_provigo"
+              },
+              "ServerCallback": {
+                "Before": "Shared_provigo"
+              }
+        },
+        {
+            "Path": "lobby/sh_private_lobby_mp_provigo.gnut",
+            "RunOn": "( CLIENT || SERVER ) && MP",
+			"ClientCallback": {
+				"Before": "PrivateLobbyAddMpProvigoMap"
+			},
+			"ServerCallback": {
+				"Before": "PrivateLobbyAddMpProvigoMap"
+			}
+        }
+    ]
+}

@@ -1,0 +1,57 @@
+global function InitHubRoom
+
+void function InitHubRoom()
+{
+    AddTriggerEditorClassFunc( "trigger_hub_room", OnSpawnTelportTrigger )
+}
+
+void function OnSpawnTelportTrigger( entity trigger )
+{
+    thread RunHubRoomTeleportTrigger( trigger )
+}
+
+void function RunHubRoomTeleportTrigger( entity trigger )
+{
+    // todo: add some stop
+
+    if ( GetEntArrayByScriptName("START").len() == 0 )
+    {
+        printt("can't find START ent")
+        return
+    }
+
+    entity player
+	table result
+    entity start = GetEntByScriptName("START")
+    // trigger.Enable()
+
+    for(;;)
+	{
+		wait 0
+
+		if ( !trigger.IsTouched() )
+		{
+			result = trigger.WaitSignal( "OnStartTouch" )
+			player = expect entity( result.activator )
+		}
+		else
+		{
+			player = trigger.GetTouchingEntities()[0]
+		}
+
+        // todo: some cool animation of door closing and all that
+        
+        vector origin = start.GetOrigin()
+        vector angles = start.GetAngles()
+
+        thread BlackOutTeleport( player, origin, angles )
+        SetHazardCheckpoint( player.GetUID(), origin, angles )
+        SetCheckpoint( player.GetUID(), origin, angles )
+
+        // todo: make this work for multiplayer
+
+        EnteredNewRoomString( "campaign_start_room" )
+        
+        GiveCurrentLoadout( player )
+	}
+}

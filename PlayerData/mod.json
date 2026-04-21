@@ -1,0 +1,17 @@
+{
+	"Name": "Info Tracker",
+	"Description": "Adds a ingame overlay with various stats. To edit the stat tracker open the file playerdata.nut located here: R2Northstar\\mods\\Playerdata\\mod\\scripts\\vscripts\\playerdata.nut",
+	"LoadPriority": 2,
+	"RequiredOnClient": false,
+	"Version": "2.0",
+
+	"Scripts": [
+		{
+			"Path": "playerdata.nut",
+			"RunOn": "CLIENT",
+			"ClientCallback": {
+				"After": "userDataPreCache"
+			}
+		}
+	]
+}

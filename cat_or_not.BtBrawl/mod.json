@@ -1,0 +1,15 @@
+{
+    "Name": "catornot.BtBrawl",
+    "Description": "Coop but its titan brawl",
+    "Version": "1.0.0",
+    "LoadPriority": 2,
+    "Scripts": [
+        {
+            "Path": "btBrawl.nut",
+            "RunOn": "SERVER && SP",
+            "ServerCallback": {
+                "After": "Init_BtBrawl"
+            }
+        }
+    ]
+}

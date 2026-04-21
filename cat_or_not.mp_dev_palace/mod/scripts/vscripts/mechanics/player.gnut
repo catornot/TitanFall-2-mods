@@ -1,0 +1,59 @@
+global function InitPlayerManager
+global function GiveCurrentLoadout
+global function SavePlayerLoadout
+
+struct PlayerLoadout {
+    bool hasDoubleJump = false
+    bool hasWallRun = false
+    string weapon = "mp_weapon_semipistol" // "mp_weapon_shotgun_doublebarrel"
+    array<string> weaponMods = []
+}
+
+struct {
+    table<string,PlayerLoadout> playerLoadouts
+} file
+
+void function InitPlayerManager()
+{
+    AddCallback_OnPlayerRespawned( PlayerRespawned )
+    AddCallback_OnClientConnected( InitPlayerLoadout )
+}
+
+void function PlayerRespawned( entity player )
+{
+    GiveCurrentLoadout( player )
+}
+
+void function InitPlayerLoadout( entity player )
+{
+    file.playerLoadouts[player.GetUID()] <- LoadPlayerLoadout( player )
+}
+
+void function GiveCurrentLoadout( entity player )
+{
+    PlayerLoadout loadout = file.playerLoadouts[player.GetUID()]
+
+    StorePilotWeapons( player )
+
+    SetTeam( player, TEAM_MILITIA )
+
+    array<string> settings = []
+    if ( !loadout.hasDoubleJump )
+        settings.append( "disable_doublejump" )
+    if ( !loadout.hasWallRun )
+        settings.append( "disable_wallrun" )
+    player.SetPlayerSettingsWithMods( DEFAULT_PILOT_SETTINGS, settings )
+    
+    player.GiveWeapon( loadout.weapon )
+}
+
+void function SavePlayerLoadout( entity player )
+{
+    // todo
+}
+
+PlayerLoadout function LoadPlayerLoadout( entity player )
+{
+    PlayerLoadout loadout
+    return loadout
+}

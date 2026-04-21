@@ -1,0 +1,11 @@
+global function PrivateLobbyAddMpMirrorCityMap
+
+void function PrivateLobbyAddMpMirrorCityMap()
+{
+	AddCallback_OnCustomGamemodesInit( AddMapToPrivateMatchWhenReady )
+}
+
+void function AddMapToPrivateMatchWhenReady()
+{
+	AddPrivateMatchMap( "mp_mirror_city" )
+}

@@ -1,0 +1,25 @@
+{
+	"Name" : "cat_or_not.sped",
+	"Description" : "no friction",
+	"Version": "1.0.0",
+	"LoadPriority": 1,
+	
+	"ConVars": [
+
+		{
+			"Name": "huh",
+			"DefaultValue": "3"
+		}
+	],
+
+	"Scripts": [
+		{
+			"Path": "sped.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "Init_Sped"
+			}
+		}
+	]
+}
+

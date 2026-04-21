@@ -1,0 +1,31 @@
+{
+	"Name" : "GunYeet",
+	"Description" : "Hold down USE to throw your gun",
+	"Version": "1.0.1",
+	"RequiredOnClient": false,
+	"LoadPriority": 3,
+	"Scripts": [
+		{
+			"Path": "sh_GunThrow.nut",
+			"RunOn": "MP",
+			"ServerCallback": {
+				"After": "SHGunTrow_init"
+			},
+			"ClientCallback": {
+				"After": "SHGunTrow_init"
+			}
+
+		},
+		{
+			"Path": "_GunThrow.nut",
+			"RunOn": "MP && SERVER",
+			"ServerCallback": {
+				"Before": "GunTrow_init"
+			}
+		}
+	],
+	"Localisation": [
+		"resource/YeetGun_localisation_%language%.txt"
+	]
+}
+

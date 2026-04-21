@@ -1,0 +1,11 @@
+global function PrivateLobbyAddMpCrumblingCaveMap
+
+void function PrivateLobbyAddMpCrumblingCaveMap()
+{
+	AddCallback_OnCustomGamemodesInit( AddMapToPrivateMatchWhenReady )
+}
+
+void function AddMapToPrivateMatchWhenReady()
+{
+	AddPrivateMatchMap( "mp_crumbling_cave" )
+}

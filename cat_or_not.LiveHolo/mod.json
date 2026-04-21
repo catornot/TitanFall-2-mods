@@ -1,0 +1,17 @@
+{
+	"Name" : "cat_or_not.LiveHolo",
+	"Description" : "Live Fire but people come out of holos",
+	"Version": "1.0.1",
+	"LoadPriority": 4,
+	"Scripts": [
+		{
+		}
+	],
+	"Localisation": [
+		"resource/LiveHolo_localisation_%language%.txt"
+	],
+	"Dependencies": {
+		"HOLOMIMIC": "cat_or_not.HoloMimic"
+	}
+}
+

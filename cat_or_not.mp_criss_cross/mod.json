@@ -1,0 +1,8 @@
+{
+  "Name": "cat_or_not.mp_criss_cross",
+  "Description": "",
+  "Version": "1.0.0",
+  "LoadPriority": 1,
+  "ConVars": [],
+  "Scripts": []
+}

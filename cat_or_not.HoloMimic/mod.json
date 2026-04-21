@@ -1,0 +1,12 @@
+{
+	"Name" : "cat_or_not.HoloMimic",
+	"Description" : "holos mimic your movement",
+	"Version": "0.1.2",
+	"LoadPriority": 4,
+	
+	"ConVars": [
+	],
+
+	"Scripts": [
+	]
+}

@@ -1,0 +1,20 @@
+
+IsTestMap: false
+
+When: "SERVER"
+Scripts:
+[
+	mp_skyline_autoprecache.nut
+]
+
+When: "SERVER || CLIENT"
+Scripts:
+[
+	
+]
+
+When: "CLIENT"
+Scripts:
+[
+	
+]

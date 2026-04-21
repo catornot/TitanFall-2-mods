@@ -1,0 +1,25 @@
+{
+	"Name" : "cat_or_not.PingYeet",
+	"Description" : "Kick people with a high ping",
+	"Version": "0.0.1",
+	"LoadPriority": 2,
+	
+	"ConVars": [
+
+		{
+			"Name": "MaxPing",
+			"DefaultValue": "150"
+		}
+	],
+
+	"Scripts": [
+		{
+			"Path": "pingkick.nut",
+			"RunOn": "SERVER",
+			"ServerCallback": {
+				"After": "Init_PingKick"
+			}
+		}
+	]
+}
+

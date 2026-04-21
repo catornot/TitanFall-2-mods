@@ -1,0 +1,26 @@
+WeaponData
+{
+	"smart_ammo_lock_type"							""
+
+	Mods
+	{
+		arc_rounds
+		{
+			"vortex_drain"									"0.033"
+
+			"ammo_clip_size"   								"*1.25"
+
+			"damage_flags"									"DF_STOPS_TITAN_REGEN | DF_BULLET | DF_NO_SELF_DAMAGE | DF_ELECTRICAL"
+		}
+		rapid_reload
+		{
+			"reload_time" 									"*0.75"
+			"reload_time_late1"								"*0.75"
+			"reloadempty_time"								"*0.75"
+		}
+		Smart_Core
+		{
+			"smart_ammo_lock_type"							"any"
+		}
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"Name" : "catornot.Spawn",
+	"Description" : "Adds a command to spawn entities",
+	"Version": "1.0.0",
+	"LoadPriority": 3,
+	"Scripts": [
+		{
+			"Path": "spawn.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "SpawnCommand_Init"
+			}
+		},
+		{
+			"Path": "spawn_ui.nut",
+			"RunOn": "SERVER && MP"
+		}
+	]
+}

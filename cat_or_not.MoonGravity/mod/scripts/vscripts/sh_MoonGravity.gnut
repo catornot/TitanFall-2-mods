@@ -1,0 +1,49 @@
+global function GRAVITYRIFF_Init
+
+const vector checked_height = <0,0,200.0>
+
+void function GRAVITYRIFF_Init()
+{
+
+    AddPrivateMatchModeSettingEnum( "#MODE_SETTING_CATEGORY_RIFF", "gravity_RIFF", [ "#SETTING_DISABLED", "#SETTING_ENABLED" ], "0" )
+
+    #if SERVER
+        AddCallback_EntitiesDidLoad( StartRoofCheck )
+	#endif
+    
+}
+
+bool function GetGravityRiffState(){
+    return GetCurrentPlaylistVarInt("gravity_RIFF", 0) == 1
+}
+
+
+#if SERVER
+
+void function StartRoofCheck()
+{
+    if ( !GetGravityRiffState() && !IsLobby() )
+        return
+    
+    thread RoofCheck()
+}
+
+void function RoofCheck()
+{
+    for(;;)
+    {
+        foreach( entity player in GetPlayerArray() )
+        {
+            if ( TraceLine( player.GetOrigin(), player.GetOrigin() + checked_height, [ player ], TRACE_MASK_SHOT, TRACE_COLLISION_GROUP_NONE ).hitEnt == null )
+            {
+                player.kv.gravity = 0.3
+            }
+            else
+            {
+                player.kv.gravity = 1
+            }
+        }
+        WaitFrame()
+    }
+}
+#endif

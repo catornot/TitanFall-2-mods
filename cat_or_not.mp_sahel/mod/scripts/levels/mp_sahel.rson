@@ -1,0 +1,19 @@
+
+IsTestMap: false
+
+When: "SERVER"
+Scripts:
+[
+	mp_sahel.nut
+]
+
+When: "SERVER || CLIENT"
+Scripts:
+[
+]
+
+When: "CLIENT"
+Scripts:
+[
+	cl_mp_sahel.nut
+]

@@ -1,0 +1,29 @@
+{
+	"Name" : "RCON",
+	"Description" : "Runs a server command through client.",
+	"Version": "1.0.1",
+	"LoadPriority": 2,
+
+	"ConVars": [
+		{
+			"Name": "rcon_admin",
+			"DefaultValue": "1004329002322,1004329002322" // edit this to add admins, no spaces between commas
+		}
+	],
+	"Scripts": [
+		{
+			"Path": "rcon.nut",
+			"RunOn": "SERVER",
+			"ServerCallback": {
+				"After": "RCONCommand"
+			}
+		},
+		{
+			"Path": "rcon_admin.nut",
+			"RunOn": "SERVER",
+			"ServerCallback": {
+				"After": "RCON_Init"
+			}
+		}
+	]
+}

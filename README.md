@@ -1,4 +1,4 @@
 # TitanFall-2-mods
-repository of the mods I make
+repository of the mods I make (and some mods that I didn't make but I dedecided to archive them here)
 
-OUR CODE
+will start using this more

@@ -1,0 +1,7 @@
+{
+    "name": "TitanCapture",
+    "version_number": "1.1.1",
+    "website_url": "",
+    "description": "replaces lts; caputure a titan and then defend it",
+    "dependencies": []
+}

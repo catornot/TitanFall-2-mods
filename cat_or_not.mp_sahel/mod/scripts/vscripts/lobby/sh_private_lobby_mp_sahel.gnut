@@ -1,0 +1,11 @@
+global function PrivateLobbyAddMpSahelMap
+
+void function PrivateLobbyAddMpSahelMap()
+{
+	AddCallback_OnCustomGamemodesInit( AddMapToPrivateMatchWhenReady )
+}
+
+void function AddMapToPrivateMatchWhenReady()
+{
+	AddPrivateMatchMap( "mp_map" )
+}

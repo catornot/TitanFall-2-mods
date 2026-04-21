@@ -1,0 +1,20 @@
+
+IsTestMap: false
+
+When: "SERVER"
+Scripts:
+[
+	_mp_provigo.nut
+	_mp_provigo_pickups.gnut
+]
+
+When: "SERVER || CLIENT"
+Scripts:
+[
+]
+
+When: "CLIENT"
+Scripts:
+[
+	cl_mp_provigo.nut
+]

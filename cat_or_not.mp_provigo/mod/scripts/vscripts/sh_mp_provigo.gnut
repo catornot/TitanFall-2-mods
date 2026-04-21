@@ -1,0 +1,28 @@
+global function Shared_provigo
+
+void function Shared_provigo()
+{
+    if ( GetMapName() != "mp_provigo" )
+        return
+    
+    AddCallback_OnRegisteringCustomNetworkVars( ProvigoRegisterNetworkVars )
+}
+
+void function ProvigoRegisterNetworkVars()
+{
+    Remote_RegisterFunction( "ServerCallback_OpenBoostStore" )
+	Remote_RegisterFunction( "ServerCallback_UpdateMoney" )
+    Remote_RegisterFunction( "ServerCallback_UpdateTeamReserve" )
+	Remote_RegisterFunction( "ServerCallback_UpdatePlayerHasBattery" )
+	Remote_RegisterFunction( "ServerCallback_UpdateAmpedWeaponState" )
+	Remote_RegisterFunction( "ServerCallback_BoostStoreTitanHint" )
+	Remote_RegisterFunction( "ServerCallback_UpdateTurretCount" )
+	
+	// RegisterNetworkedVariable( "boostStoreOpen", SNDC_GLOBAL, SNVT_BOOL, false )
+	RegisterNetworkedVariable( "FD_money", SNDC_PLAYER_GLOBAL, SNVT_UNSIGNED_INT, 0 )
+	RegisterNetworkedVariable( "FD_money256", SNDC_PLAYER_GLOBAL, SNVT_UNSIGNED_INT, 0 )
+	
+	// // these are required to prevent crashes in fd code that's called from menu_boost_store
+	RegisterNetworkedVariable( "numSuperRodeoGrenades", SNDC_PLAYER_GLOBAL, SNVT_INT, 0 )
+	RegisterNetworkedVariable( "FD_waveActive", SNDC_GLOBAL, SNVT_BOOL, false )
+}

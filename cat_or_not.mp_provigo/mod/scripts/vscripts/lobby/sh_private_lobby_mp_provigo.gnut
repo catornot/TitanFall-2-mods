@@ -1,0 +1,11 @@
+global function PrivateLobbyAddMpProvigoMap
+
+void function PrivateLobbyAddMpProvigoMap()
+{
+	AddCallback_OnCustomGamemodesInit( AddMapToPrivateMatchWhenReady )
+}
+
+void function AddMapToPrivateMatchWhenReady()
+{
+	AddPrivateMatchMap( "mp_provigo" )
+}

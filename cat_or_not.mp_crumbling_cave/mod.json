@@ -1,0 +1,19 @@
+{
+    "Name": "cat_or_not.mp_crumbling_cave",
+    "Description": "",
+    "Version": "1.0.0",
+    "LoadPriority": 1,
+    "ConVars": [],
+    "Scripts": [
+        {
+            "ClientCallback": {
+                "Before": "PrivateLobbyAddMpCrumblingCaveMap"
+            },
+            "Path": "lobby/sh_private_lobby_mp_crumbling_cave.gnut",
+            "RunOn": "(SERVER || CLIENT) && MP",
+            "ServerCallback": {
+                "Before": "PrivateLobbyAddMpCrumblingCaveMap"
+            }
+        }
+    ]
+}

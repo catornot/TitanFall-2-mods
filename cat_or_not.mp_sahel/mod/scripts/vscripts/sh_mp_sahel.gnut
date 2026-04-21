@@ -1,0 +1,14 @@
+global function Shared_mp_sahel
+
+void function Shared_mp_sahel()
+{
+    if ( GetMapName() != "mp_sahel" )
+        return
+    
+    AddCallback_OnRegisteringCustomNetworkVars( RegisterNetworkVars )
+}
+
+void function RegisterNetworkVars()
+{
+
+}

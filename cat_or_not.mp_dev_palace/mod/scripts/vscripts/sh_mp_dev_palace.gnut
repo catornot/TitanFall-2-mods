@@ -1,0 +1,11 @@
+global function Shared_mp_dev_palace
+
+void function Shared_mp_dev_palace()
+{    
+    AddCallback_OnRegisteringCustomNetworkVars( RegisterNetworkVars )
+}
+
+void function RegisterNetworkVars()
+{
+
+}

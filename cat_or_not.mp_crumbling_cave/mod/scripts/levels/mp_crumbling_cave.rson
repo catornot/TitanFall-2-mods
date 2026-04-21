@@ -1,0 +1,19 @@
+
+IsTestMap: false
+
+When: "SERVER"
+Scripts:
+[
+	mp_crumbling_cave.nut
+]
+
+When: "SERVER || CLIENT"
+Scripts:
+[
+]
+
+When: "CLIENT"
+Scripts:
+[
+	cl_mp_crumbling_cave.nut
+]

@@ -1,0 +1,15 @@
+globalize_all_functions
+
+void function BlackOutTeleport( entity player, vector origin, vector angles = <99,99,99>, int time = 3 ) // nil is needed to fix fix fix eh
+{
+    ScreenFade( player, 0, 0, 0, 255, 1, 1, (FFADE_IN | FFADE_PURGE) )
+    player.FreezeControlsOnServer()
+    player.SetOrigin( origin )
+    player.SetVelocity( <0,0,0> )
+    if ( angles != <99,99,99> )
+        player.SnapEyeAngles( angles )
+
+    wait time
+
+    player.UnfreezeControlsOnServer()
+}

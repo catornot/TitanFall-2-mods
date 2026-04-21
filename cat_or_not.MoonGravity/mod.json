@@ -1,0 +1,22 @@
+{
+	"Name" : "cat_or_not.MoonGravity",
+	"Description" : "Makes your gravity lower when you are outside",
+	"Version": "0.0.1",
+	"LoadPriority": 2,
+	"Scripts": [
+		{
+			"Path": "sh_MoonGravity.gnut",
+			"RunOn": "MP",
+			"ServerCallback": {
+				"After": "GRAVITYRIFF_Init"
+			},
+			"ClientCallback": {
+				"After": "GRAVITYRIFF_Init"
+			}
+		}
+	],
+	"Localisation": [
+		"resources/Moon_localisation_%language%.txt"
+	]
+}
+
