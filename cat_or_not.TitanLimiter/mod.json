@@ -9,6 +9,34 @@
 		{
 			"Name": "TitanLimit",
 			"DefaultValue": "3"
+		},
+		{
+			"Name": "RoninLimit",
+			"DefaultValue": "99"
+		},
+		{
+			"Name": "NorthstarLimit",
+			"DefaultValue": "99"
+		},
+		{
+			"Name": "ToneLimit",
+			"DefaultValue": "99"
+		},
+		{
+			"Name": "IonLimit",
+			"DefaultValue": "99"
+		},
+		{
+			"Name": "ScorchLimit",
+			"DefaultValue": "99"
+		},
+		{
+			"Name": "LegionLimit",
+			"DefaultValue": "99"
+		},
+		{
+			"Name": "MonarchLimit",
+			"DefaultValue": "99"
 		}
 	],
 
@@ -19,6 +47,10 @@
 			"ServerCallback": {
 				"After": "Init_TitanLimit"
 			}
+		},
+		{
+			"Path": "chassisLimit.nut",
+			"RunOn": "SERVER && MP"
 		}
 	]
 }

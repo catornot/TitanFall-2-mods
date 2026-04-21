@@ -9,7 +9,8 @@ const array<asset> models = [
     $"models/robotics_r2/turret_plasma/plasma_turret_pc_3.mdl",
     $"models/robotics_r2/turret_rocket/rocket_turret_posed.mdl",
     $"models/CARs/CAR2",
-    $"models/weapons/sentry_turret/sentry_turret.mdl"
+    $"models/weapons/sentry_turret/sentry_turret.mdl",
+    $"models/weapons/bullets/projectile_rocket_largest.mdl"
 
 ]
 

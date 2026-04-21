@@ -1,7 +1,7 @@
 {
 	"Name" : "cat_or_not.FactionLobby",
 	"Description" : "Adds the faction leader to your lobby ( next to you )",
-	"Version": " owo",
+	"Version": "2.0.0",
 	"LoadPriority": 2,
 	
 	"ConVars": [
@@ -11,20 +11,32 @@
 			"DefaultValue": "1"
 		},
 		{
-			"Name": "SpinSpeed",
+			"Name": "SpinSpeedX",
+			"DefaultValue": "0"
+		},
+		{
+			"Name": "SpinSpeedY",
+			"DefaultValue": "1"
+		},
+		{
+			"Name": "SpinSpeedZ",
+			"DefaultValue": "0"
+		},
+		{
+			"Name": "SpeedMultiplier",
 			"DefaultValue": "1"
 		},
 		{
 			"Name": "PropstartPostion",
-			"DefaultValue": "-20,50,0"
+			"DefaultValue": "50,-20,0"
 		}
 	],
 
 	"Scripts": [
 		{
 			"Path": "FactionInLobbyStuff.nut",
-			"RunOn": "SERVER && MP",
-			"ServerCallback": {
+			"RunOn": "CLIENT && MP",
+			"ClientCallback": {
 				"After": "Init_MylobbyStuff"
 			}
 		}

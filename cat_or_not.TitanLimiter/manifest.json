@@ -1,0 +1,7 @@
+{
+    "name": "TitanLimiter",
+    "version_number": "1.2.0",
+    "website_url": "",
+    "description": "adds a limit on how many titans a team can have",
+    "dependencies": []
+}

@@ -1,0 +1,7 @@
+{
+    "name": "LobbyFaction",
+    "version_number": "0.2.0",
+    "website_url": "",
+    "description": "puts your faction leader next to you",
+    "dependencies": []
+}

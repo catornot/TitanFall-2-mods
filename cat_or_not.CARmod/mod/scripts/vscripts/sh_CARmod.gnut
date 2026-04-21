@@ -8,10 +8,9 @@ void function CAR_Init()
 
     #if SERVER
         // AddCallback_EntitiesDidLoad( SpawnSomeCars )
-        AddCallback_OnClientConnected( OnPlayerConnected )
+        // AddCallback_OnClientConnected( OnPlayerConnected )
 
         AddClientCommandCallback( "CAR", SummonCAR )
-		// AddClientCommandCallback( "DropShip", PutInDropship )
 		// AddClientCommandCallback( "Sa", SA )
 		// AddClientCommandCallback( "Sa2", SA2 )
 		// AddClientCommandCallback( "Sa3", SA3 )
@@ -103,6 +102,8 @@ bool function ClearDeadCARs(entity player, array<string> args)
 
 bool function SummonCAR(entity player, array<string> args)
 {
+	InitKeyTracking()
+
     SpawnCAR( player.GetOrigin() )
     
     return true
@@ -143,37 +144,28 @@ bool function SA3(entity player, array<string> args)
     return true
 }
 
-bool function PutInDropship(entity player, array<string> args)
-{
-    // vector InitialLocation = player.GetOrigin()
-
-    // DropShipStruct dropship = SpawnDropShipRidable( InitialLocation + <0,0,500>, <0,0,0>, player )
-    // thread MakePlayerDriveDropShip( player, dropship )
-    
-    return true
-}
 
 void function OnPlayerConnected( entity player )
 {
-    AddPlayerToKeysList( player )
+    // AddPlayerToKeysList( player )
 
-	AddButtonPressedPlayerInputCallback( player, IN_DUCK , PlayerMoveDuckC )
-	AddButtonPressedPlayerInputCallback( player, IN_DUCKTOGGLE , PlayerMoveDuckC )
-	AddButtonPressedPlayerInputCallback( player, IN_JUMP , PlayerMoveJumpC )
-    AddButtonPressedPlayerInputCallback( player, IN_FORWARD, PlayerMoveFORWARDC ) 
-    AddButtonPressedPlayerInputCallback( player, IN_BACK, PlayerMoveBACKC )
-    AddButtonPressedPlayerInputCallback( player, IN_MOVELEFT, PlayerMoveLEFTC )
-    AddButtonPressedPlayerInputCallback( player, IN_MOVERIGHT, PlayerMoveRIGHTC )
-	AddButtonPressedPlayerInputCallback( player, IN_USE, PlayerMoveUSEC )
+	// AddButtonPressedPlayerInputCallback( player, IN_DUCK , PlayerMoveDuckC )
+	// AddButtonPressedPlayerInputCallback( player, IN_DUCKTOGGLE , PlayerMoveDuckC )
+	// AddButtonPressedPlayerInputCallback( player, IN_JUMP , PlayerMoveJumpC )
+    // AddButtonPressedPlayerInputCallback( player, IN_FORWARD, PlayerMoveFORWARDC ) 
+    // AddButtonPressedPlayerInputCallback( player, IN_BACK, PlayerMoveBACKC )
+    // AddButtonPressedPlayerInputCallback( player, IN_MOVELEFT, PlayerMoveLEFTC )
+    // AddButtonPressedPlayerInputCallback( player, IN_MOVERIGHT, PlayerMoveRIGHTC )
+	// AddButtonPressedPlayerInputCallback( player, IN_USE, PlayerMoveUSEC )
 
-    AddButtonReleasedPlayerInputCallback( player, IN_DUCK , PlayerStopDuckC )
-	AddButtonReleasedPlayerInputCallback( player, IN_DUCKTOGGLE , PlayerStopDuckC )
-	AddButtonReleasedPlayerInputCallback( player, IN_JUMP , PlayerStopJumpC )
-    AddButtonReleasedPlayerInputCallback( player, IN_FORWARD, PlayerStopFORWARDC ) 
-    AddButtonReleasedPlayerInputCallback( player, IN_BACK, PlayerStopBACKC )
-    AddButtonReleasedPlayerInputCallback( player, IN_MOVELEFT, PlayerStopLEFTC ) 
-    AddButtonReleasedPlayerInputCallback( player, IN_MOVERIGHT, PlayerStopRIGHTC )
-	AddButtonReleasedPlayerInputCallback( player, IN_USE, PlayerStopUSEC )
+    // AddButtonReleasedPlayerInputCallback( player, IN_DUCK , PlayerStopDuckC )
+	// AddButtonReleasedPlayerInputCallback( player, IN_DUCKTOGGLE , PlayerStopDuckC )
+	// AddButtonReleasedPlayerInputCallback( player, IN_JUMP , PlayerStopJumpC )
+    // AddButtonReleasedPlayerInputCallback( player, IN_FORWARD, PlayerStopFORWARDC ) 
+    // AddButtonReleasedPlayerInputCallback( player, IN_BACK, PlayerStopBACKC )
+    // AddButtonReleasedPlayerInputCallback( player, IN_MOVELEFT, PlayerStopLEFTC ) 
+    // AddButtonReleasedPlayerInputCallback( player, IN_MOVERIGHT, PlayerStopRIGHTC )
+	// AddButtonReleasedPlayerInputCallback( player, IN_USE, PlayerStopUSEC )
 
 	// try {
 	// 	for( int x = 0; x > 1000; x += 1 )

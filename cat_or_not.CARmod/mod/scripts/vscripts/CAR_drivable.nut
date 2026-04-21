@@ -1,33 +1,33 @@
 untyped
 global function SpawnCAR
-global function AddPlayerToKeysList
+// global function AddPlayerToKeysList
 
 
-// Movement
-global function PlayerMoveJumpC
-global function PlayerMoveDuckC
-global function PlayerMoveFORWARDC
-global function PlayerMoveBACKC
-global function PlayerMoveRIGHTC
-global function PlayerMoveLEFTC
-global function PlayerMoveUSEC
+// // Movement
+// global function PlayerMoveJumpC
+// global function PlayerMoveDuckC
+// global function PlayerMoveFORWARDC
+// global function PlayerMoveBACKC
+// global function PlayerMoveRIGHTC
+// global function PlayerMoveLEFTC
+// global function PlayerMoveUSEC
 
-// Not Movment
-global function PlayerStopJumpC
-global function PlayerStopDuckC
-global function PlayerStopFORWARDC
-global function PlayerStopBACKC
-global function PlayerStopRIGHTC
-global function PlayerStopLEFTC
-global function PlayerStopUSEC
+// // Not Movment
+// global function PlayerStopJumpC
+// global function PlayerStopDuckC
+// global function PlayerStopFORWARDC
+// global function PlayerStopBACKC
+// global function PlayerStopRIGHTC
+// global function PlayerStopLEFTC
+// global function PlayerStopUSEC
 
-const int KJ = 0
-const int KD = 1
-const int KF = 2
-const int KB = 3
-const int KL = 4
-const int KR = 5
-const int KU = 6
+// const int KJ = 0
+// const int KD = 1
+// const int KF = 2
+// const int KB = 3
+// const int KL = 4
+// const int KR = 5
+// const int KU = 6
 
 const float EmbarkRadius = 15000.0
 const vector originalOffsetPoint = <0,50,0>
@@ -88,6 +88,8 @@ CARstruct function SpawnCAR( vector origin )
     CAR.CARmover = CreateExpensiveScriptMover()
 
     CAR.car.SetValueForModelKey( $"models/vehicles_r2/vehicles/samson/samson.mdl" )
+    // CAR.car.SetValueForModelKey( $"models/weapons/bullets/projectile_rocket_largest.mdl" )
+    // CAR.car.kv.modelscale = 5
 	CAR.car.kv.fadedist = 20000
 	CAR.car.kv.renderamt = 255
 	CAR.car.kv.rendercolor = "81 130 151"
@@ -99,6 +101,7 @@ CARstruct function SpawnCAR( vector origin )
 	SetTeam( CAR.car, TEAM_BOTH )
 	CAR.car.SetOrigin( origin )
 	CAR.car.SetAngles( <0,0,0> )
+    // CAR.car.SetAngles( <0,90,0> )
 	DispatchSpawn( CAR.car )
     CAR.car.SetUsable()
     CAR.car.SetUsableByGroup( "pilot" )
@@ -130,7 +133,7 @@ void function CarUpdate( CARstruct CAR )
             
             bool InRadius = ( DistanceSqr( player.GetOrigin(), CAR.car.GetOrigin() ) <= EmbarkRadius )
 
-            if ( CAR.player == player && file.keys[player][KU] && CAR.hasPlayer && ((CAR.time_enter + 0.5) < Time()) )
+            if ( CAR.player == player && GetPlayerKeysList( player )[KU] && CAR.hasPlayer && ((CAR.time_enter + 0.5) < Time()) )
             {
                 DestroyCameraAbove( CAR )
                 player.ClearParent()
@@ -139,7 +142,7 @@ void function CarUpdate( CARstruct CAR )
                 CAR.hasPlayer = false
                 ScreenFade( player, 0, 0, 0, 255, 0.3, 0.3, (FFADE_IN | FFADE_PURGE) )
             }
-            else if ( InRadius && CAR.hasPlayer && file.keys[player][KD] && CAR.player != player )
+            else if ( InRadius && CAR.hasPlayer && GetPlayerKeysList( player )[KD] && CAR.player != player )
             {
                 player.SetParent( CAR.car )
             }
@@ -152,7 +155,7 @@ void function CarUpdate( CARstruct CAR )
 
         if ( CAR.hasPlayer && !CAR.IsFalling )
         {
-            keys = file.keys[CAR.player]
+            keys = GetPlayerKeysList( CAR.player )
             if ( keys[KF] || keys[KB] )
             {
                 canMoveF = CanMoveF( CAR )
@@ -551,10 +554,10 @@ vector function _PositionBasedOnAngle( vector CurrentPosition, float angle, vect
     return CurrentPosition
 }
 
-void function AddPlayerToKeysList( entity player )
-{
-    file.keys[player] <- [ false, false, false, false, false, false, false ]
-}
+// void function AddPlayerToKeysList( entity player )
+// {
+//     file.keys[player] <- [ false, false, false, false, false, false, false ]
+// }
 
 /*
 ███╗   ███╗ ██████╗ ██╗   ██╗███████╗███╗   ███╗███████╗███╗   ██╗████████╗
@@ -565,74 +568,74 @@ void function AddPlayerToKeysList( entity player )
 ╚═╝     ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝   
 */
 
-void function _AddMovement( entity player, int MovementIndex )
-{
-    file.keys[player][MovementIndex] = true
-} 
-void function _RmMovement( entity player, int MovementIndex )
-{
-    file.keys[player][MovementIndex] = false
-}
+// void function _AddMovement( entity player, int MovementIndex )
+// {
+//     file.keys[player][MovementIndex] = true
+// } 
+// void function _RmMovement( entity player, int MovementIndex )
+// {
+//     file.keys[player][MovementIndex] = false
+// }
 
-void function PlayerMoveJumpC( entity player )
-{
-    _AddMovement( player, KJ )
-}
-void function PlayerMoveDuckC( entity player )
-{
-    _AddMovement( player, KD )
-}
-void function PlayerMoveFORWARDC( entity player )
-{
-    _AddMovement( player, KF )
-}
-void function PlayerMoveBACKC( entity player )
-{
-    _AddMovement( player, KB )
-}
-void function PlayerMoveLEFTC( entity player )
-{
-    _AddMovement( player, KL )
-}
-void function PlayerMoveRIGHTC( entity player )
-{
-    _AddMovement( player, KR )
-}
-void function PlayerMoveUSEC( entity player )
-{
-    _AddMovement( player, KU )
-}
+// void function PlayerMoveJumpC( entity player )
+// {
+//     _AddMovement( player, KJ )
+// }
+// void function PlayerMoveDuckC( entity player )
+// {
+//     _AddMovement( player, KD )
+// }
+// void function PlayerMoveFORWARDC( entity player )
+// {
+//     _AddMovement( player, KF )
+// }
+// void function PlayerMoveBACKC( entity player )
+// {
+//     _AddMovement( player, KB )
+// }
+// void function PlayerMoveLEFTC( entity player )
+// {
+//     _AddMovement( player, KL )
+// }
+// void function PlayerMoveRIGHTC( entity player )
+// {
+//     _AddMovement( player, KR )
+// }
+// void function PlayerMoveUSEC( entity player )
+// {
+//     _AddMovement( player, KU )
+// }
 
-// Not Movement
+// // Not Movement
 
-void function PlayerStopJumpC( entity player )
-{
-    _RmMovement( player, KJ )
-}
-void function PlayerStopDuckC( entity player )
-{
-    _RmMovement( player, KD )
-}
-void function PlayerStopFORWARDC( entity player )
-{
-    _RmMovement( player, KF )
-}
-void function PlayerStopBACKC( entity player )
-{
-    _RmMovement( player, KB )
-}
-void function PlayerStopLEFTC( entity player )
-{
-    _RmMovement( player, KL )
-}
-void function PlayerStopRIGHTC( entity player )
-{
-    _RmMovement( player, KR )
-}
-void function PlayerStopUSEC( entity player )
-{
-    _RmMovement( player, KU )
-}
+// void function PlayerStopJumpC( entity player )
+// {
+//     _RmMovement( player, KJ )
+// }
+// void function PlayerStopDuckC( entity player )
+// {
+//     _RmMovement( player, KD )
+// }
+// void function PlayerStopFORWARDC( entity player )
+// {
+//     _RmMovement( player, KF )
+// }
+// void function PlayerStopBACKC( entity player )
+// {
+//     _RmMovement( player, KB )
+// }
+// void function PlayerStopLEFTC( entity player )
+// {
+//     _RmMovement( player, KL )
+// }
+// void function PlayerStopRIGHTC( entity player )
+// {
+//     _RmMovement( player, KR )
+// }
+// void function PlayerStopUSEC( entity player )
+// {
+//     _RmMovement( player, KU )
+// }
 
 
 // vector playerOrg = player.GetOrigin()
