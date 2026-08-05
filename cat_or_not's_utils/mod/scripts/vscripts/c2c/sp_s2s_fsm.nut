@@ -19,12 +19,11 @@ global function Behavior_LeaveBattleField
 
 void function S2S_FSMInit()
 {
-
 }
 
 int function GetBehaviorPriority( int behavior )
 {
-	switch( behavior )
+	switch ( behavior )
 	{
 		case eBehavior.NONE:
 			return 0
@@ -99,20 +98,23 @@ void function RunBehaviorFiniteStateMachine( ShipStruct ship )
 	EndSignal( ship, "FakeDeath" )
 	EndSignal( ship, "FakeDestroy" )
 
-	while( 1 )
+	while ( 1 )
 	{
-		table result = WaitSignal( ship,	"engineFailure",
-										"PlayerOnBoard",
-										"PlayerOffBoard",
-										"pilotDead",
-										"engineFailure_Complete",
-										"crewDead",
-										"crewDeployed",
-										"returnToPrevBehavior" )
+		table result = WaitSignal(
+			ship,
+			"engineFailure",
+			"PlayerOnBoard",
+			"PlayerOffBoard",
+			"pilotDead",
+			"engineFailure_Complete",
+			"crewDead",
+			"crewDeployed",
+			"returnToPrevBehavior"
+		)
 
 		int setBehave = eBehavior.INVALID
 		int curBehave = ship.behavior
-		switch( result.signal )
+		switch ( result.signal )
 		{
 			case "pilotDead":
 			case "engineFailure_Complete":
@@ -145,7 +147,6 @@ void function RunBehaviorFiniteStateMachine( ShipStruct ship )
 			case "returnToPrevBehavior":
 				setBehave = eBehavior.DOPREVIOUS
 				break
-
 		}
 
 		Assert( setBehave != eBehavior.INVALID, "invalid behavior for " + ship.model.GetScriptName() )
@@ -229,8 +230,7 @@ void function DevBehaviorPrint( ShipStruct ship, entity mover )
 			strBehave += "eBehavior - NOT SETUP"
 			break
 	}
-	DebugDrawText( mover.GetOrigin() + < 0,0,150>, "" + strBehave, true, FRAME_INTERVAL )
-
+	DebugDrawText( mover.GetOrigin() + < 0, 0, 150 >, "" + strBehave, true, FRAME_INTERVAL )
 }
 
 /************************************************************************************************\
@@ -245,33 +245,32 @@ void function DevBehaviorPrint( ShipStruct ship, entity mover )
 \************************************************************************************************/
 void function Behavior_None( ShipStruct ship )
 {
-
 }
 
 void function Behavior_Idle( ShipStruct ship )
 {
-	int behavior 	= ship.behavior
-	vector bounds 	= ship.flyBounds[ behavior ]
-	vector pos 		= GetOriginLocal( ship.mover ).v
-	vector offset 	= <0,0,0>
-	entity target 	= null
+	int behavior = ship.behavior
+	vector bounds = ship.flyBounds[ behavior ]
+	vector pos = GetOriginLocal( ship.mover ).v
+	vector offset = < 0, 0, 0 >
+	entity target = null
 
 	__ShipIdleAtTarget( ship, target, pos, bounds, offset )
 }
 
 void function Behavior_LeaveBattleField( ShipStruct ship )
 {
-	entity mover 	= ship.mover
+	entity mover = ship.mover
 	mover.EndSignal( "OnDestroy" )
 
 	float rightOfTarget = GetBestRightOfTargetForLeaving( ship )
 
-	int behavior 	= ship.behavior
+	int behavior = ship.behavior
 	vector flyOffset = ship.flyOffset[ behavior ]
 
-	LocalVec pos = CLVec( GetOriginLocal( mover ).v + < flyOffset.x * rightOfTarget,flyOffset.y,flyOffset.z > )
+	LocalVec pos = CLVec( GetOriginLocal( mover ).v + < flyOffset.x * rightOfTarget, flyOffset.y, flyOffset.z > )
 	entity noFollowTarget = null
-	vector offset = <0,0,0>
+	vector offset = < 0, 0, 0 >
 	thread __ShipFlyToPosInternal( ship, noFollowTarget, pos, offset, CONVOYDIR )
 	ship.goalRadius = 600
 	WaitSignal( ship, "Goal" )
@@ -295,39 +294,39 @@ void function Behavior_Custom( ShipStruct ship )
 
 void function Custom_FlyToPos( ShipStruct ship )
 {
-	entity target 	= ship.customEnt
-	LocalVec pos 	= CLVec( ship.customPos )
-	vector angles	= ship.customAng
-	vector offset 	= ship.flyOffset[ eBehavior.CUSTOM ]
+	entity target = ship.customEnt
+	LocalVec pos = CLVec( ship.customPos )
+	vector angles = ship.customAng
+	vector offset = ship.flyOffset[ eBehavior.CUSTOM ]
 
 	__ShipFlyToPosInternal( ship, target, pos, offset, angles )
 }
 
 void function Custom_IdleAtTarget( ShipStruct ship )
 {
-	vector bounds 	= ship.flyBounds[ eBehavior.CUSTOM ]
-	entity target 	= ship.customEnt
-	vector pos 		= ship.customPos
-	vector offset 	= ship.flyOffset[ eBehavior.CUSTOM ]
+	vector bounds = ship.flyBounds[ eBehavior.CUSTOM ]
+	entity target = ship.customEnt
+	vector pos = ship.customPos
+	vector offset = ship.flyOffset[ eBehavior.CUSTOM ]
 
 	__ShipIdleAtTarget( ship, target, pos, bounds, offset )
 }
 
 void function Custom_IdleAtTarget_Method2( ShipStruct ship )
 {
-	vector bounds 	= ship.flyBounds[ eBehavior.CUSTOM ]
-	entity target 	= ship.customEnt
-	vector pos 		= ship.customPos
-	vector offset 	= ship.flyOffset[ eBehavior.CUSTOM ]
+	vector bounds = ship.flyBounds[ eBehavior.CUSTOM ]
+	entity target = ship.customEnt
+	vector pos = ship.customPos
+	vector offset = ship.flyOffset[ eBehavior.CUSTOM ]
 
 	__ShipIdleAtTarget_Method2( ship, target, pos, bounds, offset )
 }
 
 void function Custom_IdleUnderTarget( ShipStruct ship )
 {
-	vector bounds 	= ship.flyBounds[ eBehavior.CUSTOM ]
-	entity target 	= ship.customEnt
-	vector pos 		= ship.customPos
+	vector bounds = ship.flyBounds[ eBehavior.CUSTOM ]
+	entity target = ship.customEnt
+	vector pos = ship.customPos
 
 	__ShipIdleUnderTarget( ship, target, pos, bounds )
 }
@@ -396,8 +395,8 @@ void function SetBehaviorBasedOnPriority( ShipStruct ship, int behavior )
 
 	if ( GetBehaviorPriority( behavior ) < GetBehaviorPriority( ship.behavior ) )
 	{
-		//at least see if the priority of this behavior is heigher than the prev and replace that
-		if ( GetBehaviorPriority( behavior ) > GetBehaviorPriority( ship.prevBehavior[0] ) && behavior != ship.prevBehavior[0] )
+		// at least see if the priority of this behavior is heigher than the prev and replace that
+		if ( GetBehaviorPriority( behavior ) > GetBehaviorPriority( ship.prevBehavior[ 0 ] ) && behavior != ship.prevBehavior[ 0 ] )
 			ArrayPush( ship.prevBehavior, behavior )
 
 		return
@@ -409,7 +408,7 @@ void function SetBehaviorBasedOnPriority( ShipStruct ship, int behavior )
 void function DoPreviousBehavior( ShipStruct ship )
 {
 	int behavior
-	while( 1 )
+	while ( 1 )
 	{
 		Assert( ship.prevBehavior.len() )
 		behavior = ArrayPop( ship.prevBehavior )

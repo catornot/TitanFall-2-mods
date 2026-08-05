@@ -1,8 +1,9 @@
 global function RCON_Init
 global function CheckRCONAdmin
-global bool hasRCONAdmin = false;
+global bool hasRCONAdmin = false
 
-struct {
+struct
+{
 	array<string> RCON
 	string RCONStringLastVal
 } file
@@ -17,11 +18,10 @@ void function UpdateRCONList()
 	string cvar = GetConVarString( "rcon_admin" )
 	if ( file.RCONStringLastVal == cvar )
 		return
-	
+
 	file.RCON = split( cvar, "," )
 	foreach ( string admin in file.RCON )
 		StringReplace( admin, " ", "" )
-
 }
 
 void function CheckRCONAdmin( entity player )
@@ -29,18 +29,18 @@ void function CheckRCONAdmin( entity player )
 	UpdateRCONList()
 	if ( file.RCON.len() == 0 )
 		return
-	
+
 	if ( file.RCON.contains( player.GetPlayerName().tolower() ) )
 	{
-		hasRCONAdmin = true;
+		hasRCONAdmin = true
 	}
 	if ( file.RCON.contains( player.GetPlayerName() ) )
 	{
-		hasRCONAdmin = true;
+		hasRCONAdmin = true
 	}
 	if ( file.RCON.contains( player.GetUID() ) )
 	{
-		hasRCONAdmin = true;
-		return;
+		hasRCONAdmin = true
+		return
 	}
 }

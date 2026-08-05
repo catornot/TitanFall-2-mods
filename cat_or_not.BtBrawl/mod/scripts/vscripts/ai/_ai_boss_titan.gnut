@@ -103,8 +103,8 @@ void function OnBossTitanCoreMitigation( entity titan, var damageInfo )
 		case eDamageSourceId.mp_titancore_salvo_core:
 			DamageInfo_ScaleDamage( damageInfo, BOSS_TITAN_CORE_DAMAGE_SCALER_LOW )
 			return
+			// case eDamageSourceId.mp_titancore_laser_cannon: laser core handles this in mp_titanweapon_lasercannon.nut
 
-		// case eDamageSourceId.mp_titancore_laser_cannon: laser core handles this in mp_titanweapon_lasercannon.nut
 		case eDamageSourceId.mp_titancore_flame_wave:
 		case eDamageSourceId.mp_titancore_flame_wave_secondary:
 		case eDamageSourceId.mp_titancore_shift_core:
@@ -128,7 +128,6 @@ void function OnBossTitanCoreMitigation( entity titan, var damageInfo )
 void function NPCTitanSpawned( entity titan )
 {
 	Assert( !IsMultiplayer() )
-
 	// if ( titan.GetTeam() == TEAM_IMC )
 	// {
 	// 	switch ( titan.ai.bossTitanType )
@@ -136,44 +135,33 @@ void function NPCTitanSpawned( entity titan )
 	// 		case TITAN_WEAK:
 	// 		case TITAN_HENCH:
 	// 			MakeMidHealthTitan( titan )
-
 	// 		case TITAN_BOSS:
 	// 			RegisterBossTitan( titan )
 	// 			ApplyTitanDamageState( titan )
-
 	// 			if ( titan.ai.bossTitanType == TITAN_BOSS )
 	// 				AddEntityCallback_OnDamaged( titan, OnBossTitanCoreMitigation )
-
 	// 			if ( titan.HasKey( "skip_boss_intro" ) && titan.GetValueForKey( "skip_boss_intro" ) == "1" )
 	// 				return
 	// 			thread BossTitanNoIntro( titan )
 	// 			break;
-
-
 	// 		case TITAN_MERC:
 	// 			// TODO: This SetSkin() call should move to RegisterBossTitan() when the above TITAN_BOSS stuff is cleaned up/removed.
 	// 			titan.SetSkin( 1 ) // all titan models have a boss titan version of the skin at index 1
 	// 			RegisterBossTitan( titan )
 	// 			ApplyTitanDamageState( titan )
-
 	// 			AddEntityCallback_OnDamaged( titan, OnBossTitanCoreMitigation )
-
 	// 			if ( titan.HasKey( "skip_boss_intro" ) && titan.GetValueForKey( "skip_boss_intro" ) == "1" )
 	// 				return
-
 	// 			if ( !titan.ai.bossTitanPlayIntro )
 	// 				return
-
 	// 			foreach ( player in GetPlayerArray() )
 	// 			{
 	// 				thread BossTitanIntro( player, titan )
 	// 			}
 	// 			break
-
 	// 		// case TITAN_WEAK:
 	// 			// MakeLowHealthTitan( titan )
 	// 			// break
-
 	// 		case TITAN_AUTO:
 	// 			if ( !IsMultiplayer() && GetMapName() == "sp_hub_timeshift" || GetMapName() == "sp_timeshift_spoke02" )
 	// 				MakeLowHealthTitan( titan )
@@ -188,7 +176,7 @@ void function BossTitanNoIntro( entity titan )
 {
 	FlagWait( "PlayerDidSpawn" )
 
-	entity player = GetPlayerArray()[0]
+	entity player = GetPlayerArray()[ 0 ]
 
 	player.EndSignal( "OnDeath" )
 	titan.EndSignal( "OnDeath" )
@@ -205,7 +193,7 @@ void function BossTitanNoIntro( entity titan )
 			break
 	}
 
- 	if ( BossTitanVDUEnabled( titan ) )
+	if ( BossTitanVDUEnabled( titan ) )
 		Remote_CallFunction_NonReplay( player, "ServerCallback_BossTitanNoIntro", titan.GetEncodedEHandle() )
 	AddEntityCallback_OnDamaged( titan, OnBossTitanDamaged )
 	AddTitanCallback_OnHealthSegmentLost( titan, OnBossTitanLostSegment )
@@ -290,7 +278,7 @@ void function BossTitanIntro( entity player, entity titan, BossTitanIntroData or
 	// Freeze player and clear up the screen
 	StartBossIntro( player, titan, introdata )
 	player.Hide()
-	player.SetVelocity( <0,0,0> )
+	player.SetVelocity( < 0, 0, 0 > )
 	player.FreezeControlsOnServer()
 	player.SetNoTarget( true )
 	player.SetInvulnerable()
@@ -387,7 +375,7 @@ void function BossTitanIntro( entity player, entity titan, BossTitanIntroData or
 
 void function PlayerParentTest()
 {
-	entity player = GetPlayerArray()[0]
+	entity player = GetPlayerArray()[ 0 ]
 
 	vector moverStartPos = player.EyePosition()
 	vector moverStartAng = FlattenAngles( player.GetAngles() )
@@ -406,7 +394,7 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 
 	vector moverStartPos = player.CameraPosition()
 
-	vector camFeetDiff = < 0,0,-185 >//player.GetOrigin() - player.CameraPosition()
+	vector camFeetDiff = < 0, 0, -185 > // player.GetOrigin() - player.CameraPosition()
 
 	vector moverStartAng = player.CameraAngles()
 	entity mover = CreateScriptMover( moverStartPos, moverStartAng )
@@ -425,7 +413,7 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 	camera.SetParent( mover, "", false )
 
 	OnThreadEnd(
-	function() : ( player, titan, mover, camera )
+		function() : ( player, titan, mover, camera )
 		{
 			if ( IsValid( camera ) )
 			{
@@ -456,8 +444,9 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 	float slamZoomTimeDecel = 0.3
 	vector viewOffset = < 200, 100, 160 >
 
-	vector viewPos = ref.GetOrigin() + ( AnglesToForward( ref.GetAngles() ) * viewOffset.x ) + ( AnglesToRight( ref.GetAngles() ) * viewOffset.y ) + ( AnglesToUp( ref.GetAngles() ) * viewOffset.z )
-	vector viewAngles = ref.GetAngles() + <0,180,0>
+	vector viewPos = ref.GetOrigin() + ( AnglesToForward( ref.GetAngles() ) * viewOffset.x ) + ( AnglesToRight( ref.GetAngles() ) * viewOffset.y ) +
+		( AnglesToUp( ref.GetAngles() ) * viewOffset.z )
+	vector viewAngles = ref.GetAngles() + < 0, 180, 0 >
 	if ( hasTitanCameraAttachment )
 	{
 		WaitFrame()
@@ -472,7 +461,7 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 
 	float startTime = Time()
 
-	player.SetVelocity( < 0,0,0 > )
+	player.SetVelocity( < 0, 0, 0 > )
 	player.MakeInvisible()
 	HolsterAndDisableWeapons( player )
 
@@ -484,7 +473,7 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 		titan.EnableNPCFlag( NPC_IGNORE_ALL )
 	}
 
-	AddCinematicFlag( player, CE_FLAG_HIDE_MAIN_HUD  )
+	AddCinematicFlag( player, CE_FLAG_HIDE_MAIN_HUD )
 	AddCinematicFlag( player, CE_FLAG_TITAN_3P_CAM )
 
 	mover.SetOrigin( player.CameraPosition() )
@@ -493,7 +482,7 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 
 	player.SetPredictionEnabled( false )
 	OnThreadEnd(
-	function() : ( player )
+		function() : ( player )
 		{
 			if ( IsValid( player ) )
 				player.SetPredictionEnabled( true )
@@ -508,8 +497,8 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 			viewPos = titan.GetAttachmentOrigin( titanCameraAttachmentID )
 			viewAngles = titan.GetAttachmentAngles( titanCameraAttachmentID )
 		}
-		mover.NonPhysicsMoveTo( viewPos, moveTime - (Time() - startTime), 0, 0 )
-		mover.NonPhysicsRotateTo( viewAngles, moveTime - (Time() - startTime), 0, 0 )
+		mover.NonPhysicsMoveTo( viewPos, moveTime - ( Time() - startTime ), 0, 0 )
+		mover.NonPhysicsRotateTo( viewAngles, moveTime - ( Time() - startTime ), 0, 0 )
 		wait 0.1
 	}
 
@@ -539,8 +528,8 @@ void function BossTitanPlayerView( entity player, entity titan, entity ref, stri
 	{
 		moverStartPos = player.GetOrigin() - camFeetDiff
 		moverStartAng = FlattenAngles( player.GetAngles() )
-		mover.NonPhysicsMoveTo( moverStartPos, slamZoomTime - (Time() - startTime), 0, 0 )
-		mover.NonPhysicsRotateTo( moverStartAng, slamZoomTime - (Time() - startTime), 0, 0 )
+		mover.NonPhysicsMoveTo( moverStartPos, slamZoomTime - ( Time() - startTime ), 0, 0 )
+		mover.NonPhysicsRotateTo( moverStartAng, slamZoomTime - ( Time() - startTime ), 0, 0 )
 		wait 0.1
 	}
 
@@ -685,7 +674,7 @@ void function MakeLowHealthTitan( entity ent )
 	entity soul = ent.GetTitanSoul()
 	soul.soul.regensHealth = false
 	thread SetHealthValuesForLowHealth( soul )
-	//ent.SetValidHealthBarTarget( false )
+	// ent.SetValidHealthBarTarget( false )
 
 	ent.TakeOffhandWeapon( OFFHAND_ORDNANCE )
 	ent.TakeOffhandWeapon( OFFHAND_ANTIRODEO )
@@ -754,12 +743,7 @@ void function SetHealthValuesForLowHealth( entity soul )
 
 void function ApplyTitanDamageState( entity titan )
 {
-	array<float> healthScale = [
-	1.0,
-	0.6,
-	0.3,
-	0.1
-	]
+	array<float> healthScale = [ 1.0, 0.6, 0.3, 0.1 ]
 
 	int state = 0
 
@@ -768,14 +752,11 @@ void function ApplyTitanDamageState( entity titan )
 		state = int( titan.GetValueForKey( "DamageState" ) )
 	}
 
-	titan.SetHealth( titan.GetMaxHealth() * healthScale[state] )
+	titan.SetHealth( titan.GetMaxHealth() * healthScale[ state ] )
 
 	if ( state >= 1 )
 	{
-		string part = [
-			"left_arm",
-			"right_arm"
-		].getrandom()
+		string part = [ "left_arm", "right_arm" ].getrandom()
 		GibBodyPart( titan, part )
 	}
 

@@ -1,4 +1,4 @@
-//TODO: FIX REARM WHILE FIRING SALVO ROCKETS
+// TODO: FIX REARM WHILE FIRING SALVO ROCKETS
 
 global function OnWeaponPrimaryAttack_titanability_rearm
 global function OnWeaponAttemptOffhandSwitch_titanability_rearm
@@ -7,84 +7,104 @@ global function OnWeaponAttemptOffhandSwitch_titanability_rearm
 	global function OnWeaponNPCPrimaryAttack_titanability_rearm
 #endif
 
-var function OnWeaponPrimaryAttack_titanability_rearm(entity weapon, WeaponPrimaryAttackParams attackParams) {
+var function OnWeaponPrimaryAttack_titanability_rearm( entity weapon, WeaponPrimaryAttackParams attackParams )
+{
 	entity weaponOwner = weapon.GetWeaponOwner()
-	if (weaponOwner.IsPlayer()) {
-		PlayerUsedOffhand(weaponOwner, weapon)
+	if ( weaponOwner.IsPlayer() )
+	{
+		PlayerUsedOffhand( weaponOwner, weapon )
 	}
 
-	entity ordnance = weaponOwner.GetOffhandWeapon(OFFHAND_RIGHT)
-	if (IsValid(ordnance)) {
+	entity ordnance = weaponOwner.GetOffhandWeapon( OFFHAND_RIGHT )
+	if ( IsValid( ordnance ) )
+	{
 		int ordnanceClipCount = ordnance.GetWeaponPrimaryClipCountMax()
-		if (ordnanceClipCount > 0) {
-			ordnance.SetWeaponPrimaryClipCount(ordnanceClipCount)
+		if ( ordnanceClipCount > 0 )
+		{
+			ordnance.SetWeaponPrimaryClipCount( ordnanceClipCount )
 		}
 
 		#if SERVER
-			if (ordnance.IsChargeWeapon()) {
-				ordnance.SetWeaponChargeFractionForced(0)
+			if ( ordnance.IsChargeWeapon() )
+			{
+				ordnance.SetWeaponChargeFractionForced( 0 )
 			}
 		#endif
 	}
 
-	entity defensive = weaponOwner.GetOffhandWeapon(OFFHAND_LEFT)
-	if (IsValid(defensive)) {
+	entity defensive = weaponOwner.GetOffhandWeapon( OFFHAND_LEFT )
+	if ( IsValid( defensive ) )
+	{
 		int defensiveClipCount = defensive.GetWeaponPrimaryClipCountMax()
-		if (defensiveClipCount > 0) {
-			defensive.SetWeaponPrimaryClipCount(defensiveClipCount)
+		if ( defensiveClipCount > 0 )
+		{
+			defensive.SetWeaponPrimaryClipCount( defensiveClipCount )
 		}
 
 		#if SERVER
-			if (defensive.IsChargeWeapon()) {
-				defensive.SetWeaponChargeFractionForced(0)
+			if ( defensive.IsChargeWeapon() )
+			{
+				defensive.SetWeaponChargeFractionForced( 0 )
 			}
 		#endif
 	}
 
 	#if SERVER
-		if (weaponOwner.IsPlayer()) {
-			weaponOwner.Server_SetDodgePower(100.0)
+		if ( weaponOwner.IsPlayer() )
+		{
+			weaponOwner.Server_SetDodgePower( 100.0 )
 		}
 	#endif
 
-	weapon.SetWeaponPrimaryClipCount(0) //used to skip the fire animation
+	weapon.SetWeaponPrimaryClipCount( 0 ) // used to skip the fire animation
 	return 0
 }
 
 #if SERVER
-var function OnWeaponNPCPrimaryAttack_titanability_rearm(entity weapon, WeaponPrimaryAttackParams attackParams) {
-	return OnWeaponPrimaryAttack_titanability_rearm(weapon, attackParams)
-}
+	var function OnWeaponNPCPrimaryAttack_titanability_rearm( entity weapon, WeaponPrimaryAttackParams attackParams )
+	{
+		return OnWeaponPrimaryAttack_titanability_rearm( weapon, attackParams )
+	}
 #endif
 
-bool function OnWeaponAttemptOffhandSwitch_titanability_rearm(entity weapon) {
+bool function OnWeaponAttemptOffhandSwitch_titanability_rearm( entity weapon )
+{
 	bool allowSwitch = true
 	entity weaponOwner = weapon.GetWeaponOwner()
 
-	entity ordnance = weaponOwner.GetOffhandWeapon(OFFHAND_RIGHT)
-	entity defensive = weaponOwner.GetOffhandWeapon(OFFHAND_LEFT)
+	entity ordnance = weaponOwner.GetOffhandWeapon( OFFHAND_RIGHT )
+	entity defensive = weaponOwner.GetOffhandWeapon( OFFHAND_LEFT )
 
-	if (ordnance.GetWeaponPrimaryClipCount() == ordnance.GetWeaponPrimaryClipCountMax() && defensive.GetWeaponPrimaryClipCount() == defensive.GetWeaponPrimaryClipCountMax()) {
+	if (
+		ordnance.GetWeaponPrimaryClipCount() == ordnance.GetWeaponPrimaryClipCountMax() &&
+		defensive.GetWeaponPrimaryClipCount() == defensive.GetWeaponPrimaryClipCountMax()
+	)
+	{
 		allowSwitch = false
 	}
 
-	if (ordnance.IsBurstFireInProgress()) {
+	if ( ordnance.IsBurstFireInProgress() )
+	{
 		allowSwitch = false
 	}
 
-	if (ordnance.IsChargeWeapon() && ordnance.GetWeaponChargeFraction() > 0.0) {
+	if ( ordnance.IsChargeWeapon() && ordnance.GetWeaponChargeFraction() > 0.0 )
+	{
 		allowSwitch = true
 	}
 
-	if (weaponOwner.GetDodgePower() < 100) {
+	if ( weaponOwner.GetDodgePower() < 100 )
+	{
 		allowSwitch = true
 	}
 
-	if(!allowSwitch && IsFirstTimePredicted()) {
+	if ( !allowSwitch && IsFirstTimePredicted() )
+	{
 		// Play SFX and show some HUD feedback here...
 		#if CLIENT
-			AddPlayerHint(1.0, 0.25, $"rui/titan_loadout/tactical/titan_tactical_rearm", "#WPN_TITANABILITY_REARM_ERROR_HINT")
-			if (weaponOwner == GetLocalViewPlayer()) {
+			AddPlayerHint( 1.0, 0.25, $"rui/titan_loadout/tactical/titan_tactical_rearm", "#WPN_TITANABILITY_REARM_ERROR_HINT" )
+			if ( weaponOwner == GetLocalViewPlayer() )
+			{
 				EmitSoundOnEntity( weapon, "titan_dryfire" )
 			}
 		#endif
@@ -93,4 +113,4 @@ bool function OnWeaponAttemptOffhandSwitch_titanability_rearm(entity weapon) {
 	return allowSwitch
 }
 
-//UPDATE TO RESTORE CHARGE FOR THE MTMS
+// UPDATE TO RESTORE CHARGE FOR THE MTMS

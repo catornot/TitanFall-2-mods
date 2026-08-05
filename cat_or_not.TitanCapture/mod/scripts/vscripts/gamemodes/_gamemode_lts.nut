@@ -1,28 +1,28 @@
 global function GamemodeLts_Init
 
-const array< array<string> > titan_combo =
-[
+const array<array<string> > titan_combo = [
 	[ "npc_titan_auto_atlas", "npc_titan_auto_atlas_ion_prime" ],
 	[ "npc_titan_auto_atlas", "npc_titan_auto_atlas_tone_prime" ],
 	// [ "titan_stryder", "npc_titan_stryder_rocketeer" ],
-	[ "npc_titan_auto_stryder", "npc_titan_auto_stryder_northstar_prime" ],
+	[
+		"npc_titan_auto_stryder",
+		"npc_titan_auto_stryder_northstar_prime"
+	],
 	[ "npc_titan_auto_stryder", "npc_titan_auto_stryder_northstar_prime" ],
 	[ "npc_titan_auto_atlas", "npc_titan_auto_atlas_vanguard" ],
 	[ "npc_titan_auto_ogre", "npc_titan_auto_ogre_scorch_prime" ],
 	[ "npc_titan_auto_ogre", "npc_titan_auto_ogre_legion_prime" ]
 ]
 
-
 struct
 {
 	entity mark
 	entity soul
 	int team
-	table< string, vector > custom_spawnpoint
+	table<string, vector> custom_spawnpoint
 	entity signlEnt
 	bool shouldHighlight = false
-}
-file
+} file
 
 void function GamemodeLts_Init()
 {
@@ -50,13 +50,11 @@ void function GamemodeLts_Init()
 	ClassicMP_SetCustomIntro( ClassicMP_DefaultNoIntro_Setup, ClassicMP_DefaultNoIntro_GetLength() )
 
 	file.custom_spawnpoint[ "mp_glitch" ] <- < -171, 93, -51 >
-	file.custom_spawnpoint[ "mp_drydock" ] <- <226,81,403>
+	file.custom_spawnpoint[ "mp_drydock" ] <- < 226, 81, 403 >
 	file.custom_spawnpoint[ "mp_wargames" ] <- < -941, -821, -127 >
 
 	file.signlEnt = CreateScriptMover()
 }
-
-
 
 void function AddTeamScoreForPlayerKilled( entity victim, entity attacker, var damageInfo )
 {
@@ -92,19 +90,19 @@ void function SpawnTitan()
 
 	if ( GetPlayerArray().len() == 0 )
 		return
-	
+
 	// print( "we have players" )
 
-	vector pos = <0,0,0>
+	vector pos = < 0, 0, 0 >
 	foreach ( entity hardpoint in GetEntArrayByClass_Expensive( "info_hardpoint" ) )
 	{
 		if ( !hardpoint.HasKey( "hardpointGroup" ) )
 			continue
-			
-		//if ( hardpoint.kv.hardpointGroup != "A" && hardpoint.kv.hardpointGroup != "B" && hardpoint.kv.hardpointGroup != "C" )
+
+		// if ( hardpoint.kv.hardpointGroup != "A" && hardpoint.kv.hardpointGroup != "B" && hardpoint.kv.hardpointGroup != "C" )
 		if ( hardpoint.kv.hardpointGroup != "B" ) // roughly map center
 			continue
-			
+
 		pos = hardpoint.GetOrigin()
 	}
 
@@ -124,7 +122,7 @@ void function SpawnTitan()
 
 	Point SpawnPoint
 	SpawnPoint.origin = pos
-	SpawnPoint.angles = <0,0,0>
+	SpawnPoint.angles = < 0, 0, 0 >
 
 	entity player = GetPlayerArray().getrandom()
 
@@ -156,7 +154,7 @@ void function SpawnTitan()
 	titan.ClearBossPlayer()
 	file.soul.ClearBossPlayer()
 	player.SetPetTitan( null )
-	
+
 	SetTeam( titan, TEAM_UNASSIGNED )
 	file.team = titan.GetTeam()
 
@@ -167,7 +165,6 @@ void function SpawnTitan()
 	// print( "titan is setup" )
 
 	thread HandleTitanOwnerShip( titan )
-
 	// print( "titan dropping" )
 }
 
@@ -183,7 +180,7 @@ void function HandleTitanOwnerShip( entity titan )
 	file.signlEnt.Signal( "StopKillEveryone" )
 
 	OnThreadEnd(
-	function() : ( titan )
+		function() : ( titan )
 		{
 			file.signlEnt.Signal( "StopKillEveryone" )
 
@@ -196,10 +193,10 @@ void function HandleTitanOwnerShip( entity titan )
 			file.team = titan.GetTeam()
 
 			thread ConfirmOwnerShip()
-			
+
 			file.shouldHighlight = true
 			thread HighlightUpdate( file.soul, p )
-			
+
 			Riff_ForceSetSpawnAsTitan( eSpawnAsTitan.Always )
 
 			if ( !IsValid( p ) )
@@ -216,9 +213,8 @@ void function HandleTitanOwnerShip( entity titan )
 				thread DealayedClearInvulnerable( p )
 			}
 
-			foreach( entity player in GetPlayerArray() )
+			foreach ( entity player in GetPlayerArray() )
 			{
-				
 				if ( ( !player.IsTitan() && player != p && IsValid( player ) && IsAlive( player ) ) )
 					thread DelayedTitanGiveAway( player )
 
@@ -232,7 +228,7 @@ void function HandleTitanOwnerShip( entity titan )
 		}
 	)
 
-	for(;;)
+	for ( ; ; )
 	{
 		if ( GetPlayerArray().len() == 0 )
 		{
@@ -255,15 +251,14 @@ void function HandleTitanOwnerShip( entity titan )
 		entity previousOwner = GetPetTitanOwner( titan )
 		if ( IsValid( previousOwner ) )
 			previousOwner.SetPetTitan( null )
-		
+
 		if ( IsPlayerEmbarking( player ) )
 			return
-		
+
 		player.SetPetTitan( titan )
 		titan.SetBossPlayer( player )
 
 		WaitFrame()
-
 		// print( "set ownership" )
 	}
 }
@@ -271,7 +266,7 @@ void function HandleTitanOwnerShip( entity titan )
 void function DealayedClearInvulnerable( entity player )
 {
 	EndSignal( player, "OnDeath" )
-	while( !player.IsTitan() )
+	while ( !player.IsTitan() )
 		WaitFrame()
 	player.SetInvulnerable()
 	wait 5
@@ -281,23 +276,23 @@ void function DealayedClearInvulnerable( entity player )
 void function ConfirmOwnerShip()
 {
 	wait 1
-	
-	foreach( entity player in GetPlayerArray() )
+
+	foreach ( entity player in GetPlayerArray() )
 	{
 		if ( GetSoulFromPlayer( player ) == file.soul )
 		{
-			if ( IsValid( file.soul.GetTitan() ) && file.soul.GetTitan().GetBossPlayer() != player  )
+			if ( IsValid( file.soul.GetTitan() ) && file.soul.GetTitan().GetBossPlayer() != player )
 			{
 				entity titan = file.soul.GetTitan()
-				
+
 				print( "WARNING: ownership assigning functions failed at its job, ConfirmOwnerShip Is trying to fix it" )
 				Chat_ServerBroadcast( "WARNING: ownership assigning functions failed at its job, ConfirmOwnerShip Is trying to fix it" )
-				
+
 				entity previousOwner = GetPetTitanOwner( titan )
 				if ( IsValid( previousOwner ) )
 					previousOwner.SetPetTitan( null )
 
-				if (titan.IsNPC())
+				if ( titan.IsNPC() )
 				{
 					player.SetPetTitan( titan )
 					titan.SetBossPlayer( player )
@@ -316,7 +311,7 @@ void function HighlightUpdate( entity soul, entity player )
 	soul.EndSignal( "OnDestroy" )
 	svGlobal.levelEnt.EndSignal( "RoundEnd" )
 	file.signlEnt.EndSignal( "StopKillEveryone" )
-	
+
 	if ( !IsValid( player ) )
 		return
 
@@ -340,7 +335,7 @@ void function HighlightUpdate( entity soul, entity player )
 	print( "new highlight" )
 
 	OnThreadEnd(
-	function() : ( soul, player )
+		function() : ( soul, player )
 		{
 			print( "atempted new highlight" + ( !IsValid( soul ) || !IsValid( soul.GetTitan() ) || !IsValid( player ) || !file.shouldHighlight ) )
 
@@ -405,7 +400,7 @@ void function DelayedRoundEnd( entity ornull attacker )
 	wait 2
 
 	SetWinner( DecideWinner() )
-	
+
 	Riff_ForceSetSpawnAsTitan( eSpawnAsTitan.Never )
 
 	if ( !IsValid( attacker ) )
@@ -417,7 +412,7 @@ void function DelayedRoundEnd( entity ornull attacker )
 void function FastRoundRestart()
 {
 	SetWinner( TEAM_UNASSIGNED )
-	
+
 	SetRespawnsEnabled( false )
 	Riff_ForceSetSpawnAsTitan( eSpawnAsTitan.Never )
 }
@@ -432,7 +427,7 @@ void function KillEveryoneThreaded()
 {
 	file.signlEnt.EndSignal( "StopKillEveryone" )
 
-	for(;;)
+	for ( ; ; )
 	{
 		foreach ( entity player in GetPlayerArray() )
 		{
@@ -458,7 +453,7 @@ void function KillEveryoneThreaded()
 	}
 }
 
-void function MakePlayerPilot( entity player, vector destination  )
+void function MakePlayerPilot( entity player, vector destination )
 {
 	EndSignal( player, "OnDeath" )
 	EndSignal( player, "OnDestroy" )
@@ -468,12 +463,12 @@ void function MakePlayerPilot( entity player, vector destination  )
 	{
 		ForcedTitanDisembark( player )
 
-		while( player.IsTitan() || titan.IsPlayer() || IsPlayerDisembarking( player ) && IsPlayerEmbarking( player ) )
+		while ( player.IsTitan() || titan.IsPlayer() || IsPlayerDisembarking( player ) && IsPlayerEmbarking( player ) )
 		{
 			titan = GetTitanFromPlayer( player )
 			wait 0.05
 		}
-		
+
 		titan.Destroy()
 		player.SetOrigin( destination )
 	}

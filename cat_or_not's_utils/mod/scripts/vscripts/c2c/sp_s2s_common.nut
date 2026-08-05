@@ -1,19 +1,19 @@
-global const int DEV_DRAWEDGENODES 	= 0
-global const int DEV_DRAWEDGES 		= 0
-global const int DEV_DRAWSHIPHULL	= 0
+global const int DEV_DRAWEDGENODES = 0
+global const int DEV_DRAWEDGES = 0
+global const int DEV_DRAWSHIPHULL = 0
 
-global const int DEV_DRAWCHASELOGIC	= 1
-global const int DEV_DRAWMOVETOPOS	= 1
+global const int DEV_DRAWCHASELOGIC = 1
+global const int DEV_DRAWMOVETOPOS = 1
 global const int DEV_DRAWGOALRADIUS = 1
-global const int DEV_DRAWBANKING 	= 1
+global const int DEV_DRAWBANKING = 1
 
-global const int DEV_PRINTSPEED		= 0
-global const int DEV_PRINTONBOARD 	= 0
-global const int DEV_PRINTBEHAVIOR 	= 1
+global const int DEV_PRINTSPEED = 0
+global const int DEV_PRINTONBOARD = 0
+global const int DEV_PRINTBEHAVIOR = 1
 
-global const int DEV_DRAWDEPLOY 	= 0
-global const int DEV_DRAWWORLDEDGE 	= 1
-global const int DEV_DRAWSKYRIG 	= 1
+global const int DEV_DRAWDEPLOY = 0
+global const int DEV_DRAWWORLDEDGE = 1
+global const int DEV_DRAWSKYRIG = 1
 
 global const int DEV_SPHERE_SEGMENTS = 12
 
@@ -36,7 +36,7 @@ global function IsDoorClosedOrClosing
 global function IsDoorOpenOrOpening
 global function IsShipOnBattleField
 
-//api
+// api
 global function SetSpawnDelay
 global function GetSpawnDelay
 global function SetSquadDelay
@@ -50,7 +50,7 @@ global function GetDeployShip
 global function SetNPCDeployFunc
 global function DeployFuncWrapper
 
-//local space concepts
+// local space concepts
 global function CLVec
 global function GetOriginLocal
 global function SetOriginLocal
@@ -63,7 +63,7 @@ global function WorldToLocalVelocity
 global function LocalToWorldVelocity
 global function UpdatePosWithLocalSpace
 
-//utility
+// utility
 global function ShipSetInvulnerable
 global function ShipClearInvulnerable
 global function ShipIsInvulnerable
@@ -80,15 +80,13 @@ global function DevPrints
 global const int MAXHEALTH = 524000
 global const float VOBUFFER = 10
 global const int ONSHIPLISTMAX = 12
-global const vector CONVOYDIR = <0,90,0>
+global const vector CONVOYDIR = < 0, 90, 0 >
 global const float ROT_DELAY = 1.0
 
 global const asset WIDOW_MODEL = $"models/vehicle/widow/widow.mdl"
 global const float FRAME_INTERVAL = 0.1
 global const vector INVALID_LOCALORIGIN = < 99999.9, 99999.9, 99999.9 >
 global const float SHIPGOALRADIUS = 100.0
-
-
 
 global enum eDoorState
 {
@@ -124,29 +122,29 @@ global enum eShipEvents
 	SHIP_PILOTKILLED
 	SHIP_DEATH
 
-	//always last one
+	// always last one
 	NUM_EVENTS
 }
 
 global enum eBehavior
 {
-	//standards
+	// standards
 	DOPREVIOUS = -2
 	INVALID
 	NONE
-	IDLE 				//1
+	IDLE // 1
 	CUSTOM
 	ENEMY_CHASE
 	ENEMY_ONBOARD
-	ENGINE_FAILURE 		//5
+	ENGINE_FAILURE // 5
 	DEPLOY
 	DEPLOYZIP
 	DEATH_ANIM
 	CREW_DEAD
-	CREW_DEPLOYED		//10
+	CREW_DEPLOYED // 10
 	LEAVING
 
-	//always last one
+	// always last one
 	NUM_BEHAVIORS
 }
 
@@ -221,22 +219,22 @@ global struct ShipStruct
 	vector templateOrigin
 	entity triggerFallingDeath
 
-	//DEV ONLY
-	vector DEV_hullSize 	= <0,0,0>
-	vector DEV_hullOffset 	= <0,0,0>
+	// DEV ONLY
+	vector DEV_hullSize = < 0, 0, 0 >
+	vector DEV_hullOffset = < 0, 0, 0 >
 	int bug_reproNum = 1
 
-	//behaviors
-	table <int, void functionref( ShipStruct )> behaviorTable
+	// behaviors
+	table<int, void functionref( ShipStruct )> behaviorTable
 	void functionref( ShipStruct, int ) defaultBehaviorFunc
 	void functionref( ShipStruct ) customBehaviorFunc
-	int behavior 				= eBehavior.IDLE
-	array<int> prevBehavior 	= [ eBehavior.IDLE ]
-	int doorState 				= eDoorState.CLOSED
-	entity 	chaseEnemy
-	vector[eBehavior.NUM_BEHAVIORS] flyBounds
-	vector[eBehavior.NUM_BEHAVIORS] flyOffset
-	float[eBehavior.NUM_BEHAVIORS] 	seekAhead
+	int behavior = eBehavior.IDLE
+	array<int> prevBehavior = [ eBehavior.IDLE ]
+	int doorState = eDoorState.CLOSED
+	entity chaseEnemy
+	vector[ eBehavior.NUM_BEHAVIORS ] flyBounds
+	vector[ eBehavior.NUM_BEHAVIORS ] flyOffset
+	float[ eBehavior.NUM_BEHAVIORS ] seekAhead
 	float minChasePoint = -16384
 	float maxChasePoint = 16384
 	float boundsMinRatio
@@ -244,35 +242,35 @@ global struct ShipStruct
 	vector customPos
 	vector customAng
 
-	//destination
-	float 		goalRadius
-	LocalVec 	goalPos
+	// destination
+	float goalRadius
+	LocalVec goalPos
 
-	//event callbacks
-	table <int, array<void functionref( ShipStruct, entity, int )> > eventTable
+	// event callbacks
+	table<int, array<void functionref( ShipStruct, entity, int )> > eventTable
 	void functionref( ShipStruct, int ) defaultEventFunc
 
-	//deploying troops
+	// deploying troops
 	vector deployPos
 	ShipStruct ornull deployShip
 	void functionref( entity ) ornull deployFunc = null
-	float[eBehavior.NUM_BEHAVIORS] spawnMinDelay
-	float[eBehavior.NUM_BEHAVIORS] spawnMaxDelay
-	float[eBehavior.NUM_BEHAVIORS] squadMinDelay
-	float[eBehavior.NUM_BEHAVIORS] squadMaxDelay
-	int[eBehavior.NUM_BEHAVIORS] squadSize
+	float[ eBehavior.NUM_BEHAVIORS ] spawnMinDelay
+	float[ eBehavior.NUM_BEHAVIORS ] spawnMaxDelay
+	float[ eBehavior.NUM_BEHAVIORS ] squadMinDelay
+	float[ eBehavior.NUM_BEHAVIORS ] squadMaxDelay
+	int[ eBehavior.NUM_BEHAVIORS ] squadSize
 
-	//movement
+	// movement
 	bool allowCrossHull = true
 	float crossHullHeight = 900
-	float crossHullBufferTime = 35 //wait this long since the last new edge before looking for a better
+	float crossHullBufferTime = 35 // wait this long since the last new edge before looking for a better
 	LocalVec localVelocity
 	float rollMax
 	float pitchMax
 	float defRollMax
 	float defPitchMax
 	float fullBankTime
-	float defBankTime = 1.5 //good for goblins and widows
+	float defBankTime = 1.5 // good for goblins and widows
 	float accMax
 	float defAccMax
 	float speedMax
@@ -285,16 +283,16 @@ global struct ShipStruct
 	array<entity> guys
 	entity pilot
 
-	bool 	engineDamage = false
-	string 	engineDamageTag = "R_exhaust_rear_2"
-	bool 	allowShoot 	= true
-	entity 	cockpit
-	entity 	npcClip
+	bool engineDamage = false
+	string engineDamageTag = "R_exhaust_rear_2"
+	bool allowShoot = true
+	entity cockpit
+	entity npcClip
 
 	entity interiorDoorR
 	entity interiorDoorL
 
-	array<entity> zipLineNodes //hand picked nodes for ziplines
+	array<entity> zipLineNodes // hand picked nodes for ziplines
 
 	/******************************\
 			widow specific
@@ -333,15 +331,15 @@ global struct EntityLevelStruct
 	float customZiplineRideTime = 0.0
 	string customZiplineDeploySignal = ""
 
-	//for the player ( maybe bt as well )
+	// for the player ( maybe bt as well )
 	ShipStruct ornull onShip = null
 	ShipStruct ornull onNextShip = null
-	ShipStruct ornull [ONSHIPLISTMAX] onShipList
+	ShipStruct ornull[ ONSHIPLISTMAX ] onShipList
 
 	LocalVec localSpaceOrigin
-	float 	lastMoveToTime = -1.0
-	float 	skyboxScale = 1.0
-	vector 	skyboxOffset = <0,0,0>
+	float lastMoveToTime = -1.0
+	float skyboxScale = 1.0
+	vector skyboxOffset = < 0, 0, 0 >
 }
 
 void function S2S_CommonInit()
@@ -373,13 +371,11 @@ void function S2S_CommonInit()
 }
 
 struct
-{
-
-}file
+{} file
 
 void function EntitiesDidLoad()
 {
-	WORLD_CENTER = CreateScriptMover( <0,0,0>, CONVOYDIR )
+	WORLD_CENTER = CreateScriptMover( < 0, 0, 0 >, CONVOYDIR )
 }
 
 /************************************************************************************************\
@@ -394,10 +390,10 @@ void function EntitiesDidLoad()
 \************************************************************************************************/
 ShipStruct function ShipTemplateSetup( entity model, vector ornull hackOffset = null, void functionref( ShipStruct, entity, entity ) ornull linkFunc = null )
 {
-	//HACK: Must do this because depending on how the model is rigged -- if it has an ORIGIN attachment, where that ORIGIN attachment is
-	//		in relation to the origin of the export from maya, etc -- it shows up differently in game than it does in levelED
+	// HACK: Must do this because depending on how the model is rigged -- if it has an ORIGIN attachment, where that ORIGIN attachment is
+	// 		in relation to the origin of the export from maya, etc -- it shows up differently in game than it does in levelED
 	if ( hackOffset == null )
-		hackOffset = <0,0,0>
+		hackOffset = < 0, 0, 0 >
 	expect vector( hackOffset )
 	model.SetOrigin( model.GetOrigin() + hackOffset )
 
@@ -424,25 +420,25 @@ ShipStruct function ShipTemplateSetup( entity model, vector ornull hackOffset = 
 	ship.templateOrigin = mover.GetOrigin()
 	ship.model.Hide()
 
-	//various parts
+	// various parts
 	array<entity> linkedEnts = model.GetLinkEntArray()
 
-	foreach( entity ent in linkedEnts )
+	foreach ( entity ent in linkedEnts )
 	{
 		SetTeam( ent, TEAM_IMC )
 		ent.SetParent( model, "ORIGIN", true )
 		ent.DontIncludeParentBbox()
 		ent.MarkAsNonMovingAttachment()
 
-		switch( ent.kv.script_noteworthy )
+		switch ( ent.kv.script_noteworthy )
 		{
 			case "parent":
-				//do nothing...already parented
+				// do nothing...already parented
 				break
 
 			case "levelEdRotator":
-				//HACK -> why do I have to do this???
-				thread ScriptedRotatorRotate( ent.GetAngles() + Vector(0,-90,0), ent )
+				// HACK -> why do I have to do this???
+				thread ScriptedRotatorRotate( ent.GetAngles() + Vector( 0, -90, 0 ), ent )
 				break
 
 			case "clip":
@@ -485,7 +481,7 @@ ShipStruct function ShipTemplateSetup( entity model, vector ornull hackOffset = 
 	return ship
 }
 
-//hack - for whatever reason triggers get enabled on the first frame
+// hack - for whatever reason triggers get enabled on the first frame
 void function EndFrameDisable( entity ent )
 {
 	WaitEndFrame()
@@ -494,10 +490,10 @@ void function EndFrameDisable( entity ent )
 
 void function RecursivePropParenter( entity model, entity prop )
 {
-	//prop.SetPusher( false )
+	// prop.SetPusher( false )
 
 	array<entity> linkedEnts = prop.GetLinkEntArray()
-	foreach( entity ent in linkedEnts )
+	foreach ( entity ent in linkedEnts )
 	{
 		SetTeam( ent, TEAM_IMC )
 		ent.SetParent( model, "", true )
@@ -510,8 +506,8 @@ void function CapitalShipTemplateBuildEdge( ShipStruct ship, entity edgeNode )
 {
 	edgeNode.SetParent( ship.model, "", true )
 
-	vector dir 		= edgeNode.GetOrigin() - ship.model.GetOrigin()
-	vector right 	= ship.model.GetRightVector()
+	vector dir = edgeNode.GetOrigin() - ship.model.GetOrigin()
+	vector right = ship.model.GetRightVector()
 
 	bool new = false
 	if ( DotProduct( dir, right ) > 0 )
@@ -532,7 +528,7 @@ void function CapitalShipTemplateBuildEdge( ShipStruct ship, entity edgeNode )
 		return
 
 	array<entity> linkedEnts = edgeNode.GetLinkEntArray()
-	foreach( entity ent in linkedEnts )
+	foreach ( entity ent in linkedEnts )
 		CapitalShipTemplateBuildEdge( ship, ent )
 }
 
@@ -540,19 +536,19 @@ void function ShipCommonFuncs( ShipStruct ship )
 {
 	ship.free = false
 	ship.model.Show()
-	ship.localVelocity.v = <0,0,0>
+	ship.localVelocity.v = < 0, 0, 0 >
 	ship.goalRadius = SHIPGOALRADIUS
 	ship.boundsMinRatio = 0.5
 
 	ResetAllEventCallbacksToDefault( ship )
 	ResetAllBehaviorsToDefault( ship )
-	ship.behavior 		= eBehavior.IDLE
-	ship.prevBehavior 	= [ eBehavior.IDLE ]
-	ship.doorState 		= eDoorState.CLOSED
-	ship.deployShip 	= null
-	ship.deployFunc 	= null
+	ship.behavior = eBehavior.IDLE
+	ship.prevBehavior = [ eBehavior.IDLE ]
+	ship.doorState = eDoorState.CLOSED
+	ship.deployShip = null
+	ship.deployFunc = null
 	ship.allowCrossHull = true
-	ship.zipLineNodes	= []
+	ship.zipLineNodes = []
 
 	thread ShipTopTriggerThink( ship )
 	if ( IsValid( ship.cabinTriggerInterior ) )
@@ -587,9 +583,9 @@ void function ShipCommonFuncs( ShipStruct ship )
 \************************************************************************************************/
 void function AddShipEventCallback( ShipStruct ship, int eventID, void functionref( ShipStruct, entity, int ) callbackFunc )
 {
-	table <int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
+	table<int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
 
-	if ( ! ( eventID in eventTable ) )
+	if ( !( eventID in eventTable ) )
 		eventTable[ eventID ] <- []
 
 	Assert( !eventTable[ eventID ].contains( callbackFunc ), "Already added " + string( callbackFunc ) + " with AddShipEventCallback for ship " + ship.model )
@@ -598,7 +594,7 @@ void function AddShipEventCallback( ShipStruct ship, int eventID, void functionr
 
 void function ClearShipEventCallback( ShipStruct ship, int eventID, void functionref( ShipStruct, entity, int ) callbackFunc )
 {
-	table <int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
+	table<int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
 
 	Assert( eventID in eventTable, "Event " + eventID + " does not exist for ship " + ship.model )
 	Assert( eventTable[ eventID ].contains( callbackFunc ), "function " + string( callbackFunc ) + " does not exist for ship " + ship.model )
@@ -619,7 +615,7 @@ void function ClearShipEventCallback( ShipStruct ship, int eventID, void functio
 
 void function ClearShipEventEntirely( ShipStruct ship, int eventID )
 {
-	table <int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
+	table<int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
 
 	Assert( eventID in eventTable, "Event " + eventID + " does not exist for ship " + ship.model )
 
@@ -628,7 +624,7 @@ void function ClearShipEventEntirely( ShipStruct ship, int eventID )
 
 bool function ShipEventExists( ShipStruct ship, int eventID )
 {
-	table <int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
+	table<int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
 
 	return ( eventID in eventTable )
 }
@@ -656,8 +652,8 @@ void function ResetAllEventCallbacksToDefault( ShipStruct ship )
 
 void function RunShipEventCallbacks( ShipStruct ship, int eventID, entity player = null )
 {
-	table <int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
-	if ( ! ( eventID in eventTable ) )
+	table<int, array<void functionref( ShipStruct, entity, int )> > eventTable = ship.eventTable
+	if ( !( eventID in eventTable ) )
 		return
 
 	foreach ( void functionref( ShipStruct, entity, int ) callbackfunc in eventTable[ eventID ] )
@@ -768,7 +764,7 @@ void function ShipTopTriggerThink( ShipStruct ship )
 	trigger.Enable()
 
 	table result
-	while( 1 )
+	while ( 1 )
 	{
 		if ( !trigger.IsTouched() )
 		{
@@ -777,7 +773,7 @@ void function ShipTopTriggerThink( ShipStruct ship )
 		}
 		else
 		{
-			player = trigger.GetTouchingEntities()[0]
+			player = trigger.GetTouchingEntities()[ 0 ]
 		}
 
 		Assert( player.IsPlayer() )
@@ -789,7 +785,7 @@ void function ShipTopTriggerThink( ShipStruct ship )
 		while ( trigger.IsTouched() )
 		{
 			trigger.WaitSignal( "OnEndTouchAll" )
-			wait 0.5 //make sure
+			wait 0.5 // make sure
 		}
 
 		PlayerOffShip( player, ship, ship.cabinTriggerInterior )
@@ -809,7 +805,7 @@ void function PlayerOnShip( entity player, ShipStruct ship, entity trigger )
 	if ( IsValid( player.l.onNextShip ) && expect ShipStruct( player.l.onNextShip ) == ship )
 		player.l.onNextShip = null
 
-	ShipStruct ornull prevShip = player.l.onShipList[0]
+	ShipStruct ornull prevShip = player.l.onShipList[ 0 ]
 
 	if ( IsValid( prevShip ) )
 	{
@@ -818,7 +814,7 @@ void function PlayerOnShip( entity player, ShipStruct ship, entity trigger )
 			Signal( prevShip, "PlayerOffBoard" )
 	}
 	#if DEV
-		if( DEV_PRINTONBOARD && GetBugReproNum() == ship.bug_reproNum )
+		if ( DEV_PRINTONBOARD && GetBugReproNum() == ship.bug_reproNum )
 		{
 			if ( IsValid( prevShip ) )
 				printt( "player On: " + ship.model + ", prev onShip = " + expect ShipStruct( prevShip ).model )
@@ -838,7 +834,7 @@ void function PlayerOffShip( entity player, ShipStruct ship, entity trigger )
 		player.l.onShip = null
 
 	#if DEV
-		if( DEV_PRINTONBOARD && GetBugReproNum() == ship.bug_reproNum )
+		if ( DEV_PRINTONBOARD && GetBugReproNum() == ship.bug_reproNum )
 		{
 			if ( IsValid( player.l.onShip ) )
 				printt( "player OFF: " + ship.model + ", player.l.onShip = " + expect ShipStruct( player.l.onShip ).model )
@@ -846,7 +842,7 @@ void function PlayerOffShip( entity player, ShipStruct ship, entity trigger )
 				printt( "player OFF: " + ship.model + ", player.l.onShip = NULL" )
 		}
 	#endif
-	//Signal( ship, "PlayerOffBoard" )
+	// Signal( ship, "PlayerOffBoard" )
 
 	if ( IsValid( trigger ) )
 		trigger.Enable()
@@ -862,7 +858,7 @@ void function ShipCabinInteriorThink( ShipStruct ship )
 	entity trigger = ship.cabinTriggerInterior
 
 	table result
-	while( 1 )
+	while ( 1 )
 	{
 		if ( !trigger.IsTouched() )
 		{
@@ -877,7 +873,7 @@ void function ShipCabinInteriorThink( ShipStruct ship )
 		while ( trigger.IsTouched() )
 		{
 			trigger.WaitSignal( "OnEndTouchAll" )
-			wait 0.5 //make sure
+			wait 0.5 // make sure
 		}
 
 		PlayerOffShip( player, ship, ship.triggerTop )
@@ -885,8 +881,6 @@ void function ShipCabinInteriorThink( ShipStruct ship )
 		RunShipEventCallbacks( ship, eShipEvents.PLAYER_INCABIN_END, player )
 	}
 }
-
-
 
 /************************************************************************************************\
 
@@ -913,10 +907,10 @@ void function DrawShipEdges( ShipStruct ship )
 
 	array<devLine> lines
 
-	CreateEdgeDrawingList( lines, ship.rightEdge[0] )
-	CreateEdgeDrawingList( lines, ship.leftEdge[0] )
+	CreateEdgeDrawingList( lines, ship.rightEdge[ 0 ] )
+	CreateEdgeDrawingList( lines, ship.leftEdge[ 0 ] )
 
-	while( 1 )
+	while ( 1 )
 	{
 		DrawEdgeLine( lines )
 		wait 0.1
@@ -930,7 +924,7 @@ void function DrawShipEdgeNodes( ShipStruct ship )
 
 	EndSignal( ship, "FakeDestroy" )
 
-	while( 1 )
+	while ( 1 )
 	{
 		DrawEdgeNodes( ship.rightEdge )
 		DrawEdgeNodes( ship.leftEdge )
@@ -960,7 +954,7 @@ void function DrawEdgeLine( array<devLine> lines )
 void function DrawEdgeNodes( array<entity> edgeArray )
 {
 	for ( int i = 0; i < edgeArray.len(); i++ )
-		DebugDrawCircle( edgeArray[ i ].GetOrigin(), Vector(0,0,0), 16, 0, 255, 0, true, FRAME_INTERVAL )
+		DebugDrawCircle( edgeArray[ i ].GetOrigin(), Vector( 0, 0, 0 ), 16, 0, 255, 0, true, FRAME_INTERVAL )
 }
 
 void function DevPrints( ShipStruct ship )
@@ -970,10 +964,10 @@ void function DevPrints( ShipStruct ship )
 	entity mover = ship.mover
 	mover.EndSignal( "OnDestroy" )
 
-	while( 1 )
+	while ( 1 )
 	{
 		if ( DEV_PRINTSPEED )
-			DebugDrawText( mover.GetOrigin() + < 0,0,128>, "Speed: " + Length( ship.localVelocity.v ), true, FRAME_INTERVAL )
+			DebugDrawText( mover.GetOrigin() + < 0, 0, 128 >, "Speed: " + Length( ship.localVelocity.v ), true, FRAME_INTERVAL )
 		if ( DEV_PRINTBEHAVIOR )
 			DevBehaviorPrint( ship, mover )
 		wait FRAME_INTERVAL - 0.001
@@ -1012,7 +1006,7 @@ void function FakeDestroy( ShipStruct ship )
 
 	entity mover = ship.mover
 
-	//not sure why this become invalid on map restarts
+	// not sure why this become invalid on map restarts
 	if ( !IsValid( mover ) )
 		return
 	mover.NonPhysicsStop()
@@ -1025,17 +1019,14 @@ void function FakeDestroy( ShipStruct ship )
 
 bool function IsDoorClosedOrClosing( ShipStruct ship )
 {
-	return ( 	ship.doorState == eDoorState.CLOSED ||
-				ship.doorState == eDoorState.CLOSING_R ||
-				ship.doorState == eDoorState.CLOSING_L )
+	return ( ship.doorState == eDoorState.CLOSED || ship.doorState == eDoorState.CLOSING_R || ship.doorState == eDoorState.CLOSING_L )
 }
 
 bool function IsDoorOpenOrOpening( ShipStruct ship )
 {
-	return ( 	ship.doorState == eDoorState.OPEN_L ||
-				ship.doorState == eDoorState.OPEN_R ||
-				ship.doorState == eDoorState.OPENING_L ||
-				ship.doorState == eDoorState.OPENING_R )
+	return (
+		ship.doorState == eDoorState.OPEN_L || ship.doorState == eDoorState.OPEN_R || ship.doorState == eDoorState.OPENING_L || ship.doorState == eDoorState.OPENING_R
+	)
 }
 
 bool function IsShipOnBattleField( ShipStruct ship )
@@ -1043,10 +1034,10 @@ bool function IsShipOnBattleField( ShipStruct ship )
 	if ( ship.free )
 		return false
 
-	if ( 	ship.behavior == eBehavior.DEATH_ANIM ||
-			ship.behavior == eBehavior.CREW_DEAD ||
-			ship.behavior == eBehavior.CREW_DEPLOYED ||
-			ship.behavior == eBehavior.LEAVING )
+	if (
+		ship.behavior == eBehavior.DEATH_ANIM || ship.behavior == eBehavior.CREW_DEAD || ship.behavior == eBehavior.CREW_DEPLOYED ||
+		ship.behavior == eBehavior.LEAVING
+	)
 		return false
 
 	return true
@@ -1075,7 +1066,7 @@ void function PushShipList( entity player, ShipStruct ship )
 	if ( existsInIndex == 0 )
 		return
 
-	ShipStruct ornull [ONSHIPLISTMAX] newArray
+	ShipStruct ornull[ ONSHIPLISTMAX ] newArray
 	newArray[ 0 ] = ship
 	int index = 1
 	for ( int i = 0; i < player.l.onShipList.len(); i++ )
@@ -1089,15 +1080,15 @@ void function PushShipList( entity player, ShipStruct ship )
 			break
 	}
 
-	//copy it back into player's array
+	// copy it back into player's array
 	for ( int i = 0; i < newArray.len(); i++ )
 		player.l.onShipList[ i ] = newArray[ i ]
-//	player.l.onShipList = newArray
+	// 	player.l.onShipList = newArray
 }
 
-int function GetIndexInShipStructArray( ShipStruct ornull [ONSHIPLISTMAX] Array, ShipStruct val )
+int function GetIndexInShipStructArray( ShipStruct ornull[ ONSHIPLISTMAX ] Array, ShipStruct val )
 {
-	foreach( int i, ShipStruct v in Array )
+	foreach ( int i, ShipStruct v in Array )
 	{
 		if ( val == v )
 			return i
@@ -1119,7 +1110,7 @@ void function ShipClearInvulnerable( ShipStruct ship )
 	ship.model.ClearInvulnerable()
 
 	if ( IsValid( ship.cockpit ) )
-			ship.cockpit.ClearInvulnerable()
+		ship.cockpit.ClearInvulnerable()
 }
 
 void function ShipIsInvulnerable( ShipStruct ship )
@@ -1228,8 +1219,8 @@ void function UpdatePosWithLocalSpace( entity ent )
 	EndSignal( ent, "UpdateingLocalSpace" )
 	EndSignal( ent, "OnDestroy" )
 
-	vector oldpos = <999,999,999>
-	while( 1 )
+	vector oldpos = < 999, 999, 999 >
+	while ( 1 )
 	{
 		vector newpos = WORLD_CENTER.GetOrigin()
 		if ( newpos != oldpos )
@@ -1246,9 +1237,9 @@ void function __NonPhysicsMoveToUpdateLocalSpace( entity ent, LocalVec pos, floa
 	EndSignal( ent, "UpdateingLocalSpace" )
 	EndSignal( ent, "OnDestroy" )
 
-	entity animRef = CreateScriptMover( <0,0,0>, CONVOYDIR )
+	entity animRef = CreateScriptMover( < 0, 0, 0 >, CONVOYDIR )
 	OnThreadEnd(
-	function() : ( animRef )
+		function() : ( animRef )
 		{
 			animRef.Destroy()
 		}
@@ -1260,7 +1251,7 @@ void function __NonPhysicsMoveToUpdateLocalSpace( entity ent, LocalVec pos, floa
 
 	animRef.NonPhysicsMoveTo( delta, time, accTime, decTime )
 
-	while( endTime > Time() )
+	while ( endTime > Time() )
 	{
 		vector newLoc = startLoc + animRef.GetOrigin()
 		ent.NonPhysicsMoveTo( newLoc + WORLD_CENTER.GetOrigin(), FRAME_INTERVAL * 1.5, 0, 0 )
@@ -1289,7 +1280,7 @@ void function SetVelocityLocal( entity ent, LocalVec vel )
 float function GetBestRightOfTargetForLeaving( ShipStruct ship )
 {
 	float rightOfTarget = 1.0
-	switch( ship.doorState )
+	switch ( ship.doorState )
 	{
 		case eDoorState.OPEN_L:
 		case eDoorState.OPENING_L:

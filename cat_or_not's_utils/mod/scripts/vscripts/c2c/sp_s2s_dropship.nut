@@ -1,14 +1,14 @@
-untyped //->effect.Fire only exists at runtime
+untyped // ->effect.Fire only exists at runtime
 
-global const asset DROPSHIP_FLYING_MODEL 	= $"models/vehicle/goblin_dropship/goblin_dropship_flying_static.mdl"
+global const asset DROPSHIP_FLYING_MODEL = $"models/vehicle/goblin_dropship/goblin_dropship_flying_static.mdl"
 global const asset CROW_FLYING_MODEL = $"models/vehicles_r2/aircraft/dropship_crow/crow_dropship_flying_gutted.mdl"
 global const asset CROW_MODEL = $"models/vehicle/crow_dropship/crow_dropship.mdl"
 
-const asset GOBLIN_ENGINE_FAILURE	= $"P_s2s_engine_failure_smoke"
-const asset GOBLIN_ENGINE_DAMAGE	= $"P_s2s_engine_damage_smoke"
-const asset GOBLIN_ENGINE_BLOW 		= $"P_exp_flak_s2s_light"
-global const asset GOBLIN_DEATH_FX_S2S 		= $"P_veh_exp_goblin_HS"
-global const asset CROW_DEATH_FX_S2S 		= $"P_veh_exp_crow_HS"
+const asset GOBLIN_ENGINE_FAILURE = $"P_s2s_engine_failure_smoke"
+const asset GOBLIN_ENGINE_DAMAGE = $"P_s2s_engine_damage_smoke"
+const asset GOBLIN_ENGINE_BLOW = $"P_exp_flak_s2s_light"
+global const asset GOBLIN_DEATH_FX_S2S = $"P_veh_exp_goblin_HS"
+global const asset CROW_DEATH_FX_S2S = $"P_veh_exp_crow_HS"
 global const asset CROW_HERO_MODEL = $"models/vehicle/crow_dropship/crow_dropship_hero.mdl"
 global const asset DROPSHIP_HERO_MODEL = $"models/vehicle/goblin_dropship/goblin_dropship_hero.mdl"
 
@@ -37,7 +37,7 @@ struct
 {
 	array<ShipStruct> goblinTemplates
 	array<ShipStruct> crowTemplates
-}file
+} file
 
 void function S2S_DropshipInit()
 {
@@ -70,7 +70,7 @@ void function EntitiesDidLoad()
 	foreach ( entity template in templates )
 	{
 		template.SetModel( DROPSHIP_HERO_MODEL )
-		ShipStruct ship = DropshipDefaultSetup( template, <0,0,98> )
+		ShipStruct ship = DropshipDefaultSetup( template, < 0, 0, 98 > )
 		file.goblinTemplates.append( ship )
 	}
 
@@ -78,7 +78,7 @@ void function EntitiesDidLoad()
 	foreach ( entity template in templates )
 	{
 		template.SetModel( CROW_HERO_MODEL )
-		ShipStruct ship = DropshipDefaultSetup( template, <0,0,100> )
+		ShipStruct ship = DropshipDefaultSetup( template, < 0, 0, 100 > )
 		Highlight_SetFriendlyHighlight( ship.model, "sp_s2s_crow_outline" )
 		file.crowTemplates.append( ship )
 	}
@@ -86,7 +86,7 @@ void function EntitiesDidLoad()
 
 ShipStruct function DropshipDefaultSetup( entity template, vector offset )
 {
-	template.kv.CollisionGroup = TRACE_COLLISION_GROUP_BLOCK_WEAPONS//this makes the goblin shootable but not have phys collision
+	template.kv.CollisionGroup = TRACE_COLLISION_GROUP_BLOCK_WEAPONS // this makes the goblin shootable but not have phys collision
 	template.SetMaxHealth( GOBLIN_HEALTH )
 	template.SetTouchTriggers( false )
 	AddEntityCallback_OnDamaged( template, GoblinOnDamaged )
@@ -99,14 +99,14 @@ ShipStruct function DropshipDefaultSetup( entity template, vector offset )
 
 void function DropshipDefaultDataSettings( ShipStruct ship )
 {
-	ship.defaultBehaviorFunc 	= DefaultBehavior_Goblin
-	ship.defaultEventFunc 		= DefaultEventCallbacks_Goblin
-	ship.DEV_hullSize 			= <350, 400, 180>
-	ship.DEV_hullOffset 		= <0, 0, 110>
-	ship.defAccMax 				= 100	//350
-	ship.defSpeedMax 			= 500	//500
-	ship.defRollMax 			= 37
-	ship.defPitchMax 			= 37
+	ship.defaultBehaviorFunc = DefaultBehavior_Goblin
+	ship.defaultEventFunc = DefaultEventCallbacks_Goblin
+	ship.DEV_hullSize = < 350, 400, 180 >
+	ship.DEV_hullOffset = < 0, 0, 110 >
+	ship.defAccMax = 100 // 350
+	ship.defSpeedMax = 500 // 500
+	ship.defRollMax = 37
+	ship.defPitchMax = 37
 }
 
 array<ShipStruct> function GetActiveGoblins()
@@ -154,7 +154,7 @@ ShipStruct function SpawnCrow( LocalVec ornull origin = null, vector angles = CO
 ShipStruct function SpawnDropShip( LocalVec ornull origin = null, vector angles = CONVOYDIR, array<entity> ornull spawners = null, int team = 0 )
 {
 	if ( origin == null )
-		origin = CLVec( <0,0,0> )
+		origin = CLVec( < 0, 0, 0 > )
 	expect LocalVec( origin )
 
 	ShipStruct ship
@@ -179,7 +179,7 @@ ShipStruct function SpawnDropShip( LocalVec ornull origin = null, vector angles 
 		thread GoblinCockpitDamageThink( ship )
 	thread GoblinEngineFailureThink( ship )
 
-	//common
+	// common
 	thread ShipCommonFuncs( ship )
 	ship.bug_reproNum = 10
 	FakeNPCSettings( ship )
@@ -189,7 +189,7 @@ ShipStruct function SpawnDropShip( LocalVec ornull origin = null, vector angles 
 ShipStruct function SpawnDSCombatTest( LocalVec ornull origin = null, vector angles = CONVOYDIR )
 {
 	if ( origin == null )
-		origin = CLVec( <0,0,0> )
+		origin = CLVec( < 0, 0, 0 > )
 	expect LocalVec( origin )
 
 	ShipStruct ship = GetFreeTemplate( file.crowTemplates )
@@ -208,7 +208,7 @@ ShipStruct function SpawnDSCombatTest( LocalVec ornull origin = null, vector ang
 		thread GoblinCockpitDamageThink( ship )
 	thread GoblinEngineFailureThink( ship )
 
-	//common
+	// common
 	thread ShipCommonFuncs( ship )
 	ship.bug_reproNum = 10
 	return ship
@@ -229,7 +229,7 @@ ShipStruct function SpawnDropShipLight( LocalVec ornull origin = null, vector an
 	Assert( team != 0, "Team: " + team + " not valid" )
 
 	if ( origin == null )
-		origin = CLVec( <0,0,0> )
+		origin = CLVec( < 0, 0, 0 > )
 	expect LocalVec( origin )
 
 	ShipStruct ship
@@ -237,14 +237,14 @@ ShipStruct function SpawnDropShipLight( LocalVec ornull origin = null, vector an
 	if ( team == TEAM_IMC )
 	{
 		shipModel = DROPSHIP_FLYING_MODEL
-		if( animating )
+		if ( animating )
 			shipModel = DROPSHIP_MODEL
 	}
 	else
 	{
 		Assert( team == TEAM_MILITIA )
 		shipModel = CROW_FLYING_MODEL
-		if( animating )
+		if ( animating )
 			shipModel = CROW_MODEL
 	}
 
@@ -271,7 +271,7 @@ ShipStruct function SpawnDropShipLight( LocalVec ornull origin = null, vector an
 		// make this work in the future
 		// Remote_CallFunction_NonReplay( GetPlayerArray()[0], "ServerCallback_DisableDropshipLights", eHandle )
 	}
-//	CreateFakeRiders( ship, team )
+	// 	CreateFakeRiders( ship, team )
 
 	DropshipDefaultDataSettings( ship )
 
@@ -283,20 +283,19 @@ ShipStruct function SpawnDropShipLight( LocalVec ornull origin = null, vector an
 	ship.model.SetHealth( ship.model.GetMaxHealth() )
 	AddEntityCallback_OnDamaged( ship.model, GoblinOnDamaged )
 
-	ship.FuncGetBankMagnitude 	= GetBankMagnitudeGoblin
+	ship.FuncGetBankMagnitude = GetBankMagnitudeGoblin
 
-
-	ship.localVelocity.v = <0,0,0>
+	ship.localVelocity.v = < 0, 0, 0 >
 	ship.goalRadius = SHIPGOALRADIUS
 	ship.boundsMinRatio = 0.5
 
 	ResetAllEventCallbacksToDefault( ship )
 	ResetAllBehaviorsToDefault( ship )
-	ship.behavior 		= eBehavior.IDLE
-	ship.prevBehavior 	= [ eBehavior.IDLE ]
-	ship.doorState 		= eDoorState.CLOSED
-	ship.free 			= false
-	
+	ship.behavior = eBehavior.IDLE
+	ship.prevBehavior = [ eBehavior.IDLE ]
+	ship.doorState = eDoorState.CLOSED
+	ship.free = false
+
 	if ( !disableEngineFailure )
 		thread GoblinEngineFailureThink( ship )
 	thread RunBehaviorFiniteStateMachine( ship )
@@ -355,7 +354,7 @@ ShipStruct function ChangeRealDropshipToLight( ShipStruct ship, bool animating =
 
 	if ( animating )
 	{
-		switch( lightweight.doorState )
+		switch ( lightweight.doorState )
 		{
 			case eDoorState.OPEN_L:
 				thread PlayAnim( lightweight.model, "dropship_open_doorL_idle", lightweight.mover )
@@ -374,7 +373,7 @@ ShipStruct function ChangeRealDropshipToLight( ShipStruct ship, bool animating =
 void function GoblinSetupLinks( ShipStruct ship, entity mover, entity ent )
 {
 	entity model = ship.model
-	switch( ent.kv.script_noteworthy )
+	switch ( ent.kv.script_noteworthy )
 	{
 		case "Cockpit":
 			ship.cockpit = ent
@@ -408,18 +407,15 @@ void function GoblinSetupLinks( ShipStruct ship, entity mover, entity ent )
 void function SpawnGoblinRiders( ShipStruct ship, array<entity> ornull spawners, int team )
 {
 	#if DEV
-		foreach( entity guy in ship.guys )
+		foreach ( entity guy in ship.guys )
 			Assert( !IsAlive( guy ) )
 		Assert( !IsAlive( ship.pilot ) )
 	#endif
 
 	string riderTag = "RESCUE"
-	string[4] weaponNames = [ "mp_weapon_lstar",
-							"mp_weapon_dmr",
-							"mp_weapon_lstar",
-							"mp_weapon_lstar" ]
+	string[ 4 ] weaponNames = [ "mp_weapon_lstar", "mp_weapon_dmr", "mp_weapon_lstar", "mp_weapon_lstar" ]
 
-	for( int i = 0; i < 4; i++ )
+	for ( int i = 0; i < 4; i++ )
 	{
 		entity guy
 		if ( spawners == null )
@@ -441,54 +437,44 @@ void function SpawnGoblinRiders( ShipStruct ship, array<entity> ornull spawners,
 			}
 		}
 
-		//guy.DisableHibernation()
+		// guy.DisableHibernation()
 		GoblinRiderAnimate( guy, ship.model, i, riderTag )
 		AddEntityCallback_OnDamaged( guy, GoblinRiderOnDamaged )
 		if ( ship.guys.len() > i )
-			ship.guys[i] = guy
+			ship.guys[ i ] = guy
 		else
 			ship.guys.append( guy )
 	}
 
 	thread SignalOnCrewDead( ship )
-
 	/*
 	entity guy = CreateSoldier( team, ship.model.GetOrigin(), ship.model.GetAngles() )
 	DispatchSpawn( guy )
 	thread GoblinPilotAnimate( guy, ship )
 	ship.pilot = guy
-	*/
+*/
 }
 
 void function CreateFakeRiders( ShipStruct ship, int team )
 {
 	string riderTag = "RESCUE"
-	string[4] weaponNames = [ "mp_weapon_lstar",
-							"mp_weapon_dmr",
-							"mp_weapon_lstar",
-							"mp_weapon_lstar" ]
-	asset[4] imcModels 	= [ TEAM_IMC_GRUNT_MODEL_LMG,
-							TEAM_IMC_GRUNT_MODEL_RIFLE,
-							TEAM_IMC_GRUNT_MODEL_SHOTGUN,
-							TEAM_IMC_GRUNT_MODEL_SMG ]
-	asset[4] milModels 	= [ TEAM_MIL_GRUNT_MODEL,
-							TEAM_MIL_GRUNT_MODEL,
-							TEAM_MIL_GRUNT_MODEL,
-							TEAM_MIL_GRUNT_MODEL ]
-	table<int, asset[4]> models = {}
+	string[ 4 ] weaponNames = [ "mp_weapon_lstar", "mp_weapon_dmr", "mp_weapon_lstar", "mp_weapon_lstar" ]
+	asset[ 4 ] imcModels = [ TEAM_IMC_GRUNT_MODEL_LMG, TEAM_IMC_GRUNT_MODEL_RIFLE, TEAM_IMC_GRUNT_MODEL_SHOTGUN, TEAM_IMC_GRUNT_MODEL_SMG ]
+	asset[ 4 ] milModels = [ TEAM_MIL_GRUNT_MODEL, TEAM_MIL_GRUNT_MODEL, TEAM_MIL_GRUNT_MODEL, TEAM_MIL_GRUNT_MODEL ]
+	table<int, asset[ 4 ]> models = {}
 	models[ TEAM_MILITIA ] <- milModels
 	models[ TEAM_IMC ] <- imcModels
 
-	for( int i = 0; i < 4; i++ )
+	for ( int i = 0; i < 4; i++ )
 	{
 		entity guy = CreatePropDynamic( models[ team ][ i ] )
 		guy.MarkAsNonMovingAttachment()
-		entity gun = CreatePropDynamic( GetWeaponInfoFileKeyFieldAsset_Global( weaponNames[i], "playermodel" ) )
-		gun.SetParent( guy, "PROPGUN")
+		entity gun = CreatePropDynamic( GetWeaponInfoFileKeyFieldAsset_Global( weaponNames[ i ], "playermodel" ) )
+		gun.SetParent( guy, "PROPGUN" )
 		guy.MarkAsNonMovingAttachment()
 
 		GoblinRiderAnimate( guy, ship.model, i, riderTag )
-		ship.guys[i] = guy
+		ship.guys[ i ] = guy
 	}
 }
 
@@ -530,7 +516,7 @@ void function ResetGoblinTemplate( ShipStruct ship )
 		ship.cabinTriggerInterior.Enable()
 	ship.triggerTop.Enable()
 
-	ship.FuncGetBankMagnitude 	= GetBankMagnitudeGoblin
+	ship.FuncGetBankMagnitude = GetBankMagnitudeGoblin
 }
 
 void function DefaultBehavior_Goblin( ShipStruct ship, int behavior )
@@ -539,7 +525,7 @@ void function DefaultBehavior_Goblin( ShipStruct ship, int behavior )
 	{
 		case eBehavior.ENEMY_CHASE:
 			AddShipBehavior( ship, behavior, Behavior_ChaseEnemy )
-			//right, forward, up
+			// right, forward, up
 			SetFlyOffset( ship, behavior, < 950, 0, 350 > )
 			SetFlyBounds( ship, behavior, < 500, 500, 225 > )
 			SetSeekAhead( ship, behavior, 700 )
@@ -547,19 +533,18 @@ void function DefaultBehavior_Goblin( ShipStruct ship, int behavior )
 
 		case eBehavior.DEPLOY:
 			AddShipBehavior( ship, behavior, Behavior_Deploy )
-			//right, forward, up
+			// right, forward, up
 			SetFlyOffset( ship, behavior, < 0, 0, 100 > )
 			SetFlyBounds( ship, behavior, < 100, 20, 8 > )
 			break
 
 		case eBehavior.DEPLOYZIP:
 			AddShipBehavior( ship, behavior, Behavior_DeployZip )
-			//right, forward, up
+			// right, forward, up
 			SetFlyOffset( ship, behavior, < 1000, 0, 650 > )
 			SetFlyBounds( ship, behavior, < 250, 200, 150 > )
 			break
-
-	/*	case eBehavior.ENEMY_ONBOARD:
+			/*	case eBehavior.ENEMY_ONBOARD:
 			AddShipBehavior( ship, behavior, Behavior_EnemyOnboard )
 			//right, forward, up
 			SetFlyOffset( ship, behavior, < 350, -100, 300 > )
@@ -569,7 +554,7 @@ void function DefaultBehavior_Goblin( ShipStruct ship, int behavior )
 
 		case eBehavior.ENGINE_FAILURE:
 			AddShipBehavior( ship, behavior, Behavior_EngineFailure )
-			//right, forward, up
+			// right, forward, up
 			SetFlyOffset( ship, behavior, < 300, 0, 16 > )
 			SetFlyBounds( ship, behavior, < 50, 300, 32 > )
 			SetSeekAhead( ship, behavior, 50 )
@@ -652,7 +637,17 @@ void function GoblinOnDamaged( entity ent, var damageInfo )
 
 	if ( IsValid( attacker ) && attacker.IsPlayer() )
 	{
-		attacker.NotifyDidDamage( ent, 0, DamageInfo_GetDamagePosition( damageInfo ), DamageInfo_GetCustomDamageType( damageInfo ), DamageInfo_GetDamage( damageInfo ), DamageInfo_GetDamageFlags( damageInfo ), DamageInfo_GetHitGroup( damageInfo ), DamageInfo_GetWeapon( damageInfo ), DamageInfo_GetDistFromAttackOrigin( damageInfo ) )
+		attacker.NotifyDidDamage(
+			ent,
+			0,
+			DamageInfo_GetDamagePosition( damageInfo ),
+			DamageInfo_GetCustomDamageType( damageInfo ),
+			DamageInfo_GetDamage( damageInfo ),
+			DamageInfo_GetDamageFlags( damageInfo ),
+			DamageInfo_GetHitGroup( damageInfo ),
+			DamageInfo_GetWeapon( damageInfo ),
+			DamageInfo_GetDistFromAttackOrigin( damageInfo )
+		)
 		if ( attacker.IsTitan() )
 			AddCreditToTitanCoreBuilderForTitanDamageInflicted( attacker, max( damage * 0.25, 100 ) )
 	}
@@ -660,7 +655,7 @@ void function GoblinOnDamaged( entity ent, var damageInfo )
 	if ( IsValid( inflictor ) && inflictor.GetTeam() == ent.GetTeam() )
 		DamageInfo_SetDamage( damageInfo, 0 )
 
-	//make sure this entity NEVER dies
+	// make sure this entity NEVER dies
 	if ( damage >= ent.GetHealth() )
 	{
 		bool OverDamaged = false
@@ -688,7 +683,7 @@ void function GoblinEngineFailureThink( ShipStruct ship )
 	table e
 
 	OnThreadEnd(
-	function() : ( ship, model, e )
+		function() : ( ship, model, e )
 		{
 			model.SetTakeDamageType( DAMAGE_NO )
 			model.SetDamageNotifications( false )
@@ -702,9 +697,9 @@ void function GoblinEngineFailureThink( ShipStruct ship )
 
 	e.fx <- null
 	array<float> damageStates = [ 0.6, 0.3, 0.0 ]
-	foreach( damageRatio in damageStates )
+	foreach ( damageRatio in damageStates )
 	{
-		while( 1 )
+		while ( 1 )
 		{
 			table result = WaitSignal( model, "OnDamaged", "OverDamaged" )
 			if ( expect string( result.signal ) == "OverDamaged" )
@@ -713,8 +708,8 @@ void function GoblinEngineFailureThink( ShipStruct ship )
 				wait 0.1
 
 				ship.engineDamage = true
-			//	ship.model.SetNoTarget( true )
-			//	ship.model.SetNoTargetSmartAmmo( true )
+				// 	ship.model.SetNoTarget( true )
+				// 	ship.model.SetNoTargetSmartAmmo( true )
 				return
 			}
 
@@ -766,9 +761,8 @@ void function Event_GoblinEngineFailure( ShipStruct ship, entity player, int eve
 		return
 	S2S_VOtime = Time() + VOBUFFER
 
-	array<string> text = [	"Engine one is down! We're losing altitude",
-							"Mayday, Mayday, Engine one is down!" ]
-	//Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
+	array<string> text = [ "Engine one is down! We're losing altitude", "Mayday, Mayday, Engine one is down!" ]
+	// Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
 }
 
 /************************************************************************************************\
@@ -783,7 +777,7 @@ void function Event_GoblinEngineFailure( ShipStruct ship, entity player, int eve
 \************************************************************************************************/
 void function Event_PlayerInGoblinCabinStart( ShipStruct ship, entity player, int eventID )
 {
-	foreach( entity guy in ship.guys )
+	foreach ( entity guy in ship.guys )
 	{
 		if ( !IsAlive( guy ) )
 			continue
@@ -795,7 +789,7 @@ void function Event_PlayerInGoblinCabinStart( ShipStruct ship, entity player, in
 void function Event_PlayerInGoblinCabinEnd( ShipStruct ship, entity player, int eventID )
 {
 	string riderTag
-	switch( ship.doorState )
+	switch ( ship.doorState )
 	{
 		case eDoorState.OPENING_L:
 		case eDoorState.OPEN_L:
@@ -808,7 +802,7 @@ void function Event_PlayerInGoblinCabinEnd( ShipStruct ship, entity player, int 
 			break
 	}
 
-	foreach( int index, entity guy in ship.guys )
+	foreach ( int index, entity guy in ship.guys )
 	{
 		if ( !IsAlive( guy ) )
 			continue
@@ -833,7 +827,7 @@ void function GoblinCockpitDamageThink( ShipStruct ship )
 	EndSignal( ship, "FakeDestroy" )
 
 	OnThreadEnd(
-	function() : ( ship )
+		function() : ( ship )
 		{
 			ship.cockpit.SetTakeDamageType( DAMAGE_NO )
 			ship.cockpit.SetDamageNotifications( false )
@@ -841,8 +835,8 @@ void function GoblinCockpitDamageThink( ShipStruct ship )
 		}
 	)
 
-	int damageState1 = 5 * 50 //num shots * r101 damage
-	while( 1 )
+	int damageState1 = 5 * 50 // num shots * r101 damage
+	while ( 1 )
 	{
 		table result = WaitSignal( ship.cockpit, "OnDamaged" )
 		entity player = expect entity( result.activator )
@@ -854,12 +848,12 @@ void function GoblinCockpitDamageThink( ShipStruct ship )
 		float dist = Distance( pos, ship.cockpit.GetOrigin() ) - 16
 		vector start = pos + ( dir * dist )
 		vector end = start + ( dir * 100 )
-		//DebugDrawLine( start, end, 255, 0, 0, true, 0.5 )
+		// DebugDrawLine( start, end, 255, 0, 0, true, 0.5 )
 
 		entity weapon = player.GetActiveWeapon()
 		bool isSolid = ship.model.IsSolid()
 		ship.model.NotSolid()
-		weapon.FireWeaponBullet( start, dir, 1, damageTypes.bullet )//HACK
+		weapon.FireWeaponBullet( start, dir, 1, damageTypes.bullet ) // HACK
 		if ( isSolid )
 			ship.model.Solid()
 	}
@@ -870,12 +864,14 @@ void function Event_PlayerOnGoblinHullStart( ShipStruct ship, entity player, int
 	if ( !IsValid( player ) || !player.IsPlayer() )
 		return
 
-	array<string> text = [	"He's on the hull! Shake him off!",
-							"Holy shit! He's on the roof!",
-							"Where he go?! Up there! Up there!",
-							"He just jumped on the roof! Holy shit!",
-							"How'd he get up there? I don't know!?" ]
-	//Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
+	array<string> text = [
+		"He's on the hull! Shake him off!",
+		"Holy shit! He's on the roof!",
+		"Where he go?! Up there! Up there!",
+		"He just jumped on the roof! Holy shit!",
+		"How'd he get up there? I don't know!?"
+	]
+	// Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
 }
 
 /************************************************************************************************\
@@ -890,12 +886,12 @@ void function Event_PlayerOnGoblinHullStart( ShipStruct ship, entity player, int
 \************************************************************************************************/
 void function Behavior_ChaseEnemy( ShipStruct ship )
 {
-	entity enemy 	= ship.chaseEnemy
+	entity enemy = ship.chaseEnemy
 	thread GoblinChaseVO( ship, enemy )
 
-	int behavior 	= ship.behavior
-	vector bounds 	= ship.flyBounds[ behavior ]
-	vector offset 	= ship.flyOffset[ behavior ]
+	int behavior = ship.behavior
+	vector bounds = ship.flyBounds[ behavior ]
+	vector offset = ship.flyOffset[ behavior ]
 	float seekAhead = ship.seekAhead[ behavior ]
 	__ShipFlyAlongEdge( ship, bounds, offset, seekAhead, eShipEvents.SHIP_ATNEWEDGE )
 }
@@ -905,10 +901,10 @@ void function Behavior_Deploy( ShipStruct ship )
 	ShipStruct ornull followShip = GetDeployShip( ship )
 	expect ShipStruct( followShip )
 	entity targetEnt = followShip.mover
-	vector pos 		= GetDeployPos( ship )
-	int behavior 	= ship.behavior
-	vector offset 	= ship.flyOffset[ behavior ]
-	vector bounds 	= ship.flyBounds[ behavior ]
+	vector pos = GetDeployPos( ship )
+	int behavior = ship.behavior
+	vector offset = ship.flyOffset[ behavior ]
+	vector bounds = ship.flyBounds[ behavior ]
 
 	__ShipFollowShip( ship, targetEnt, pos, bounds, offset, eShipEvents.SHIP_ATDEPLOYPOS )
 }
@@ -918,23 +914,23 @@ void function Behavior_DeployZip( ShipStruct ship )
 	ShipStruct ornull followShip = GetDeployShip( ship )
 	expect ShipStruct( followShip )
 	entity targetEnt = followShip.mover
-	vector pos 		= GetDeployPos( ship )
-	int behavior 	= ship.behavior
-	vector offset 	= ship.flyOffset[ behavior ]
-	vector bounds 	= ship.flyBounds[ behavior ]
+	vector pos = GetDeployPos( ship )
+	int behavior = ship.behavior
+	vector offset = ship.flyOffset[ behavior ]
+	vector bounds = ship.flyBounds[ behavior ]
 
 	__ShipFollowShip( ship, targetEnt, pos, bounds, offset, eShipEvents.SHIP_ATDEPLOYPOSZIP )
 }
 
 void function Behavior_EnemyOnboard( ShipStruct ship )
 {
-	//what was our prev behavior?
-	switch( ship.prevBehavior[0] )
+	// what was our prev behavior?
+	switch ( ship.prevBehavior[ 0 ] )
 	{
 		case eBehavior.ENEMY_CHASE:
-			int behavior 	= ship.behavior
-			vector bounds 	= ship.flyBounds[ behavior ]
-			vector offset 	= ship.flyOffset[ behavior ]
+			int behavior = ship.behavior
+			vector bounds = ship.flyBounds[ behavior ]
+			vector offset = ship.flyOffset[ behavior ]
 			float seekAhead = ship.seekAhead[ behavior ]
 			__ShipFlyAlongEdge( ship, bounds, offset, seekAhead, eShipEvents.NONE )
 			break
@@ -947,15 +943,15 @@ void function Behavior_EnemyOnboard( ShipStruct ship )
 
 void function Behavior_EngineFailure( ShipStruct ship )
 {
-	ship.accMax 			= 200
+	ship.accMax = 200
 
-	//what was our prev behavior?
-	switch( ship.prevBehavior[0] )
+	// what was our prev behavior?
+	switch ( ship.prevBehavior[ 0 ] )
 	{
 		case eBehavior.ENEMY_CHASE:
-			int behavior 	= ship.behavior
-			vector bounds 	= ship.flyBounds[ behavior ]
-			vector offset 	= ship.flyOffset[ behavior ]
+			int behavior = ship.behavior
+			vector bounds = ship.flyBounds[ behavior ]
+			vector offset = ship.flyOffset[ behavior ]
 			float seekAhead = ship.seekAhead[ behavior ]
 			__ShipFlyAlongEdge( ship, bounds, offset, seekAhead, eShipEvents.SHIP_ATNEWEDGE )
 			break
@@ -969,12 +965,12 @@ void function Behavior_EngineFailure( ShipStruct ship )
 void function GoblinChaseVO( ShipStruct ship, entity player )
 {
 	if ( !IsValid( player ) || !player.IsPlayer() )
-			return
+		return
 
 	EndSignal( ship, "NewBehavior" )
 	EndSignal( ship, "FakeDeath" )
 
-	while( 1 )
+	while ( 1 )
 	{
 		wait 2
 		if ( Time() < S2S_VOtime )
@@ -982,12 +978,14 @@ void function GoblinChaseVO( ShipStruct ship, entity player )
 
 		S2S_VOtime = Time() + RandomFloatRange( VOBUFFER * 1.5, VOBUFFER * 2 )
 
-		array<string> text = [	"He's moving too fast!",
-								"Do you see him? Where is he?",
-								"Clear to engage! Open fire!",
-								"He's moving across the hull of that ship!",
-								"He's right there! He's right there!" ]
-		//Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
+		array<string> text = [
+			"He's moving too fast!",
+			"Do you see him? Where is he?",
+			"Clear to engage! Open fire!",
+			"He's moving across the hull of that ship!",
+			"He's right there! He's right there!"
+		]
+		// Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
 	}
 }
 
@@ -1020,14 +1018,14 @@ void function Behavior_DeathAnimThread( ShipStruct ship )
 	Signal( ship, "FakeDeath" )
 	EndSignal( ship, "FakeDestroy" )
 
-	entity mover 	= ship.mover
+	entity mover = ship.mover
 	mover.EndSignal( "OnDestroy" )
 	entity enemy = ship.chaseEnemy
 
 	entity fxRef = GoblinDeathFx( ship )
 
 	OnThreadEnd(
-	function() : ( ship, fxRef )
+		function() : ( ship, fxRef )
 		{
 			if ( IsValid( fxRef ) )
 				fxRef.Destroy()
@@ -1050,8 +1048,8 @@ void function Behavior_DeathAnimThread( ShipStruct ship )
 
 	float rightOfTarget = GetBestRightOfTargetForLeaving( ship )
 	LocalVec pos = CLVec( GetOriginLocal( mover ).v + < x * rightOfTarget, y, z > )
-	vector offset = <0,0,0>
-	
+	vector offset = < 0, 0, 0 >
+
 	thread __ShipFlyToPosInternal( ship, noFollowTarget, pos, offset, CONVOYDIR )
 
 	ship.goalRadius = RandomFloatRange( 3000, 8500 )
@@ -1075,7 +1073,7 @@ void function ExplodeGoblin( ShipStruct ship )
 {
 	int fxID = GetParticleSystemIndex( GOBLIN_DEATH_FX_S2S )
 
-	//is it a real ship? or light?
+	// is it a real ship? or light?
 	if ( IsValid( ship.model ) )
 	{
 		if ( ship.model.GetTeam() == TEAM_MILITIA )
@@ -1105,7 +1103,7 @@ void function ExplodeGoblin( ShipStruct ship )
 void function Event_GoblinDeploy( ShipStruct ship, entity player, int eventID )
 {
 	OnThreadEnd(
-	function() : ( ship )
+		function() : ( ship )
 		{
 			foreach ( index, value in ship.guys )
 				ship.guys[ index ] = null
@@ -1144,7 +1142,7 @@ const float MAXPINTIME = 0.6
 void function Event_GoblinDeployZip( ShipStruct ship, entity player, int eventID )
 {
 	OnThreadEnd(
-	function() : ( ship )
+		function() : ( ship )
 		{
 			foreach ( index, value in ship.guys )
 				ship.guys[ index ] = null
@@ -1166,21 +1164,19 @@ void function Event_GoblinDeployZip( ShipStruct ship, entity player, int eventID
 
 	if ( guys.len() == 4 )
 	{
-		Assert( IsAlive( guys[0]) )
-		Assert( IsAlive( guys[1]) )
-		Assert( IsAlive( guys[2]) )
-		Assert( IsAlive( guys[3]) )
-		array<entity> guys1 = [ guys[0], guys[2] ]
-		array<table>	tables1 = [ S2SCreateDropshipAnimTable( ship.model, side, 0 ),
-									S2SCreateDropshipAnimTable( ship.model, side, 2 )]
-		tables1[0].hullNode <- hullNodes[ 0 ]
-		tables1[1].hullNode <- hullNodes[ 0 ]
+		Assert( IsAlive( guys[ 0 ] ) )
+		Assert( IsAlive( guys[ 1 ] ) )
+		Assert( IsAlive( guys[ 2 ] ) )
+		Assert( IsAlive( guys[ 3 ] ) )
+		array<entity> guys1 = [ guys[ 0 ], guys[ 2 ] ]
+		array<table> tables1 = [ S2SCreateDropshipAnimTable( ship.model, side, 0 ), S2SCreateDropshipAnimTable( ship.model, side, 2 ) ]
+		tables1[ 0 ].hullNode <- hullNodes[ 0 ]
+		tables1[ 1 ].hullNode <- hullNodes[ 0 ]
 
-		array<entity> guys2 = [ guys[1], guys[3] ]
-		array<table>	tables2 = [ S2SCreateDropshipAnimTable( ship.model, side, 1 ),
-									S2SCreateDropshipAnimTable( ship.model, side, 3 )]
-		tables2[0].hullNode <- hullNodes[ 1 ]
-		tables2[1].hullNode <- hullNodes[ 1 ]
+		array<entity> guys2 = [ guys[ 1 ], guys[ 3 ] ]
+		array<table> tables2 = [ S2SCreateDropshipAnimTable( ship.model, side, 1 ), S2SCreateDropshipAnimTable( ship.model, side, 3 ) ]
+		tables2[ 0 ].hullNode <- hullNodes[ 1 ]
+		tables2[ 1 ].hullNode <- hullNodes[ 1 ]
 
 		int customTimes = 0
 		foreach ( guy in guys )
@@ -1238,8 +1234,8 @@ void function Event_GoblinDeployZip( ShipStruct ship, entity player, int eventID
 
 void function GoblinRiderDeployZipTandom( array<entity> guys, ShipStruct ship, string side, array<table> Tables, table<string, int> deployTable )
 {
-	entity mover 	= CreateScriptMover()
-	entity dropNode = expect entity( Tables[0].hullNode )
+	entity mover = CreateScriptMover()
+	entity dropNode = expect entity( Tables[ 0 ].hullNode )
 
 	ship.model.EndSignal( "OnDeath" )
 	mover.EndSignal( "OnDestroy" )
@@ -1247,32 +1243,32 @@ void function GoblinRiderDeployZipTandom( array<entity> guys, ShipStruct ship, s
 	OnThreadEnd(
 		function() : ( mover, Tables, dropNode )
 		{
-			thread S2SZiplineRetracts( Tables[0], dropNode, mover )
+			thread S2SZiplineRetracts( Tables[ 0 ], dropNode, mover )
 		}
 	)
 
-	RiderIdlesForZipline( guys[0], ship.model, Tables[0] )
-	RiderIdlesForZipline( guys[1], ship.model, Tables[1] )
+	RiderIdlesForZipline( guys[ 0 ], ship.model, Tables[ 0 ] )
+	RiderIdlesForZipline( guys[ 1 ], ship.model, Tables[ 1 ] )
 
 	WaittillPlayDeployAnims( ship.model )
 	wait RandomFloatRange( 0.1, 0.75 )
 
 	// the zipline shoots out
-	CreateZipLineForNode( guys[0], Tables[0], dropNode )
-	if ( IsAlive( guys[0] ) )
+	CreateZipLineForNode( guys[ 0 ], Tables[ 0 ], dropNode )
+	if ( IsAlive( guys[ 0 ] ) )
 	{
-		waitthread TandomGuyZiplinesToHull( guys[0], ship, Tables[0], mover, dropNode, deployTable )
+		waitthread TandomGuyZiplinesToHull( guys[ 0 ], ship, Tables[ 0 ], mover, dropNode, deployTable )
 		wait RandomFloatRange( 0.0, 0.5 )
 	}
 
-	if ( IsAlive( guys[1] ) )
-		waitthread TandomGuyZiplinesToHull( guys[1], ship, Tables[0], mover, dropNode, deployTable )
+	if ( IsAlive( guys[ 1 ] ) )
+		waitthread TandomGuyZiplinesToHull( guys[ 1 ], ship, Tables[ 0 ], mover, dropNode, deployTable )
 }
 
 void function GoblinRiderDeployZipTandomCustom( array<entity> guys, ShipStruct ship, string side, array<table> Tables, table<string, int> deployTable )
 {
-	entity mover 	= CreateScriptMover()
-	entity dropNode = expect entity( Tables[0].hullNode )
+	entity mover = CreateScriptMover()
+	entity dropNode = expect entity( Tables[ 0 ].hullNode )
 
 	ship.model.EndSignal( "OnDeath" )
 	mover.EndSignal( "OnDestroy" )
@@ -1280,12 +1276,12 @@ void function GoblinRiderDeployZipTandomCustom( array<entity> guys, ShipStruct s
 	OnThreadEnd(
 		function() : ( mover, Tables, dropNode )
 		{
-			thread S2SZiplineRetracts( Tables[0], dropNode, mover )
+			thread S2SZiplineRetracts( Tables[ 0 ], dropNode, mover )
 		}
 	)
 
-	RiderIdlesForZipline( guys[0], ship.model, Tables[0] )
-	RiderIdlesForZipline( guys[1], ship.model, Tables[1] )
+	RiderIdlesForZipline( guys[ 0 ], ship.model, Tables[ 0 ] )
+	RiderIdlesForZipline( guys[ 1 ], ship.model, Tables[ 1 ] )
 
 	WaittillPlayDeployAnims( ship.model )
 
@@ -1295,37 +1291,36 @@ void function GoblinRiderDeployZipTandomCustom( array<entity> guys, ShipStruct s
 	Assert( ropeTime >= 0 )
 
 	if ( ropeTime > 0 )
-		delaythread( ropeTime ) CreateZipLineForNode( guys[0], Tables[0], dropNode )
+		delaythread( ropeTime ) CreateZipLineForNode( guys[ 0 ], Tables[ 0 ], dropNode )
 	else
-		thread CreateZipLineForNode( guys[0], Tables[0], dropNode )
+		thread CreateZipLineForNode( guys[ 0 ], Tables[ 0 ], dropNode )
 
 	// the zipline shoots out
-	delaythread( time1 ) TandomGuyZiplinesToHull( guys[0], ship, Tables[0], mover, dropNode, deployTable )
+	delaythread( time1 ) TandomGuyZiplinesToHull( guys[ 0 ], ship, Tables[ 0 ], mover, dropNode, deployTable )
 
 	wait time2
-	if ( guys[1].l.customZiplineDeploySignal != "" )
-		guys[1].WaitSignal( guys[1].l.customZiplineDeploySignal )
+	if ( guys[ 1 ].l.customZiplineDeploySignal != "" )
+		guys[ 1 ].WaitSignal( guys[ 1 ].l.customZiplineDeploySignal )
 
-	if ( IsAlive( guys[1] ) )
-		waitthread TandomGuyZiplinesToHull( guys[1], ship, Tables[0], mover, dropNode, deployTable )
+	if ( IsAlive( guys[ 1 ] ) )
+		waitthread TandomGuyZiplinesToHull( guys[ 1 ], ship, Tables[ 0 ], mover, dropNode, deployTable )
 }
 
-void function TandomGuyZiplinesToHull( entity guy, ShipStruct ship, table zipTable, entity mover, entity dropNode, table<string, int> deployTable  )
+void function TandomGuyZiplinesToHull( entity guy, ShipStruct ship, table zipTable, entity mover, entity dropNode, table<string, int> deployTable )
 {
 	if ( !IsAlive( guy ) )
 		return
 
-	table e 		= {} // Track the movement of the script mover that moves the guy to the ground
+	table e = {} // Track the movement of the script mover that moves the guy to the ground
 	thread TrackMoverDirection( mover, e )
 
 	waitthread RiderZiplinesToHull( guy, ship.model, zipTable, mover )
 	thread RiderDetachesOntoHull( guy, zipTable, dropNode, e, ship, deployTable )
-
 }
 
 void function ResetZipline( entity mover, table zipTable )
 {
-	//reset zipline
+	// reset zipline
 	mover.Signal( "StopZipMovement" )
 	entity end = expect entity( zipTable.end )
 
@@ -1337,8 +1332,8 @@ void function ResetZipline( entity mover, table zipTable )
 
 void function GoblinRiderDeployZip( entity guy, ShipStruct ship, string side, table Table, table<string, int> deployTable )
 {
-	entity mover 	= CreateScriptMover()
-	table e 		= {} // Track the movement of the script mover that moves the guy to the ground
+	entity mover = CreateScriptMover()
+	table e = {} // Track the movement of the script mover that moves the guy to the ground
 	entity dropNode = expect entity( Table.hullNode )
 	thread TrackMoverDirection( mover, e )
 
@@ -1364,7 +1359,7 @@ void function GoblinRiderDeployZip( entity guy, ShipStruct ship, string side, ta
 	thread RiderDetachesOntoHull( guy, Table, dropNode, e, ship, deployTable )
 }
 
-void function RiderIdlesForZipline( entity guy , entity model, table Table )
+void function RiderIdlesForZipline( entity guy, entity model, table Table )
 {
 	string tag = expect string( Table.shipAttach )
 	string anim = expect string( Table.idleAnim )
@@ -1377,7 +1372,7 @@ void function RiderIdlesForZipline( entity guy , entity model, table Table )
 void function RiderDetachesOntoHull( entity guy, table Table, entity dropNode, table e, ShipStruct ship, table<string, int> deployTable )
 {
 	OnThreadEnd(
-	function() : ( ship, deployTable )
+		function() : ( ship, deployTable )
 		{
 			deployTable.numGuys--
 			if ( deployTable.numGuys == 0 )
@@ -1465,11 +1460,10 @@ void function RiderZiplinesToHull( entity guy, entity model, table Table, entity
 		guy.WaitSignal( "customDeployDetach" )
 	else
 	{
-		while( DistanceSqr( mover.GetOrigin(), dropNode.GetOrigin() ) > ZipLineDetachDistSqr )
+		while ( DistanceSqr( mover.GetOrigin(), dropNode.GetOrigin() ) > ZipLineDetachDistSqr )
 			WaitFrame()
 	}
-
-	//thread ZiplineStuckFailsafe( guy, dropNode.GetOrigin() )
+	// thread ZiplineStuckFailsafe( guy, dropNode.GetOrigin() )
 }
 
 void function MoverZipsToHull( table zipline, entity mover, float timeTotal )
@@ -1487,17 +1481,17 @@ void function MoverZipsToHull( table zipline, entity mover, float timeTotal )
 	mover.SetAngles( angles )
 
 	entity zipStart = expect entity( zipline.start )
-	entity zipEnd 	= expect entity( zipline.end )
-	float endTime 	= Time() + timeTotal
+	entity zipEnd = expect entity( zipline.end )
+	float endTime = Time() + timeTotal
 	float maxOffset = -100
 
-	while( Time() < endTime )
+	while ( Time() < endTime )
 	{
 		float timeLeft = endTime - Time()
 		float fraction = timeLeft / timeTotal
 
-		vector end = zipEnd.GetOrigin()// + GetVelocityLocal( zipEnd ).v
-		vector start = zipStart.GetOrigin()// + GetVelocityLocal( zipStart ).v
+		vector end = zipEnd.GetOrigin() // + GetVelocityLocal( zipEnd ).v
+		vector start = zipStart.GetOrigin() // + GetVelocityLocal( zipStart ).v
 		vector line = start - end
 		angles = VectorToAngles( -line )
 		angles.x = 0
@@ -1510,7 +1504,7 @@ void function MoverZipsToHull( table zipline, entity mover, float timeTotal )
 			offsetZ = GraphCapped( fraction, 0.5, 0.1, maxOffset, 0 )
 
 		line *= fraction
-		end += line + <0,0,offsetZ>
+		end += line + < 0, 0, offsetZ >
 
 		mover.NonPhysicsMoveTo( end, 0.1, 0, 0 )
 		mover.NonPhysicsRotateTo( angles, 0.1, 0, 0 )
@@ -1518,9 +1512,9 @@ void function MoverZipsToHull( table zipline, entity mover, float timeTotal )
 		#if DEV
 			if ( DEV_DRAWDEPLOY && GetMoDevState() )
 			{
-				DebugDrawCircle( zipEnd.GetOrigin(), <0,0,0>, 4, 0, 202, 255, true, FRAME_INTERVAL )
+				DebugDrawCircle( zipEnd.GetOrigin(), < 0, 0, 0 >, 4, 0, 202, 255, true, FRAME_INTERVAL )
 				DebugDrawLine( zipEnd.GetOrigin(), zipStart.GetOrigin(), 0, 202, 255, true, FRAME_INTERVAL )
-				DebugDrawCircle( end, <0,0,0>, 4, 255, 202, 0, true, FRAME_INTERVAL )
+				DebugDrawCircle( end, < 0, 0, 0 >, 4, 255, 202, 0, true, FRAME_INTERVAL )
 			}
 		#endif
 
@@ -1530,20 +1524,20 @@ void function MoverZipsToHull( table zipline, entity mover, float timeTotal )
 
 void function CreateZipLineForNode( entity guy, table Table, entity dropNode )
 {
-	entity ship 		= expect entity( Table.ship )
-	string shipAttach 	= expect string( Table.shipAttach )
-	float rideDist 		= Distance( guy.GetOrigin(), dropNode.GetOrigin() )
-	Table.rideTime 		<- Graph( rideDist, 0, 1000, 0, 2.5 ) 	// how long it takes the rider to ride 1000 units
-	float pinTime 		= Graph( rideDist, 0, 1000, 0, MAXPINTIME )	// how long it takes the zipline to travel 1000 units
-	Table.pinTime 		<- pinTime
-	Table.retractTime 	<- Graph( rideDist, 0, 1000, 0, 0.5 ) 	// how long it takes the zipline to retract,
-	int attachIndex 	= ship.LookupAttachment( shipAttach )
-	Table.attachIndex 	= attachIndex
+	entity ship = expect entity( Table.ship )
+	string shipAttach = expect string( Table.shipAttach )
+	float rideDist = Distance( guy.GetOrigin(), dropNode.GetOrigin() )
+	Table.rideTime <- Graph( rideDist, 0, 1000, 0, 2.5 ) // how long it takes the rider to ride 1000 units
+	float pinTime = Graph( rideDist, 0, 1000, 0, MAXPINTIME ) // how long it takes the zipline to travel 1000 units
+	Table.pinTime <- pinTime
+	Table.retractTime <- Graph( rideDist, 0, 1000, 0, 0.5 ) // how long it takes the zipline to retract,
+	int attachIndex = ship.LookupAttachment( shipAttach )
+	Table.attachIndex = attachIndex
 
 	CreateS2SRopeEntities( Table )
-	entity end 		= expect entity( Table.end )
-	entity start 	= expect entity( Table.start )
-	entity mid 		= expect entity( Table.mid )
+	entity end = expect entity( Table.end )
+	entity start = expect entity( Table.start )
+	entity mid = expect entity( Table.mid )
 	end.SetOrigin( ship.GetAttachmentOrigin( attachIndex ) )
 	start.SetParent( ship, shipAttach )
 	mid.SetParent( ship, shipAttach )
@@ -1555,7 +1549,7 @@ void function CreateZipLineForNode( entity guy, table Table, entity dropNode )
 	float len = Distance( start.GetOrigin(), end.GetOrigin() )
 	float wiggleMagnitude = 1.0
 	float wiggleSpeed = 5.0
-	float wiggleLengthFrac = 0.99  // after rope reaches this fraction of the total length, stop wiggling
+	float wiggleLengthFrac = 0.99 // after rope reaches this fraction of the total length, stop wiggling
 	// RopeWiggle( maxlen, wiggleMagnitude, wiggleSpeed, duration, fadeDuration )
 	end.RopeWiggle( len * wiggleLengthFrac, wiggleMagnitude, wiggleSpeed, pinTime * wiggleLengthFrac, pinTime )
 
@@ -1623,7 +1617,7 @@ void function ZiplineMoverRealTime( entity ent, entity end, float timeTotal )
 	)
 
 	float endTime = Time() + timeTotal
-	while( Time() < endTime )
+	while ( Time() < endTime )
 	{
 		float timeLeft = endTime - Time()
 		mover.NonPhysicsMoveTo( end.GetOrigin(), timeLeft, 0, 0 )
@@ -1663,7 +1657,7 @@ void function CleanupZiplineGuy( entity guy, entity model )
 	if ( !IsAlive( guy ) )
 	{
 		guy.Anim_Stop()
-		guy.BecomeRagdoll( Vector(0,0,0), false )
+		guy.BecomeRagdoll( Vector( 0, 0, 0 ), false )
 	}
 }
 
@@ -1671,11 +1665,11 @@ void function S2SZiplineRetracts( table zipline, entity dropNode, entity mover )
 {
 	if ( !( "start" in zipline ) )
 		return
-	entity eStart 	= expect entity( zipline.start )
-	entity eMid 	= expect entity( zipline.mid )
-	entity eEnd 	= expect entity( zipline.end )
-	entity ship 	= expect entity( zipline.ship )
-	float time  	= expect float( zipline.retractTime )
+	entity eStart = expect entity( zipline.start )
+	entity eMid = expect entity( zipline.mid )
+	entity eEnd = expect entity( zipline.end )
+	entity ship = expect entity( zipline.ship )
+	float time = expect float( zipline.retractTime )
 	if ( !IsValid( eStart ) )
 		return
 	if ( !IsValid( eMid ) )
@@ -1716,7 +1710,7 @@ void function S2SZiplineRetracts( table zipline, entity dropNode, entity mover )
 	float len = Distance( eStart.GetOrigin(), eEnd.GetOrigin() )
 	float wiggleMagnitude = 0.08
 	float wiggleSpeed = 5.0
-	float wiggleLengthFrac = 0.99  // after rope reaches this fraction of the total length, stop wiggling
+	float wiggleLengthFrac = 0.99 // after rope reaches this fraction of the total length, stop wiggling
 	// RopeWiggle( maxlen, wiggleMagnitude, wiggleSpeed, duration, fadeDuration )
 	eStart.RopeWiggle( len * wiggleLengthFrac, wiggleMagnitude, wiggleSpeed, time * wiggleLengthFrac, time )
 
@@ -1729,7 +1723,7 @@ void function LegacyHookOrigin( entity guy, entity model, table Table )
 	entity dropNode = expect entity( Table.hullNode )
 
 	vector attachOrigin = model.GetAttachmentOrigin( expect int( Table.attachIndex ) )
-	var hookOrigin  	= GetHookOriginFromNode( guy.GetOrigin(), dropNode.GetOrigin(), attachOrigin )
+	var hookOrigin = GetHookOriginFromNode( guy.GetOrigin(), dropNode.GetOrigin(), attachOrigin )
 
 	// couldn't find a place to hook it? This needs to be tested on precompile
 	if ( !hookOrigin )
@@ -1739,10 +1733,10 @@ void function LegacyHookOrigin( entity guy, entity model, table Table )
 			if ( DEV_DRAWDEPLOY && GetMoDevState() )
 			{
 				DebugDrawLine( guy.GetOrigin(), dropNode.GetOrigin(), 255, 120, 0, true, 8.0 )
-				DebugDrawCircle( dropNode.GetOrigin(), <0,0,0>, 4, 255, 120, 0, true, 8.0 )
-				DebugDrawCircle( dropNode.GetOrigin(), <0,0,0>, 8, 255, 120, 0, true, 8.0 )
-				DebugDrawCircle( dropNode.GetOrigin(), <0,0,0>, 12, 255, 120, 0, true, 8.0 )
-				DebugDrawCircle( dropNode.GetOrigin(), <0,0,0>, 16, 255, 120, 0, true, 8.0 )
+				DebugDrawCircle( dropNode.GetOrigin(), < 0, 0, 0 >, 4, 255, 120, 0, true, 8.0 )
+				DebugDrawCircle( dropNode.GetOrigin(), < 0, 0, 0 >, 8, 255, 120, 0, true, 8.0 )
+				DebugDrawCircle( dropNode.GetOrigin(), < 0, 0, 0 >, 12, 255, 120, 0, true, 8.0 )
+				DebugDrawCircle( dropNode.GetOrigin(), < 0, 0, 0 >, 16, 255, 120, 0, true, 8.0 )
 			}
 		#endif
 		WaitForever()
@@ -1753,7 +1747,7 @@ void function LegacyHookOrigin( entity guy, entity model, table Table )
 			if ( DEV_DRAWDEPLOY && GetMoDevState() )
 			{
 				DebugDrawLine( guy.GetOrigin(), dropNode.GetOrigin(), 0, 202, 255, true, 1.0 )
-				DebugDrawCircle( dropNode.GetOrigin(), <0,0,0>, 4, 0, 202, 255, true, 1.0 )
+				DebugDrawCircle( dropNode.GetOrigin(), < 0, 0, 0 >, 4, 0, 202, 255, true, 1.0 )
 			}
 		#endif
 	}
@@ -1769,7 +1763,7 @@ void function LegacyTableForward( entity guy, table Table, entity dropNode )
 	// the sequence ended before the guy reached the ground
 	vector start = guy.GetOrigin()
 	// this needs functionification
-	vector end = dropNode.GetOrigin() + Vector( 0,0,-80 )
+	vector end = dropNode.GetOrigin() + Vector( 0, 0, -80 )
 	TraceResults result = TraceLine( start, end, guy )
 	vector angles = guy.GetAngles()
 	Table.forward <- AnglesToForward( angles )
@@ -1793,13 +1787,13 @@ table function S2SCreateDropshipAnimTable( entity model, string side, int seat )
 
 	table Table = {}
 
-	Table.idleAnim			<- anims[ side ][ seat ].idle
-	Table.deployAnim		<- "zipline"
-	Table.shipAttach 		<- anims[ side ][ seat ].attach
-	Table.attachIndex 		<- null
-	Table.ship 				<- model
-	Table.side				<- side
-	Table.blendTime			<- DEFAULT_SCRIPTED_ANIMATION_BLEND_TIME
+	Table.idleAnim <- anims[ side ][ seat ].idle
+	Table.deployAnim <- "zipline"
+	Table.shipAttach <- anims[ side ][ seat ].attach
+	Table.attachIndex <- null
+	Table.ship <- model
+	Table.side <- side
+	Table.blendTime <- DEFAULT_SCRIPTED_ANIMATION_BLEND_TIME
 
 	return Table
 }
@@ -1812,16 +1806,16 @@ void function AddZiplineDeployNodes( ShipStruct ship, array<entity> nodes )
 
 array<entity> function GetZipHullNodes( ShipStruct ship, string side )
 {
-	//check hand picked nodes
+	// check hand picked nodes
 	if ( ship.zipLineNodes.len() )
 		return ship.zipLineNodes
 
 	ShipStruct ornull followShip = GetDeployShip( ship )
 	expect ShipStruct( followShip )
-	vector pos 		= GetDeployPos( ship )
-	float range 	= 32
-	float dist 		= 128
-	vector anglesC 	= <0, ship.model.GetAngles().y, 0>
+	vector pos = GetDeployPos( ship )
+	float range = 32
+	float dist = 128
+	vector anglesC = < 0, ship.model.GetAngles().y, 0 >
 	vector anglesL, anglesR
 	vector forward, back, offset, origin
 	TraceResults result
@@ -1829,40 +1823,40 @@ array<entity> function GetZipHullNodes( ShipStruct ship, string side )
 	switch ( side )
 	{
 		case "left":
-			anglesC = AnglesCompose( anglesC, <0,90,0> )
-			anglesL = AnglesCompose( anglesL, <0,90,0> )
-			anglesR = AnglesCompose( anglesR, <0,-90,0> )
+			anglesC = AnglesCompose( anglesC, < 0, 90, 0 > )
+			anglesL = AnglesCompose( anglesL, < 0, 90, 0 > )
+			anglesR = AnglesCompose( anglesR, < 0, -90, 0 > )
 			break
 
 		case "right":
-			anglesC = AnglesCompose( anglesC, <0,-90,0> )
-			anglesL = AnglesCompose( anglesL, <0,90,0> )
-			anglesR = AnglesCompose( anglesR, <0,-90,0> )
+			anglesC = AnglesCompose( anglesC, < 0, -90, 0 > )
+			anglesL = AnglesCompose( anglesL, < 0, 90, 0 > )
+			anglesR = AnglesCompose( anglesR, < 0, -90, 0 > )
 			break
 	}
 
-	forward  	= AnglesToForward( anglesC ) * dist
-	back  		= AnglesToForward( anglesC ) * -dist * 0.5
-	offset 		= < RandomFloatRange( -range, range ), RandomFloatRange( -range, range ), 0 >
-	origin 		= LocalPosToWorldPos( pos + forward + back + offset, followShip.model )
-	result 		= TraceLine( origin + Vector(0,0,500), origin - Vector(0,0,1000), [], TRACE_MASK_NPCSOLID, TRACE_COLLISION_GROUP_NPC )
-	origin 		= result.endPos
+	forward = AnglesToForward( anglesC ) * dist
+	back = AnglesToForward( anglesC ) * -dist * 0.5
+	offset = < RandomFloatRange( -range, range ), RandomFloatRange( -range, range ), 0 >
+	origin = LocalPosToWorldPos( pos + forward + back + offset, followShip.model )
+	result = TraceLine( origin + Vector( 0, 0, 500 ), origin - Vector( 0, 0, 1000 ), [], TRACE_MASK_NPCSOLID, TRACE_COLLISION_GROUP_NPC )
+	origin = result.endPos
 	entity nodeC = CreateScriptMover( origin )
 	nodeC.SetParent( followShip.model, "", true )
 
-	forward  	= AnglesToForward( anglesL ) * dist
-	offset 		= < RandomFloatRange( -range, range ), RandomFloatRange( -range, range ), 0 >
-	origin 		= LocalPosToWorldPos( pos + forward + back + offset, followShip.model )
-	result 		= TraceLine( origin + Vector(0,0,500), origin - Vector(0,0,1000), [], TRACE_MASK_NPCSOLID, TRACE_COLLISION_GROUP_NPC )
-	origin 		= result.endPos
+	forward = AnglesToForward( anglesL ) * dist
+	offset = < RandomFloatRange( -range, range ), RandomFloatRange( -range, range ), 0 >
+	origin = LocalPosToWorldPos( pos + forward + back + offset, followShip.model )
+	result = TraceLine( origin + Vector( 0, 0, 500 ), origin - Vector( 0, 0, 1000 ), [], TRACE_MASK_NPCSOLID, TRACE_COLLISION_GROUP_NPC )
+	origin = result.endPos
 	entity nodeL = CreateScriptMover( origin )
 	nodeL.SetParent( followShip.model, "", true )
 
-	forward  	= AnglesToForward( anglesR ) * dist
-	offset 		= < RandomFloatRange( -range, range ), RandomFloatRange( -range, range ), 0 >
-	origin 		= LocalPosToWorldPos( pos + forward + back + offset, followShip.model )
-	result 		= TraceLine( origin + Vector(0,0,500), origin - Vector(0,0,1000), [], TRACE_MASK_NPCSOLID, TRACE_COLLISION_GROUP_NPC )
-	origin 		= result.endPos
+	forward = AnglesToForward( anglesR ) * dist
+	offset = < RandomFloatRange( -range, range ), RandomFloatRange( -range, range ), 0 >
+	origin = LocalPosToWorldPos( pos + forward + back + offset, followShip.model )
+	result = TraceLine( origin + Vector( 0, 0, 500 ), origin - Vector( 0, 0, 1000 ), [], TRACE_MASK_NPCSOLID, TRACE_COLLISION_GROUP_NPC )
+	origin = result.endPos
 	entity nodeR = CreateScriptMover( origin )
 	nodeR.SetParent( followShip.model, "", true )
 
@@ -1899,7 +1893,7 @@ void function DropshipAnimateOpen( ShipStruct ship, string side )
 
 	int openingState, openState
 	string riderTag, anim, idle
-	switch( side )
+	switch ( side )
 	{
 		case "left":
 			openState = eDoorState.OPEN_L
@@ -1943,12 +1937,14 @@ void function Event_GoblinOnOpenDoor( ShipStruct ship, entity player, int eventI
 		return
 	S2S_VOtime = Time() + VOBUFFER
 
-	array<string> text = [	"There he is! Open fire!",
-							"Contact in sight! Weapons Clear!",
-							"He's down there! Follow my tracers!",
-							"I see him! I see him! Engaging!",
-							"Where is he! There! There!" ]
-	//Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
+	array<string> text = [
+		"There he is! Open fire!",
+		"Contact in sight! Weapons Clear!",
+		"He's down there! Follow my tracers!",
+		"I see him! I see him! Engaging!",
+		"Where is he! There! There!"
+	]
+	// Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
 }
 
 void function Event_GoblinAnimCloseDoor( ShipStruct ship, entity player, int eventID )
@@ -1989,7 +1985,7 @@ void function DropshipAnimateClose( ShipStruct ship, entity mover, string side )
 		}
 	}
 
-	switch( side )
+	switch ( side )
 	{
 		case "left":
 			closeState = eDoorState.CLOSED
@@ -2032,12 +2028,14 @@ void function Event_GoblinOnCloseDoor( ShipStruct ship, entity player, int event
 		return
 	S2S_VOtime = Time() + VOBUFFER
 
-	array<string> text = [	"He switched sides, Hold on! In Pursuit!",
-							"He's on the other side of the hull!",
-							"We need to get closer, moving to engage!",
-							"Can't get a clear shot! Shifting sides!",
-							"Hold on! I'm bringing us in closer!" ]
-	//Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
+	array<string> text = [
+		"He switched sides, Hold on! In Pursuit!",
+		"He's on the other side of the hull!",
+		"We need to get closer, moving to engage!",
+		"Can't get a clear shot! Shifting sides!",
+		"Hold on! I'm bringing us in closer!"
+	]
+	// Dev_PrintMessage( player, "", text.getrandom(), 5 )//hack
 }
 
 /************************************************************************************************\
@@ -2070,17 +2068,11 @@ void function GoblinRiderAnimate( entity guy, entity model, int index, string ta
 	if ( guy.IsNPC() && !IsAlive( guy ) )
 		return
 
-	array<string> idles = [ "pt_S2S_crew_A_idle",
-						"pt_S2S_crew_B_idle",
-						"pt_S2S_crew_C_idle",
-						"pt_S2S_crew_D_idle" ]
+	array<string> idles = [ "pt_S2S_crew_A_idle", "pt_S2S_crew_B_idle", "pt_S2S_crew_C_idle", "pt_S2S_crew_D_idle" ]
 
 	if ( tag == "RESCUE" )
 	{
-		idles = [ 	"pt_S2S_crew_D_idle",
-					"pt_S2S_crew_C_idle",
-					"pt_S2S_crew_B_idle",
-					"pt_S2S_crew_A_idle" ]
+		idles = [ "pt_S2S_crew_D_idle", "pt_S2S_crew_C_idle", "pt_S2S_crew_B_idle", "pt_S2S_crew_A_idle" ]
 	}
 
 	guy.SetParent( model, tag )
@@ -2094,7 +2086,7 @@ void function GoblinPilotAnimate( entity guy, ShipStruct ship )
 	EndSignal( ship, "FakeDestroy" )
 
 	OnThreadEnd(
-	function() : ( guy, ship )
+		function() : ( guy, ship )
 		{
 			if ( !IsAlive( guy ) )
 				Signal( ship, "pilotDead" )
@@ -2103,7 +2095,7 @@ void function GoblinPilotAnimate( entity guy, ShipStruct ship )
 
 	guy.SetParent( ship.model, "ORIGIN" )
 
-	thread PlayAnim( guy, "Militia_flyinA_idle_mac", ship.model, "ORIGIN")
+	thread PlayAnim( guy, "Militia_flyinA_idle_mac", ship.model, "ORIGIN" )
 
 	guy.WaitSignal( "OnDeath" )
 }
@@ -2114,7 +2106,7 @@ void function GoblinRiderDeploySide( entity guy, int index, ShipStruct ship, str
 	guy.Signal( "deploy" )
 
 	OnThreadEnd(
-	function() : ( ship, deployTable )
+		function() : ( ship, deployTable )
 		{
 			deployTable.numGuys--
 			if ( deployTable.numGuys == 0 )
@@ -2123,7 +2115,7 @@ void function GoblinRiderDeploySide( entity guy, int index, ShipStruct ship, str
 	)
 
 	string attach
-	switch( side )
+	switch ( side )
 	{
 		case "left":
 			attach = "RESCUE"
@@ -2134,18 +2126,18 @@ void function GoblinRiderDeploySide( entity guy, int index, ShipStruct ship, str
 			break
 	}
 
-	//init
+	// init
 	guy.SetParent( ship.model, attach )
 	guy.SetEfficientMode( true )
 
-	//deploy
-	string[4] deployAnims = DropOffAISide_GetDeployAnims()
-	float[4] seekTimes = DropOffAISide_GetSeekTimes()
+	// deploy
+	string[ 4 ] deployAnims = DropOffAISide_GetDeployAnims()
+	float[ 4 ] seekTimes = DropOffAISide_GetSeekTimes()
 
 	thread PlayAnimTeleport( guy, deployAnims[ index ], ship.model, attach )
 	guy.Anim_SetInitialTime( seekTimes[ index ] + 2.0 )
 
-	guy.WaitSignal( "not_solid" ) //HACK -> the ship crushes the guy when he unparents
+	guy.WaitSignal( "not_solid" ) // HACK -> the ship crushes the guy when he unparents
 	guy.NotSolid()
 
 	WaittillAnimDone( guy )
@@ -2153,11 +2145,11 @@ void function GoblinRiderDeploySide( entity guy, int index, ShipStruct ship, str
 
 	guy.SetEfficientMode( false )
 
-	//disperse
-//	string[4] disperseAnims = DropOffAISide_GetDisperseAnims()
-//	var origin = HackGetDeltaToRef( guy.GetOrigin(), guy.GetAngles(), guy, disperseAnims[ index ] ) + Vector( 0,0,2 )
-//	expect vector( origin )
+	// disperse
+	// 	string[4] disperseAnims = DropOffAISide_GetDisperseAnims()
+	// 	var origin = HackGetDeltaToRef( guy.GetOrigin(), guy.GetAngles(), guy, disperseAnims[ index ] ) + Vector( 0,0,2 )
+	// 	expect vector( origin )
 
-//	waitthread PlayAnimGravity( guy, disperseAnims[ index ], origin, guy.GetAngles() )
+	// 	waitthread PlayAnimGravity( guy, disperseAnims[ index ], origin, guy.GetAngles() )
 	DeployFuncWrapper( ship, guy )
 }

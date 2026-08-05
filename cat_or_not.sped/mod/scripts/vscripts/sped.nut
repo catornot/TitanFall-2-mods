@@ -18,9 +18,9 @@ void function OnPlayerRespawned( entity player )
 
 void function FrictionConstantApply()
 {
-	for(;;)
+	for ( ; ; )
 	{
-		foreach( entity player in GetPlayerArray() )
+		foreach ( entity player in GetPlayerArray() )
 		{
 			if ( IsValid( player ) && IsAlive( player ) )
 				player.SetGroundFrictionScale( 0 )
@@ -34,10 +34,10 @@ void function CrouchSlowDown( entity player )
 	EndSignal( player, "OnDeath" )
 	EndSignal( player, "OnDestroy" )
 
-	for(;;)
+	for ( ; ; )
 	{
 		if ( player.IsCrouched() && player.IsOnGround() )
-			player.SetVelocity( <0,0,player.GetVelocity().z> )
+			player.SetVelocity( < 0, 0, player.GetVelocity().z > )
 		WaitFrame()
 	}
 }

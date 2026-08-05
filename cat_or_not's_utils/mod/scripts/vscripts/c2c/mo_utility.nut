@@ -9,14 +9,14 @@ global function DropOffAISide_GetSeekTimes
 global function LocalPosToWorldPos
 global function StopAnimOnAlert
 global function GruntRunsToAndActivatesSpectreRack
-global function	FlagSetOn_NumDead
-global function	FlagSetOn_NumDeadWithTimeout
-global function	FlagSetOn_AllDead
-global function	FlagSetOn_AllDeadWithTimeout
-global function	FlagSetOn_NumDeadOrLeeched
-global function	FlagSetOn_NumDeadOrLeechedWithTimeout
-global function	FlagSetOn_AllDeadOrLeeched
-global function	FlagSetOn_AllDeadOrLeechedWithTimeout
+global function FlagSetOn_NumDead
+global function FlagSetOn_NumDeadWithTimeout
+global function FlagSetOn_AllDead
+global function FlagSetOn_AllDeadWithTimeout
+global function FlagSetOn_NumDeadOrLeeched
+global function FlagSetOn_NumDeadOrLeechedWithTimeout
+global function FlagSetOn_AllDeadOrLeeched
+global function FlagSetOn_AllDeadOrLeechedWithTimeout
 global function GetEnemiesClosest
 global function GetEnemiesFarthest
 global function GetMoDevState
@@ -33,7 +33,7 @@ global function Hack_StopTrinity
 global function Hack_StopGibraltar
 global function MoUtilityInit
 
-global const int DEV_DRAWMOVETARGET 	= 0
+global const int DEV_DRAWMOVETARGET = 0
 
 void function MoUtilityInit()
 {
@@ -46,13 +46,13 @@ void function MoUtilityInit()
 	RegisterSignal( "RunToNewRecordedAnimStart" )
 }
 
-entity function SpawnFromSpawner( entity spawner, void functionref(entity) ornull spawnSettingsFunc = null  )
+entity function SpawnFromSpawner( entity spawner, void functionref( entity ) ornull spawnSettingsFunc = null )
 {
 	entity npc = spawner.SpawnEntity()
 
 	if ( spawnSettingsFunc != null )
 	{
-		expect void functionref(entity)( spawnSettingsFunc )
+		expect void functionref( entity )( spawnSettingsFunc )
 		spawnSettingsFunc( npc )
 	}
 
@@ -64,7 +64,7 @@ void function SpawnFromScriptName( string name )
 {
 	array<entity> spawners = GetEntArrayByScriptName( name )
 	// foreach ( entity ent in spawners )
-		// TriggerSpawnSpawner( ent ) // deal with this later
+	// TriggerSpawnSpawner( ent ) // deal with this later
 }
 
 entity function CreateTriggerRadiusFromEnt( string name, entity player )
@@ -84,9 +84,9 @@ void function DevDrawMoveTarget( entity npc, entity moveTarget )
 	int g = RandomIntRange( 100, 255 )
 	int b = RandomIntRange( 100, 255 )
 
-	while( 1 )
+	while ( 1 )
 	{
-		DebugDrawCircle( moveTarget.GetOrigin(), Vector(0,0,0), 8, r, g, b, true, 0.181 )
+		DebugDrawCircle( moveTarget.GetOrigin(), Vector( 0, 0, 0 ), 8, r, g, b, true, 0.181 )
 		DebugDrawLine( npc.GetOrigin(), moveTarget.GetOrigin(), r, g, b, true, 0.181 )
 		wait FRAME_INTERVAL - 0.001
 	}
@@ -114,45 +114,49 @@ array<entity> function GetNPCArrayByScriptName( string name, int team = 0 )
 	return npc
 }
 
-string[4] function DropOffAISide_GetIdleAnims()
+string[ 4 ] function DropOffAISide_GetIdleAnims()
 {
-	string[4] anims = [
-	"pt_ds_side_intro_gen_idle_A",	//standing right
-	"pt_ds_side_intro_gen_idle_B",	//standing left
-	"pt_ds_side_intro_gen_idle_C",	//sitting right
-	"pt_ds_side_intro_gen_idle_D" ]	//sitting left
+	string[ 4 ] anims = [
+		"pt_ds_side_intro_gen_idle_A", // standing right
+		"pt_ds_side_intro_gen_idle_B", // standing left
+		"pt_ds_side_intro_gen_idle_C", // sitting right
+		"pt_ds_side_intro_gen_idle_D"
+	] // sitting left
 
 	return anims
 }
 
-string[4] function DropOffAISide_GetDeployAnims()
+string[ 4 ] function DropOffAISide_GetDeployAnims()
 {
-	string[4] anims = [
-	"pt_generic_side_jumpLand_A",	//standing right
-	"pt_generic_side_jumpLand_B",	//standing left
-	"pt_generic_side_jumpLand_C",	//sitting right
-	"pt_generic_side_jumpLand_D" ]	//sitting left
+	string[ 4 ] anims = [
+		"pt_generic_side_jumpLand_A", // standing right
+		"pt_generic_side_jumpLand_B", // standing left
+		"pt_generic_side_jumpLand_C", // sitting right
+		"pt_generic_side_jumpLand_D"
+	] // sitting left
 
 	return anims
 }
-string[4] function DropOffAISide_GetDisperseAnims()
+string[ 4 ] function DropOffAISide_GetDisperseAnims()
 {
-	string[4] anims = [
-	"React_signal_thatway",	//standing right
-	"React_spot_radio2",	//standing left
-	"stand_2_run_45R",		//sitting right
-	"stand_2_run_45L" ]		//sitting left
+	string[ 4 ] anims = [
+		"React_signal_thatway", // standing right
+		"React_spot_radio2", // standing left
+		"stand_2_run_45R", // sitting right
+		"stand_2_run_45L"
+	] // sitting left
 
 	return anims
 }
 
-float[4] function DropOffAISide_GetSeekTimes()
+float[ 4 ] function DropOffAISide_GetSeekTimes()
 {
-	float[4] anims = [
-	9.75,	//standing right
-	10.0,	//standing left
-	10.5,	//sitting right
-	11.25 ]	//sitting left
+	float[ 4 ] anims = [
+		9.75, // standing right
+		10.0, // standing left
+		10.5, // sitting right
+		11.25
+	] // sitting left
 
 	return anims
 }
@@ -165,9 +169,9 @@ vector function LocalPosToWorldPos( vector pos, entity ent )
 
 	vector localPos = ent.GetOrigin()
 
-	vector x =  r * pos.x
-	vector y =  f * pos.y
-	vector z =  u * pos.z
+	vector x = r * pos.x
+	vector y = f * pos.y
+	vector z = u * pos.z
 
 	vector worldPos = localPos + x + y + z
 
@@ -179,14 +183,14 @@ void function StopAnimOnAlert( entity guy )
 	guy.EndSignal( "OnDeath" )
 
 	OnThreadEnd(
-	function() : ( guy )
+		function() : ( guy )
 		{
 			if ( !IsAlive( guy ) )
 				guy.Anim_Stop()
 		}
 	)
 
-	while( 1 )
+	while ( 1 )
 	{
 		table result = WaitSignal( guy, "OnStateChange", "OnNoticePotentialEnemy" )
 
@@ -194,7 +198,7 @@ void function StopAnimOnAlert( entity guy )
 			return
 
 		string state = guy.GetNPCState()
-		switch( state )
+		switch ( state )
 		{
 			case "alert":
 			case "combat":
@@ -202,7 +206,7 @@ void function StopAnimOnAlert( entity guy )
 				break
 
 			default:
-				//do nothing
+				// do nothing
 				break
 		}
 	}
@@ -217,7 +221,7 @@ void function GruntRunsToAndActivatesSpectreRack( entity guy, entity button )
 	vector x = button.GetRightVector() * -60
 	vector z = button.GetUpVector() * -64
 	vector origin = button.GetOrigin() + x + z
-	vector angles = AnglesCompose( button.GetAngles(), < 0,-90,0 > )
+	vector angles = AnglesCompose( button.GetAngles(), < 0, -90, 0 > )
 
 	entity node = CreateScriptMover( origin, angles )
 	node.SetParent( button, "", true )
@@ -227,7 +231,7 @@ void function GruntRunsToAndActivatesSpectreRack( entity guy, entity button )
 	thread DeactivateButtonOnPlayerUse( button )
 
 	OnThreadEnd(
-	function() : ( guy, node )
+		function() : ( guy, node )
 		{
 			if ( IsValid( guy ) )
 			{
@@ -243,7 +247,7 @@ void function GruntRunsToAndActivatesSpectreRack( entity guy, entity button )
 				guy.DisableNPCFlag( NPC_IGNORE_ALL )
 				guy.Anim_Stop()
 				guy.ClearMoveAnim()
-				guy.SetAngles( <0,guy.GetAngles().y,0> )
+				guy.SetAngles( < 0, guy.GetAngles().y, 0 > )
 			}
 		}
 	)
@@ -262,19 +266,19 @@ void function GruntRunsToAndActivatesSpectreRack( entity guy, entity button )
 	wait soundTime
 	EmitSoundOnEntity( guy, "s2s_grunt_enter_code" )
 
-	//anim time to touch the button
+	// anim time to touch the button
 	wait 1.6 - soundTime
 	DeactivateButton( button )
 
 	foreach ( entity linkedEnt in button.GetLinkEntArray() )
- 	{
- 		if ( IsStalkerRack( linkedEnt ) )
- 			thread SpawnFromStalkerRack( linkedEnt )
- 	}
+	{
+		if ( IsStalkerRack( linkedEnt ) )
+			thread SpawnFromStalkerRack( linkedEnt )
+	}
 
- 	//anim time to stop and go back to normal
- 	guy.Signal( "SpectreRack_Online" )
- 	wait 1.2
+	// anim time to stop and go back to normal
+	guy.Signal( "SpectreRack_Online" )
+	wait 1.2
 }
 
 void function DeactivateButtonOnPlayerUse( entity button )
@@ -288,12 +292,13 @@ void function DeactivateButtonOnPlayerUse( entity button )
 void function DeactivateButton( entity button )
 {
 	bool usesSkins
-	switch( button.GetModelName() )
+	switch ( button.GetModelName() )
 	{
 		case $"models/props/global_access_panel_button/global_access_panel_button_wall.mdl":
 		case $"models/props/global_access_panel_button/global_access_panel_button_console.mdl":
 			usesSkins = true
 			break
+
 		default:
 			usesSkins = false
 			break
@@ -390,7 +395,7 @@ void function CheckPointLoopThread( float interval, string ender )
 	FlagEnd( ender )
 	EndSignal( svGlobal.levelEnt, "CheckPointLoop" )
 
-	while( 1 )
+	while ( 1 )
 	{
 		wait interval
 		CheckPoint()
@@ -407,7 +412,7 @@ void function CheckPointLoopThread( float interval, string ender )
 ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝
 
 \************************************************************************************************/
-void function PlayRecordedAnim( entity guy, var recording, vector origin = <0,0,0>, vector angles = <0,0,0>, entity ref = null, float blendTime = DEFAULT_SCRIPTED_ANIMATION_BLEND_TIME, float blendOutTime = 0.1 )
+void function PlayRecordedAnim( entity guy, var recording, vector origin = < 0, 0, 0 >, vector angles = < 0, 0, 0 >, entity ref = null, float blendTime = DEFAULT_SCRIPTED_ANIMATION_BLEND_TIME, float blendOutTime = 0.1 )
 {
 	guy.Signal( "PlayNewRecordedAnim" )
 	guy.EndSignal( "PlayNewRecordedAnim" )
@@ -418,27 +423,26 @@ void function PlayRecordedAnim( entity guy, var recording, vector origin = <0,0,
 
 	guy.SetNextThinkNow()
 
-	guy.PlayRecordedAnimation( recording, <0,0,0>, <0,0,0>, blendTime, ref )
+	guy.PlayRecordedAnimation( recording, < 0, 0, 0 >, < 0, 0, 0 >, blendTime, ref )
 	float duration = GetRecordedAnimationDuration( recording )
 
 	printt( "PlayRecordedAnim: " + guy + ", " + recording + " (duration " + duration + " - " + blendOutTime + ")" )
 
 	wait duration - blendOutTime
-	
 
 	printt( "PlayRecordedAnim finished: " + guy + ", " + recording + " (duration " + duration + " - " + blendOutTime + ")" )
 
 	guy.Anim_Stop()
 	guy.EndSignal( "OnAnimationDone" )
 
-	//kills the jump jet fx
+	// kills the jump jet fx
 	int eHandle = guy.GetEncodedEHandle()
 	array<entity> players = GetPlayerArray()
-	foreach( player in players )
+	foreach ( player in players )
 		Remote_CallFunction_NonReplay( player, "ServerCallback_SignalAnimDone", eHandle )
 }
 
-void function RunToRecordedAnimStart( entity guy, var recording, vector origin = <0,0,0>, vector angles = <0,0,0>, entity ref = null, bool disableArrival = true )
+void function RunToRecordedAnimStart( entity guy, var recording, vector origin = < 0, 0, 0 >, vector angles = < 0, 0, 0 >, entity ref = null, bool disableArrival = true )
 {
 	guy.Signal( "RunToNewRecordedAnimStart" )
 	guy.EndSignal( "PlayNewRecordedAnim" )
@@ -448,9 +452,9 @@ void function RunToRecordedAnimStart( entity guy, var recording, vector origin =
 	guy.Anim_Stop() // in case we were doing an anim already
 	guy.EndSignal( "OnDeath" )
 
-	bool allowFlee 			= guy.GetNPCFlag( NPC_ALLOW_FLEE )
-	bool allowHandSignal 	= guy.GetNPCFlag( NPC_ALLOW_HAND_SIGNALS )
-	bool allowArrivals 		= guy.GetNPCMoveFlag( NPCMF_DISABLE_ARRIVALS )
+	bool allowFlee = guy.GetNPCFlag( NPC_ALLOW_FLEE )
+	bool allowHandSignal = guy.GetNPCFlag( NPC_ALLOW_HAND_SIGNALS )
+	bool allowArrivals = guy.GetNPCMoveFlag( NPCMF_DISABLE_ARRIVALS )
 
 	if ( disableArrival )
 		guy.EnableNPCMoveFlag( NPCMF_DISABLE_ARRIVALS )
@@ -465,25 +469,25 @@ void function RunToRecordedAnimStart( entity guy, var recording, vector origin =
 
 	vector animStartPos = GetRecordedAnimationStartForRefPoint( recording, origin, angles )
 
-	float goalRadius 		= guy.AssaultGetGoalRadius()
-	float fightRadius 		= guy.AssaultGetFightRadius()
-	float arrivalTolerance 	= guy.AssaultGetArrivalTolerance()
+	float goalRadius = guy.AssaultGetGoalRadius()
+	float fightRadius = guy.AssaultGetFightRadius()
+	float arrivalTolerance = guy.AssaultGetArrivalTolerance()
 	float runtoRadius = 71.16
 	guy.AssaultSetGoalRadius( runtoRadius )
 	guy.AssaultSetFightRadius( runtoRadius )
 	guy.AssaultSetArrivalTolerance( runtoRadius )
 
-	bool savedEnableFriendlyFollower 	= guy.ai.enableFriendlyFollower
-	guy.ai.enableFriendlyFollower 		= false
+	bool savedEnableFriendlyFollower = guy.ai.enableFriendlyFollower
+	guy.ai.enableFriendlyFollower = false
 
 	guy.AssaultPoint( animStartPos )
 
-	//DebugDrawLine( guy.GetOrigin(), animStartPos, 255, 0, 0, true, 20.0 )
+	// DebugDrawLine( guy.GetOrigin(), animStartPos, 255, 0, 0, true, 20.0 )
 	WaitSignal( guy, "OnFinishedAssault" )
 
 	guy.DisableBehavior( "Assault" )
 
-	//in case the scripter reset during run, we want to honor the intended change
+	// in case the scripter reset during run, we want to honor the intended change
 	if ( guy.AssaultGetGoalRadius() == runtoRadius )
 		guy.AssaultSetGoalRadius( goalRadius )
 
@@ -499,7 +503,6 @@ void function RunToRecordedAnimStart( entity guy, var recording, vector origin =
 
 	guy.ai.enableFriendlyFollower = savedEnableFriendlyFollower
 }
-
 
 void function Hack_StopDraconis( vector angles = CONVOYDIR )
 {
@@ -545,12 +548,10 @@ void function Hack_StopShip( ShipStruct ship )
 	WaitForever()
 }
 
-
-/// stuff that sp has but not mp
+// / stuff that sp has but not mp
 
 void function CheckPoint()
 {
-
 }
 
 struct MyFile
@@ -572,7 +573,7 @@ struct MyFile
 	float worldCenterLeadDist
 	int maltaRunnersComplete = 0
 
-	//heroes
+	// heroes
 	entity davis
 	entity droz
 	entity gates
@@ -580,19 +581,19 @@ struct MyFile
 	entity sarahTitan
 	entity viper
 
-	//airbattle
+	// airbattle
 	entity airBattleNode
 	var airBattleData // should be AirBattleStruct&
-	table<int,entity> rocketDummy
-	table<int,array<ShipStruct> > dropships
+	table<int, entity> rocketDummy
+	table<int, array<ShipStruct> > dropships
 
-	//misc
+	// misc
 	entity sculptor
 	entity objBridgePanel
 	float driftWC_MaxSpeed
 	float driftWC_MaxAcc
-	table<string,table<asset,array<asset> > > landTree
-	table<entity,vector> edgeMeleeForce
+	table<string, table<asset, array<asset> > > landTree
+	table<entity, vector> edgeMeleeForce
 	array<entity> draconis_PA
 	PilotLoadoutDef& loadout
 	int callsignIndex = 0
@@ -602,7 +603,7 @@ struct MyFile
 	entity coreGlowFX1
 	entity coreGlowFX2
 
-	table< int, var > DynamicStreamingData // should be StreamingData
+	table<int, var> DynamicStreamingData // should be StreamingData
 }
 MyFile file
 

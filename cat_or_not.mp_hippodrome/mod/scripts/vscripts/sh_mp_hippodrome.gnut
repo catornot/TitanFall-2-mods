@@ -2,13 +2,12 @@ global function Shared_mp_hippodrome
 
 void function Shared_mp_map()
 {
-    if ( GetMapName() != "mp_hippodrome" )
-        return
-    
-    AddCallback_OnRegisteringCustomNetworkVars( RegisterNetworkVars )
+	if ( GetMapName() != "mp_hippodrome" )
+		return
+
+	AddCallback_OnRegisteringCustomNetworkVars( RegisterNetworkVars )
 }
 
 void function RegisterNetworkVars()
 {
-
 }

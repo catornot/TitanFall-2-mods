@@ -9,7 +9,7 @@ global function OnWeaponTossReleaseAnimEvent_weapon_satchel
 global function OnProjectileCollision_weapon_satchel
 global function AddCallback_OnSatchelPlanted
 
-const MAX_SATCHELS_IN_WORLD = 3  // if more than this are thrown, the oldest one gets cleaned up
+const MAX_SATCHELS_IN_WORLD = 3 // if more than this are thrown, the oldest one gets cleaned up
 const SATCHEL_THROW_POWER = 620
 
 function MpWeaponSatchel_Init()
@@ -74,11 +74,10 @@ var function OnWeaponTossReleaseAnimEvent_weapon_satchel( entity weapon, WeaponP
 	else
 		attackPos = attackParams.pos
 
-
 	vector attackVec = attackParams.dir
 	vector angularVelocity = Vector( 600, RandomFloatRange( -300, 300 ), 0 )
 
-	float fuseTime = 0.0	// infinite
+	float fuseTime = 0.0 // infinite
 
 	int damageFlags = weapon.GetWeaponDamageFlags()
 	entity satchel = weapon.FireWeaponGrenade( attackPos, attackVec, angularVelocity, fuseTime, damageFlags, damageFlags, PROJECTILE_PREDICTED, true, true )
@@ -103,7 +102,7 @@ var function OnWeaponTossReleaseAnimEvent_weapon_satchel( entity weapon, WeaponP
 
 vector function GetSatchelThrowStartPos( entity player, vector baseStartPos )
 {
-	vector attackPos = player.OffsetPositionFromView( baseStartPos, Vector( 15.0, 0.0, 0.0 ) )	// forward, right, up
+	vector attackPos = player.OffsetPositionFromView( baseStartPos, Vector( 15.0, 0.0, 0.0 ) ) // forward, right, up
 	return attackPos
 }
 
@@ -118,13 +117,7 @@ vector function GetSatchelThrowVelocity( entity player, vector baseAngles )
 
 void function OnProjectileCollision_weapon_satchel( entity weapon, vector pos, vector normal, entity hitEnt, int hitbox, bool isCritical )
 {
-	table collisionParams =
-	{
-		pos = pos,
-		normal = normal,
-		hitEnt = hitEnt,
-		hitbox = hitbox
-	}
+	table collisionParams = { pos = pos, normal = normal, hitEnt = hitEnt, hitbox = hitbox }
 
 	bool result = PlantStickyEntity( weapon, collisionParams )
 
@@ -148,21 +141,21 @@ void function OnProjectileCollision_weapon_satchel( entity weapon, vector pos, v
 		}
 
 		#if SERVER && MP
-			if ( GetCurrentPlaylistVarInt("Satchel", 0) == 1 )
+			if ( GetCurrentPlaylistVarInt( "Satchel", 0 ) == 1 )
 				thread phaseToSacthelThreaded( player, collisionParams )
 		#endif
 		#if SERVER && SP
 			thread phaseToSacthelThreaded( player, collisionParams )
 		#endif
 
-		//if player is rodeoing a Titan and we stickied the satchel onto the Titan, set lastAttackTime accordingly
+		// if player is rodeoing a Titan and we stickied the satchel onto the Titan, set lastAttackTime accordingly
 		if ( result )
 		{
 			entity entAttachedTo = weapon.GetParent()
 			if ( !IsValid( entAttachedTo ) )
 				return
 
-			if ( !player.IsPlayer() ) //If an NPC Titan has vortexed a satchel and fires it back out, then it won't be a player that is the owner of this satchel
+			if ( !player.IsPlayer() ) // If an NPC Titan has vortexed a satchel and fires it back out, then it won't be a player that is the owner of this satchel
 				return
 
 			entity titanSoulRodeoed = player.GetTitanSoulBeingRodeoed()
@@ -177,9 +170,6 @@ void function OnProjectileCollision_weapon_satchel( entity weapon, vector pos, v
 			if ( titan == entAttachedTo )
 				titanSoulRodeoed.SetLastRodeoHitTime( Time() )
 		}
-
-
-
 	#endif
 }
 
@@ -195,59 +185,59 @@ function AddCallback_OnSatchelPlanted( callbackFunc )
 	level.onSatchelPlanted.append( callbackFunc )
 }
 #if SERVER
-void function phaseToSacthelThreaded( entity player, table collisionParams )
-{
-    if ( IsValid( player ) )
-    {
-		vector newPos = GetGoodPos( expect vector( collisionParams.pos ), player )
-
-		if ( newPos == <0,0,0> )
-			return
-
-		CreateHoloPilotDecoys( player, 1 )
-
-        entity mover = CreateOwnedScriptMover( player )
-        player.SetParent( mover )
-        mover.MoveTo( newPos, 0.5, 0, 0 )
-        vector angles = player.GetAngles()
-        PhaseShift( player, 0.1, 1 )
-        player.SetAngles( angles )
-
-        player.SetHealth( player.GetMaxHealth() )
-    }
-
-	wait 0.6
-    if ( IsValid( player ) )
-    {
-        player.ClearParent()
-        player.SetVelocity( <0,0,50> )
-    }
-}
-
-vector function GetGoodPos( vector orinal_pos, entity player )
-{
-	int solidMask = TRACE_MASK_PLAYERSOLID
-	vector mins
-	vector maxs
-	local ignoreEnts = []
-	ignoreEnts.append( player ) //in case we want to check player's current pos
-	TraceResults result
-	
-	mins = player.GetPlayerMins()
-	maxs = player.GetPlayerMaxs()
-	for ( int x; x < 50; x++ )
+	void function phaseToSacthelThreaded( entity player, table collisionParams )
 	{
-		result = TraceHull( orinal_pos + <0,0,x*50>, orinal_pos + < 0, 0, 50 + x*50 >, mins, maxs, ignoreEnts, solidMask, TRACE_COLLISION_GROUP_DEBRIS )
-		if ( !IsValid( result.hitEnt ) )
+		if ( IsValid( player ) )
 		{
-			// entity check_info = CreateInfoTarget( orinal_pos + <0,0,x*50> )
-			// if ( !EntityIsOutOfBounds( check_info ) )
-			return orinal_pos + <0,0,x*50>
-			// else
-			// 	return <0,0,0>
+			vector newPos = GetGoodPos( expect vector( collisionParams.pos ), player )
+
+			if ( newPos == < 0, 0, 0 > )
+				return
+
+			CreateHoloPilotDecoys( player, 1 )
+
+			entity mover = CreateOwnedScriptMover( player )
+			player.SetParent( mover )
+			mover.MoveTo( newPos, 0.5, 0, 0 )
+			vector angles = player.GetAngles()
+			PhaseShift( player, 0.1, 1 )
+			player.SetAngles( angles )
+
+			player.SetHealth( player.GetMaxHealth() )
+		}
+
+		wait 0.6
+		if ( IsValid( player ) )
+		{
+			player.ClearParent()
+			player.SetVelocity( < 0, 0, 50 > )
 		}
 	}
-	return <0,0,0>
-}
+
+	vector function GetGoodPos( vector orinal_pos, entity player )
+	{
+		int solidMask = TRACE_MASK_PLAYERSOLID
+		vector mins
+		vector maxs
+		local ignoreEnts = []
+		ignoreEnts.append( player ) // in case we want to check player's current pos
+		TraceResults result
+
+		mins = player.GetPlayerMins()
+		maxs = player.GetPlayerMaxs()
+		for ( int x; x < 50; x++ )
+		{
+			result = TraceHull( orinal_pos + < 0, 0, x * 50 >, orinal_pos + < 0, 0, 50 + x * 50 >, mins, maxs, ignoreEnts, solidMask, TRACE_COLLISION_GROUP_DEBRIS )
+			if ( !IsValid( result.hitEnt ) )
+			{
+				// entity check_info = CreateInfoTarget( orinal_pos + <0,0,x*50> )
+				// if ( !EntityIsOutOfBounds( check_info ) )
+				return orinal_pos + < 0, 0, x * 50 >
+				// else
+				// 	return <0,0,0>
+			}
+		}
+		return < 0, 0, 0 >
+	}
 
 #endif

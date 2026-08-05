@@ -13,13 +13,14 @@ global function PlayRecoding_recording_riseSarahPart3
 global function PlayRecoding_recording_aim
 global function TEST_built_in_anims
 
-const float FAST = 0.000000000000000000001
+const float FAST = 1.0e-21
 const table WALLRUN_MAP = { left = "pt_wallrun_hang_left", right = "pt_wallrun_hang_right", back = "pt_wallrun_hang_up", front = "pt_wallrun_hang_front" }
 
-struct Recording {
-   entity mover
-   entity pilot
-   bool state
+struct Recording
+{
+	entity mover
+	entity pilot
+	bool state
 }
 
 void function PlayRecoding_recording_loop()
@@ -29,13 +30,13 @@ void function PlayRecoding_recording_loop()
 	Recording recording = CreateRecording( < -2.12805, -3236.17, 576.031 >, < 0, 54.8834, 0 > )
 
 	OnThreadEnd(
-	   function() : ( recording )
-	   {
-	       if ( IsValid( recording.mover ) )
-	           recording.mover.Destroy()
-	       if ( IsValid( recording.pilot ) )
-	           recording.pilot.Destroy()
-	   }
+		function() : ( recording )
+		{
+			if ( IsValid( recording.mover ) )
+				recording.mover.Destroy()
+			if ( IsValid( recording.pilot ) )
+				recording.pilot.Destroy()
+		}
 	)
 
 	RunTo( recording, < 1.8082, -3229.42, 576.031 >, < 0, 91.2903, 0 > )
@@ -1955,7 +1956,6 @@ void function PlayRecoding_recording_sarah( entity ornull model = null )
 
 			if ( IsValid( recording.mover ) )
 				recording.mover.Destroy()
-			
 			// if ( IsValid( recording.pilot ) )
 			// 	recording.pilot.Destroy() // should be cleaned up by the script
 		}
@@ -4712,7 +4712,7 @@ void function PlayRecoding_recording_race_homestead_1( entity ornull model = nul
 	print( "recoding ended naturally" )
 }
 
-void function PlayRecoding_recording_riseHintPilot( entity ornull model = null ) 
+void function PlayRecoding_recording_riseHintPilot( entity ornull model = null )
 {
 	print( "starting pre-recorded movement" )
 
@@ -4723,10 +4723,10 @@ void function PlayRecoding_recording_riseHintPilot( entity ornull model = null )
 	OnThreadEnd(
 		function() : ( recording )
 		{
-				if ( IsValid( recording.mover ) )
-						recording.mover.Destroy()
-				if ( IsValid( recording.pilot ) )
-						recording.pilot.Destroy()
+			if ( IsValid( recording.mover ) )
+				recording.mover.Destroy()
+			if ( IsValid( recording.pilot ) )
+				recording.pilot.Destroy()
 		}
 	)
 
@@ -5151,7 +5151,7 @@ void function PlayRecoding_recording_riseHintPilot( entity ornull model = null )
 	print( "recoding ended naturally" )
 }
 
-void function PlayRecoding_recording_riseSarahPart1( entity ornull model = null ) 
+void function PlayRecoding_recording_riseSarahPart1( entity ornull model = null )
 {
 	print( "starting pre-recorded movement" )
 
@@ -5598,7 +5598,7 @@ void function PlayRecoding_recording_riseSarahPart1( entity ornull model = null 
 	print( "recoding ended naturally" )
 }
 
-void function PlayRecoding_recording_riseSarahPart2( entity ornull model = null ) 
+void function PlayRecoding_recording_riseSarahPart2( entity ornull model = null )
 {
 	print( "starting pre-recorded movement" )
 
@@ -6037,7 +6037,7 @@ void function PlayRecoding_recording_riseSarahPart2( entity ornull model = null 
 	print( "recoding ended naturally" )
 }
 
-void function PlayRecoding_recording_riseSarahPart3( entity ornull model = null ) 
+void function PlayRecoding_recording_riseSarahPart3( entity ornull model = null )
 {
 	print( "starting pre-recorded movement" )
 
@@ -6560,7 +6560,7 @@ void function PlayRecoding_recording_riseSarahPart3( entity ornull model = null 
 	print( "recoding ended naturally" )
 }
 
-Recording function CreateRecording( vector origin, vector angles, entity ornull model = null  )
+Recording function CreateRecording( vector origin, vector angles, entity ornull model = null )
 {
 	Recording recording
 
@@ -6582,7 +6582,7 @@ Recording function CreateRecording( vector origin, vector angles, entity ornull 
 	}
 	recording.pilot.SetParent( recording.mover )
 
-   return recording
+	return recording
 }
 
 void function RunTo( Recording recording, vector origin, vector angles )
@@ -6632,11 +6632,10 @@ void function FallTo( Recording recording, vector origin, vector angles )
 	recording.pilot.Anim_Play( "jump_start" )
 }
 
-
 void function WallRunTo( Recording recording, string side, vector origin, vector angles )
 {
 	// print( "wallrunning to" + origin )
-	recording.pilot.Anim_Play( WALLRUN_MAP[side] )
+	recording.pilot.Anim_Play( WALLRUN_MAP[ side ] )
 	recording.mover.NonPhysicsRotateTo( angles, FAST, 0, 0 )
 	recording.mover.NonPhysicsMoveTo( origin, FAST, 0, 0 )
 }
@@ -6650,20 +6649,20 @@ void function TEST_built_in_anims()
 
 	entity ref = CreateScriptMover( player.GetOrigin() ) // should cleanup this in release
 
-	printt( "READY TO RECORD")
+	printt( "READY TO RECORD" )
 
-	//start recording
+	// start recording
 	wait 2
 	printt( "RECORDING STARTED" )
 
 	player.StartRecordingAnimation( ref.GetOrigin(), ref.GetAngles() )
 
-	//stop
+	// stop
 	wait 5
 
 	var recording = player.StopRecordingAnimation()
 
-	// test_userdata( recording ) // remove this before next maps+ release 
+	// test_userdata( recording ) // remove this before next maps+ release
 
 	// SaveRecordedAnimation( recording, filename )
 
@@ -6671,7 +6670,7 @@ void function TEST_built_in_anims()
 
 	// DevTextBufferWrite( recording )
 
-    // DevP4Checkout( filename )
+	// DevP4Checkout( filename )
 	// DevTextBufferDumpToFile( filename )
 	// DevP4Add( filename )
 
@@ -6685,7 +6684,7 @@ void function TEST_built_in_anims()
 
 	print( recording )
 
-	ghost.PlayRecordedAnimation( recording, <0,0,0>, <0,0,0>, DEFAULT_SCRIPTED_ANIMATION_BLEND_TIME, ref )
+	ghost.PlayRecordedAnimation( recording, < 0, 0, 0 >, < 0, 0, 0 >, DEFAULT_SCRIPTED_ANIMATION_BLEND_TIME, ref )
 
 	wait 5
 
@@ -6696,12 +6695,12 @@ entity function CreateGhost( vector origin )
 {
 	entity ghost = CreatePropScript( $"models/humans/heroes/mlt_hero_jack.mdl", origin, < 0, 0, 0 >, 0, 99999 )
 	ghost.kv.skin = PILOT_SKIN_INDEX_GHOST
-	ghost.kv.rendercolor = "94 174 255" //Blue
+	ghost.kv.rendercolor = "94 174 255" // Blue
 	ghost.kv.VisibilityFlags = ENTITY_VISIBLE_TO_EVERYONE
 	ghost.SetFootstepType( "holopath" )
 
 	int helmetDecalGroupIdx = ghost.FindBodyGroup( "decal" )
-	ghost.SetBodygroup( helmetDecalGroupIdx, 1 )  // 1 = no decal
+	ghost.SetBodygroup( helmetDecalGroupIdx, 1 ) // 1 = no decal
 
 	ghost.SetTitle( "cat_or_not" )
 

@@ -1,4 +1,4 @@
-//spawn_test
+// spawn_test
 global function InjectorFire
 global function LightstripSounds
 
@@ -8,49 +8,49 @@ global function DoWorldRumble
 global function InjectorLightUp
 global function InjectorSpoolDown
 
-const float FRAME_INTERVAL = .1
-const FX_CANNON_BEAM 				= $"P_rail_fire_beam_scale"
+const float FRAME_INTERVAL = 0.1
+const FX_CANNON_BEAM = $"P_rail_fire_beam_scale"
 
-//TORTURE ROOM ASSETS
+// TORTURE ROOM ASSETS
 const asset COMBAT_KNIFE = $"models/weapons/combat_knife/w_combat_knife.mdl"
 const asset WINGMAN = $"models/Weapons/b3wing/b3_wingman_hero_static.mdl"
 
-const asset STRATON_MODEL	= $"models/vehicle/straton/straton_imc_gunship_01.mdl"
+const asset STRATON_MODEL = $"models/vehicle/straton/straton_imc_gunship_01.mdl"
 
-//RISING WORLD RUN ASSETS
+// RISING WORLD RUN ASSETS
 const asset ROCK_IMPACT_DUST = $"P_sw_rock_impact_XL"
 const asset ROCK_IMPACT_DEBRIS = $"P_gate_smash"
 const asset PHYS_ROCK_TRAIL = $"Rocket_Smoke_Trail_Large"
 
-//SCULPTOR RING MODELS
+// SCULPTOR RING MODELS
 const asset OUTER_RING_CHUNK_MAIN = $"models/levels_terrain/sp_skyway/sculpter_outer_ring_dmg.mdl"
 const asset MIDDLE_RING_CHUNK_MAIN = $"models/levels_terrain/sp_skyway/sculpter_middle_ring_dmg.mdl"
 const asset INNER_RING_CHUNK_MAIN = $"models/levels_terrain/sp_skyway/sculpter_inner_ring_dmg.mdl"
 
-//CORE MODELS/FX
+// CORE MODELS/FX
 const asset CORE_ENERGY = $"models/props/core_energy/core_energy_animated.mdl"
 const asset FX_CORE_FLARE = $"env_star_blue"
 const asset FX_CORE_GLOW = $"P_sw_introom_core_light"
 
-//WORLD RUN DEBRIS
+// WORLD RUN DEBRIS
 const asset LARGE_BEAM = $"models/industrial/beam_curved_metal02.mdl"
 const asset TRUCK = $"models/vehicle/vehicle_truck_modular/vehicle_truck_modular_closed_bed.mdl"
 
-//GOBLIN PARTS
+// GOBLIN PARTS
 const asset GOBLIN_DEBRIS_CABIN = $"models/vehicle/goblin_dropship/goblin_dropship_dest_center.mdl"
 const asset GOBLIN_DEBRIS_WING_LEFT = $"models/vehicle/goblin_dropship/goblin_dropship_dest_wing_l.mdl"
 const asset GOBLIN_DEBRIS_WING_RIGHT = $"models/vehicle/goblin_dropship/goblin_dropship_dest_wing_r.mdl"
 
-//ROCK CHUNKS
-const asset SMALL_ROCK_01 =  $"models/rocks/rock_jagged_granite_small_01_phys.mdl"
-const asset SMALL_ROCK_02 =  $"models/rocks/rock_jagged_granite_small_02_phys.mdl"
-const asset SMALL_ROCK_03 =  $"models/rocks/rock_jagged_granite_small_03_phys.mdl"
-const asset SMALL_ROCK_04 =  $"models/rocks/rock_jagged_granite_small_04_phys.mdl"
-const asset SMALL_ROCK_05 =  $"models/rocks/rock_jagged_granite_small_05_phys.mdl"
-const asset SMALL_ROCK_06 =  $"models/rocks/rock_jagged_granite_small_06_phys.mdl"
-const asset SMALL_ROCK_07 =  $"models/rocks/rock_jagged_granite_small_07_phys.mdl"
+// ROCK CHUNKS
+const asset SMALL_ROCK_01 = $"models/rocks/rock_jagged_granite_small_01_phys.mdl"
+const asset SMALL_ROCK_02 = $"models/rocks/rock_jagged_granite_small_02_phys.mdl"
+const asset SMALL_ROCK_03 = $"models/rocks/rock_jagged_granite_small_03_phys.mdl"
+const asset SMALL_ROCK_04 = $"models/rocks/rock_jagged_granite_small_04_phys.mdl"
+const asset SMALL_ROCK_05 = $"models/rocks/rock_jagged_granite_small_05_phys.mdl"
+const asset SMALL_ROCK_06 = $"models/rocks/rock_jagged_granite_small_06_phys.mdl"
+const asset SMALL_ROCK_07 = $"models/rocks/rock_jagged_granite_small_07_phys.mdl"
 
-//CHARACTER MODELS
+// CHARACTER MODELS
 const asset CROW_HERO_MODEL = $"models/vehicle/crow_dropship/crow_dropship_hero.mdl"
 const asset SW_CROW = $"models/vehicle/crow_dropship/crow_dropship.mdl"
 const asset SLONE_MODEL = $"models/Humans/heroes/imc_hero_slone.mdl"
@@ -59,16 +59,16 @@ const asset SW_SARAH_MODEL = $"models/humans/heroes/mlt_hero_sarah.mdl"
 const asset MARDER_HOLOGRAM_MODEL = $"models/humans/heroes/imc_hero_marder.mdl"
 const asset TORTURE_HARNESS = $"models/props/skyway_harness_01_animated.mdl"
 
-const string SFX_WORLD_RUMBLE_CLOSE 				= "Skyway_Explosion_Rumble_Close"
-const string SFX_WORLD_RUMBLE_DISTANT 				= "Skyway_Explosion_Rumble_Dist"
+const string SFX_WORLD_RUMBLE_CLOSE = "Skyway_Explosion_Rumble_Close"
+const string SFX_WORLD_RUMBLE_DISTANT = "Skyway_Explosion_Rumble_Dist"
 
 const asset FLAK_FX = $"P_sw_impact_exp_flak"
-const asset COCKPIT_LIGHT = $"P_sw_cockpit_dlight_damaged"//$"veh_interior_Dlight_cockpit"
+const asset COCKPIT_LIGHT = $"P_sw_cockpit_dlight_damaged" // $"veh_interior_Dlight_cockpit"
 
-global const STRATON_SB_MODEL	= $"models/vehicle/straton/straton_imc_gunship_01_1000x.mdl"
+global const STRATON_SB_MODEL = $"models/vehicle/straton/straton_imc_gunship_01_1000x.mdl"
 
-const FX_CARRIER_ATTACK 	= $"P_weapon_tracers_megalaser"
-const FX_REDEYE_ATTACKS_CARRIER 	= $"P_Rocket_Phaser_Swirl"
+const FX_CARRIER_ATTACK = $"P_weapon_tracers_megalaser"
+const FX_REDEYE_ATTACKS_CARRIER = $"P_Rocket_Phaser_Swirl"
 const FX_EXP_BIRM_SML = $"p_exp_redeye_sml"
 const FIRE_TRAIL = $"Rocket_Smoke_Swirl_LG"
 const FX_REDEYE_WARPIN_SKYBOX = $"veh_red_warp_in_full_SB_1000"
@@ -78,14 +78,14 @@ const FX_EXPLOSION_MED = $"P_exp_redeye_sml_elec"
 const asset SKYBOX_TRACER = $"P_muzzleflash_MaltaGun_sw"
 const asset SKYBOX_MFLASH = $"P_muzzleflash_MaltaGun_sw_NoTracer"
 
-const asset FX_BT_ARM_DAMAGED 	= $"P_xo_arm_damaged"
-const asset FX_BT_ARM_DAMAGED_POP 	= $"P_xo_arm_damaged_pop"
+const asset FX_BT_ARM_DAMAGED = $"P_xo_arm_damaged"
+const asset FX_BT_ARM_DAMAGED_POP = $"P_xo_arm_damaged_pop"
 const asset FX_BT_ARM_DAMAGED_POP_SM = $"P_xo_arm_damaged_pop_SM"
 
-const asset FX_BT_BODY_DAMAGED_POP 	= $"xo_spark_small"
+const asset FX_BT_BODY_DAMAGED_POP = $"xo_spark_small"
 const asset FX_BT_BODY_DAMAGED_POP_SM = $"P_xo_BT_damaged_elec"
 
-const asset FX_BT_COCKPIT_SPARK 	= $"xo_cockpit_spark_01"
+const asset FX_BT_COCKPIT_SPARK = $"xo_cockpit_spark_01"
 
 const asset CORE_MODEL = $"models/core_unit/core_unit.mdl"
 const asset BT_EYE_CASE_MODEL = $"models/Titans/buddy/titan_buddy_hatch_eye.mdl"
@@ -127,14 +127,7 @@ struct
 	int currentPhase
 	int idealPhase
 
-	array<float> phaseDelays = [
-		60.0,
-		60.0,
-		120.0,
-		120.0,
-		240.0,
-		90.0
-	]
+	array<float> phaseDelays = [ 60.0, 60.0, 120.0, 120.0, 240.0, 90.0 ]
 
 	entity worldRunLandingNode
 	entity dropship
@@ -155,7 +148,7 @@ struct
 	float extraDelay
 } file
 
-//Called when the map is initialized
+// Called when the map is initialized
 void function CodeCallback_MapInit()
 {
 	AddCallback_EntitiesDidLoad( EntitiesDidLoad )
@@ -194,7 +187,7 @@ void function CodeCallback_MapInit()
 	Init_Bombardment()
 	ShSpSkywayCommonInit()
 
-	//START POINT END FLAGS
+	// START POINT END FLAGS
 	FlagInit( "TitanHillDone" )
 	FlagInit( "InjectorRoomDone" )
 	FlagInit( "BliskFareweelDone" )
@@ -202,7 +195,7 @@ void function CodeCallback_MapInit()
 	FlagInit( "BTSacrificeDone" )
 	FlagInit( "RisingWorldRunDone" )
 
-	//Flags for Torture Room
+	// Flags for Torture Room
 	FlagInit( "TR_StartBurn" )
 	FlagInit( "slone_kill_bt" )
 	FlagInit( "slone_exit_tr" )
@@ -245,14 +238,14 @@ void function CodeCallback_MapInit()
 
 	FlagInit( "PickUpEyeCase" )
 
-	//Flags for BT Reunion
+	// Flags for BT Reunion
 	FlagInit( "AcceptEye" )
 	FlagInit( "EyeInserted" )
 	FlagInit( "BTReunionConversationDone" )
 	FlagInit( "BTStoodUp" )
 	FlagInit( "injector_lighting_FX" )
 
-	//RegisterSignal( "InsertEyeCore" )
+	// RegisterSignal( "InsertEyeCore" )
 
 	// Titan Hill
 	FlagInit( "titan_hill_arena" )
@@ -272,7 +265,7 @@ void function CodeCallback_MapInit()
 
 	FlagInit( "BT_Throws_Player" )
 
-	//Flags for Rising World Run
+	// Flags for Rising World Run
 	FlagInit( "SpawnRingChunk" )
 	FlagInit( "slam_rocks_01" )
 	FlagInit( "embed_droppod_01" )
@@ -303,7 +296,7 @@ void function CodeCallback_MapInit()
 	PrecacheParticleSystem( FX_CANNON_BEAM )
 	PrecacheParticleSystem( $"P_rail_fire_flash" )
 
-	//PRECACHE TORTURE ROOM ASSETS
+	// PRECACHE TORTURE ROOM ASSETS
 	PrecacheModel( MARDER_HOLOGRAM_MODEL )
 	PrecacheModel( SW_BLISK_MODEL )
 	PrecacheModel( SW_SARAH_MODEL )
@@ -320,7 +313,7 @@ void function CodeCallback_MapInit()
 	PrecacheModel( LIGHTSTRIP_4 )
 	PrecacheModel( $"models/fx/xo_shield_coll_small.mdl" )
 
-	//PRECACHE RISING WORLD RUN ASSETS
+	// PRECACHE RISING WORLD RUN ASSETS
 	PrecacheParticleSystem( ROCK_IMPACT_DEBRIS )
 	PrecacheParticleSystem( $"hotdrop_radial_smoke" )
 	PrecacheParticleSystem( ROCK_IMPACT_DUST )
@@ -351,36 +344,35 @@ void function CodeCallback_MapInit()
 
 	PrecacheModel( STRATON_SB_MODEL )
 
-	//SCULPTOR CORE ASSETS
+	// SCULPTOR CORE ASSETS
 	PrecacheModel( CORE_ENERGY )
 	PrecacheParticleSystem( FX_CORE_FLARE )
 	PrecacheParticleSystem( FX_CORE_GLOW )
 
 	PrecacheParticleSystem( COCKPIT_LIGHT )
 
-	//------------------
+	// ------------------
 	// Start points
-	//------------------
-					//startPoint, 					mainFunc,							setupFunc							skipFunc
-	AddStartPoint( "Level Start", 					STARTHELEVEL, null, null )
-	AddStartPoint( "Torture Room B",				STARTHELEVEL, null, null )
-	AddStartPoint( "Smart Pistol Run",				STARTHELEVEL, null, null )
-	AddStartPoint( "Bridge Fight", 					STARTHELEVEL, null, null )
-	AddStartPoint( "BT Reunion", 					STARTHELEVEL, null, null )
-	AddStartPoint( "Titan Hill",					STARTHELEVEL, null, null )
-	AddStartPoint( "Titan Smash Hallway",			STARTHELEVEL, null, null )
-	AddStartPoint( "Sculptor Climb",				STARTHELEVEL, null, null )
-	AddStartPoint( "Targeting Room",				STARTHELEVEL, null, null )
-	AddStartPoint( "Injector Room",					STARTHELEVEL, null, null )
-	AddStartPoint( "Blisk's Farewell",				STARTHELEVEL, null, null )
-	AddStartPoint( "BT Sacrifice",					STARTHELEVEL, null, null )
-	AddStartPoint( "Rising World Run",				STARTHELEVEL, null, null )
-	AddStartPoint( "Rising World Jump",				STARTHELEVEL, null, null )
-	AddStartPoint( "Exploding Planet",				STARTHELEVEL, null, null )
-	AddStartPoint( "Harmony",						STARTHELEVEL, null, null )
+	// ------------------
+	// startPoint, 					mainFunc,							setupFunc							skipFunc
+	AddStartPoint( "Level Start", STARTHELEVEL, null, null )
+	AddStartPoint( "Torture Room B", STARTHELEVEL, null, null )
+	AddStartPoint( "Smart Pistol Run", STARTHELEVEL, null, null )
+	AddStartPoint( "Bridge Fight", STARTHELEVEL, null, null )
+	AddStartPoint( "BT Reunion", STARTHELEVEL, null, null )
+	AddStartPoint( "Titan Hill", STARTHELEVEL, null, null )
+	AddStartPoint( "Titan Smash Hallway", STARTHELEVEL, null, null )
+	AddStartPoint( "Sculptor Climb", STARTHELEVEL, null, null )
+	AddStartPoint( "Targeting Room", STARTHELEVEL, null, null )
+	AddStartPoint( "Injector Room", STARTHELEVEL, null, null )
+	AddStartPoint( "Blisk's Farewell", STARTHELEVEL, null, null )
+	AddStartPoint( "BT Sacrifice", STARTHELEVEL, null, null )
+	AddStartPoint( "Rising World Run", STARTHELEVEL, null, null )
+	AddStartPoint( "Rising World Jump", STARTHELEVEL, null, null )
+	AddStartPoint( "Exploding Planet", STARTHELEVEL, null, null )
+	AddStartPoint( "Harmony", STARTHELEVEL, null, null )
 
 	// FlagInit( "BreakWorld" )
-
 
 	// AddScriptNoteworthySpawnCallback( "die_at_end", NPC_DieAtPathEnd )
 	// AddScriptNoteworthySpawnCallback( "bridge_turrets", BridgeTurretsSpawnThink )
@@ -412,17 +404,35 @@ void function CodeCallback_MapInit()
 
 	// Credits_MapInit() //MUST BE THE LAST ENTRY
 
-	array<vector> origins = [ <6683.55, -2433.11, 2906.24>, <6003.59, -3081.41, 2840.37>, <6805.31, -2863.7, 2813.38>, <8502.47, -3836.56, 2994.33>, <7418.28, -3329.43, 2794.07>, <8219.36, -3671.74, 2929.99>, <8094.24, -3246.91, 2896.91>, <7898.12, -1917.1, 3141.06> ]
+	array<vector> origins = [
+		< 6683.55, -2433.11, 2906.24 >,
+		< 6003.59, -3081.41, 2840.37 >,
+		< 6805.31, -2863.7, 2813.38 >,
+		< 8502.47, -3836.56, 2994.33 >,
+		< 7418.28, -3329.43, 2794.07 >,
+		< 8219.36, -3671.74, 2929.99 >,
+		< 8094.24, -3246.91, 2896.91 >,
+		< 7898.12, -1917.1, 3141.06 >
+	]
 
-	foreach( vector origin in origins )
+	foreach ( vector origin in origins )
 	{
 		entity ref = CreateScriptRef( origin, < 0.0, 0.0, 0.0 > )
 		ref.SetScriptName( "BrawlSpawnNode2" )
 	}
 
-	origins = [ <11166.4, -783.351, 3521.98>, <9905.15, -323.603, 3543.7>, <10141.4, 975.395, 3738.8>, <9829.18, 829.99, 3768.68>, <9485.63, 1619.5, 3990.99>, <8984.73, 1263.57, 3983.4>, <10445.9, -21.0667, 3522.93> ]
+	origins =
+		[
+			< 11166.4, -783.351, 3521.98 >,
+			< 9905.15, -323.603, 3543.7 >,
+			< 10141.4, 975.395, 3738.8 >,
+			< 9829.18, 829.99, 3768.68 >,
+			< 9485.63, 1619.5, 3990.99 >,
+			< 8984.73, 1263.57, 3983.4 >,
+			< 10445.9, -21.0667, 3522.93 >
+		]
 
-	foreach( vector origin in origins )
+	foreach ( vector origin in origins )
 	{
 		entity ref = CreateScriptRef( origin, < 0.0, 0.0, 0.0 > )
 		ref.SetScriptName( "BrawlSpawnNode3" )
@@ -431,27 +441,22 @@ void function CodeCallback_MapInit()
 
 void function LightstripSounds()
 {
-
 }
 
 void function DoWorldRumble( entity player )
 {
-
 }
 
 void function InjectorSpoolDown( entity player, float delayBetweenFlaps = 0.3 )
 {
-
 }
 
 void function InjectorFire( bool fireSound = true )
 {
-
 }
 
 void function InjectorLightUp( entity player, float delayBetweenFlaps = 0.3, bool doFlash = false )
 {
-
 }
 
 void function Init_FloatingWorldStuff()
@@ -470,7 +475,7 @@ void function Init_FloatingWorldStuff()
 	entity node = GetEntByScriptName( "rising_world_run_landing_node" )
 	entity mover = CreateScriptMover()
 	vector fwd = AnglesToForward( node.GetAngles() )
-	mover.SetOrigin( node.GetOrigin() + < 0,0,-37 >  )
+	mover.SetOrigin( node.GetOrigin() + < 0, 0, -37 > )
 	mover.SetAngles( node.GetAngles() )
 	mover.SetParent( startingArea )
 	file.worldRunLandingNode = mover
@@ -519,12 +524,15 @@ void function Init_FloatingWorldStuff()
 	thread FloatingIslandThread( destroyedIsland2, true, runDriver3 )
 
 	entity fogTrigger = GetEntByScriptName( "world_run_fog_trigger" )
-	fogTrigger.SetOrigin( fogTrigger.GetOrigin() - <0,0,10000> )
+	fogTrigger.SetOrigin( fogTrigger.GetOrigin() - < 0, 0, 10000 > )
 }
 
-void function FloatingIslandThread( entity island, bool useSyncedRot, entity runDriver, string startFlag = "StartRise", vector rotArc = < 360, 360, 360 >, vector startOff = <0.0,0.0,0.0>, vector startRotOff = <0.0,0.0,0.0> )
+void function FloatingIslandThread( entity island, bool useSyncedRot, entity runDriver, string startFlag = "StartRise", vector rotArc = < 360, 360, 360 >, vector startOff = <
+	0.0,
+	0.0,
+	0.0
+>, vector startRotOff = < 0.0, 0.0, 0.0 > )
 {
-
 	island.EndSignal( "OnDestroy" )
 	island.EndSignal( "RockStrike" )
 
@@ -533,12 +541,12 @@ void function FloatingIslandThread( entity island, bool useSyncedRot, entity run
 	float spinYMod = RandomFloatRange( -1, 1 )
 	float spinZMod = RandomFloatRange( -1, 1 )
 
-	//float sinkDist = 2048
+	// float sinkDist = 2048
 	float sinkDist = 4096
 	float riseSpeed = 32
 	float riseSpeadIncrement = 1.01
-	float spinSpeed = .75
-	//float sinkDist = RandomFloatRange( 2048, 4096 )
+	float spinSpeed = 0.75
+	// float sinkDist = RandomFloatRange( 2048, 4096 )
 
 	vector startingPos = island.GetOrigin()
 	vector startingAngles = island.GetAngles()
@@ -557,18 +565,18 @@ void function FloatingIslandThread( entity island, bool useSyncedRot, entity run
 		island.SetPusher( true )
 	}
 
-	//entity mover = CreateScriptMover( startingPos, < 0, 0, 0 >, 0 )
+	// entity mover = CreateScriptMover( startingPos, < 0, 0, 0 >, 0 )
 	entity mover = CreateScriptMover( startingPos, startingAngles, 0 )
 	island.SetParent( mover, "", true )
 	mover.SetPusher( true )
 
-	//vector startingAngles = mover.GetAngles()
+	// vector startingAngles = mover.GetAngles()
 	bool rise = false
-	//mover.SetOrigin( < startingPos.x, startingPos.y, startingPos.z - sinkDist > )
+	// mover.SetOrigin( < startingPos.x, startingPos.y, startingPos.z - sinkDist > )
 
 	mover.EndSignal( "OnDestroy" )
-	//runDriver.SetModel( $"models/dev/editor_ref.mdl" )
-	//runDriver.Show()
+	// runDriver.SetModel( $"models/dev/editor_ref.mdl" )
+	// runDriver.Show()
 
 	entity hideRef = GetEntByScriptName( "run_stuff_hide_ref" )
 
@@ -576,19 +584,18 @@ void function FloatingIslandThread( entity island, bool useSyncedRot, entity run
 
 	FlagWait( startFlag )
 
-	mover.SetOrigin( startingPos - < startOff.x, startOff.y, sinkDist> )
+	mover.SetOrigin( startingPos - < startOff.x, startOff.y, sinkDist > )
 	mover.SetAngles( mover.GetAngles() + startRotOff )
 
 	while ( true )
 	{
-		time += .1
+		time += 0.1
 		entity player = GetPlayerByIndex( 0 )
 
 		if ( IsValid( player ) )
 		{
-
-			//mover.SetModel( $"models/dev/editor_ref.mdl" )
-			//mover.Show()
+			// mover.SetModel( $"models/dev/editor_ref.mdl" )
+			// mover.Show()
 
 			float dist2 = DistanceSqr( runDriver.GetOrigin(), startingPos )
 			float dist2Start = DistanceSqr( mover.GetOrigin(), startingPos )
@@ -597,35 +604,35 @@ void function FloatingIslandThread( entity island, bool useSyncedRot, entity run
 			float modSpinRate = dist2 / ( sinkDist * sinkDist )
 
 			float bob = sin( time )
-			//float spin = 360 * modSpinRate
+			// float spin = 360 * modSpinRate
 			float spinX = rotArc.x * modSpinRate
 			float spinY = rotArc.y * modSpinRate
 			float spinZ = rotArc.z * modSpinRate
 
-			float xSpin = clamp( ( spinX * spinSpeed ) , 0, 360 )
-			float ySpin = clamp( ( spinY * spinSpeed ) , 0, 360 )
-			float zSpin = clamp( ( spinZ * spinSpeed ) , 0, 360 )
+			float xSpin = clamp( ( spinX * spinSpeed ), 0, 360 )
+			float ySpin = clamp( ( spinY * spinSpeed ), 0, 360 )
+			float zSpin = clamp( ( spinZ * spinSpeed ), 0, 360 )
 			vector spinVector = < xSpin, ySpin, zSpin >
-			//printt( modSinkDist )
+			// printt( modSinkDist )
 
 			vector playerDir = Normalize( player.GetOrigin() - mover.GetOrigin() )
-			playerDir *= 32 //< playerDir.x * 32, playerDir.y * 32, playerDir.z * 128 >
+			playerDir *= 32 // < playerDir.x * 32, playerDir.y * 32, playerDir.z * 128 >
 
 			if ( dist2 <= 300 * 300 && dist2Start <= 300 * 300 )
 				rise = true
 
 			if ( rise )
 			{
-				//mover.NonPhysicsMoveTo( mover.GetOrigin() + < 0, 0, riseSpeed >, .5, 0, .1 )
-				//riseSpeed *= riseSpeadIncrement
-				//mover.NonPhysicsMoveTo( ( startingPos + playerDir ) + < bob * 16, bob * 16, ( sinkDist * modSinkDist ) + ( bob * 64 ) >, .5, 0, .1 )
-				mover.NonPhysicsMoveTo( ( startingPos + playerDir ) + < 0, 0, ( sinkDist * modSinkDist ) >, .5, 0, 0 )
+				// mover.NonPhysicsMoveTo( mover.GetOrigin() + < 0, 0, riseSpeed >, .5, 0, .1 )
+				// riseSpeed *= riseSpeadIncrement
+				// mover.NonPhysicsMoveTo( ( startingPos + playerDir ) + < bob * 16, bob * 16, ( sinkDist * modSinkDist ) + ( bob * 64 ) >, .5, 0, .1 )
+				mover.NonPhysicsMoveTo( ( startingPos + playerDir ) + < 0, 0, ( sinkDist * modSinkDist ) >, 0.5, 0, 0 )
 				spinVector *= -1
 			}
 			else
 			{
-				//mover.NonPhysicsMoveTo( ( startingPos + playerDir ) - < bob * 16, bob * 16, ( sinkDist * modSinkDist ) + ( bob * 64 ) >, .5, 0, .1 )
-				mover.NonPhysicsMoveTo( ( startingPos + playerDir ) - < 0, 0, ( sinkDist * modSinkDist ) > , .5, 0, 0 )
+				// mover.NonPhysicsMoveTo( ( startingPos + playerDir ) - < bob * 16, bob * 16, ( sinkDist * modSinkDist ) + ( bob * 64 ) >, .5, 0, .1 )
+				mover.NonPhysicsMoveTo( ( startingPos + playerDir ) - < 0, 0, ( sinkDist * modSinkDist ) >, 0.5, 0, 0 )
 			}
 
 			if ( !useSyncedRot )
@@ -638,24 +645,23 @@ void function FloatingIslandThread( entity island, bool useSyncedRot, entity run
 				angles.x = AngleNormalize( angles.x )
 				angles.y = AngleNormalize( angles.y )
 				angles.z = AngleNormalize( angles.z )
-				mover.NonPhysicsRotateTo( angles, .5, 0, .1 )
+				mover.NonPhysicsRotateTo( angles, 0.5, 0, 0.1 )
 			}
 
 			if ( mover.GetOrigin().z - startingPos.z >= sinkDist )
 			{
 				return
-				//island.ClearParent()
-				//island.Destroy()
-				//mover.Destroy()
+				// island.ClearParent()
+				// island.Destroy()
+				// mover.Destroy()
 			}
-
 		}
 
-		wait( .1 )
+		wait ( 0.1 )
 	}
 }
 
-//Callback checking if the map entities loaded
+// Callback checking if the map entities loaded
 void function EntitiesDidLoad()
 {
 	FlagInit( "aiskit_dontbreakout" )
@@ -663,8 +669,6 @@ void function EntitiesDidLoad()
 	FlagInit( "bombardment_titan_target_01" )
 	FlagInit( "bombardment_target_01" )
 	Init_FloatingWorldStuff()
-
-
 }
 
 void function STARTHELEVEL( entity player )

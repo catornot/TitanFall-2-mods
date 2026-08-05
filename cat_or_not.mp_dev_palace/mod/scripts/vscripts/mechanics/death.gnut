@@ -4,11 +4,11 @@ global function InitDeathManager
 
 void function InitDeathManager()
 {
-    AddCallback_OnPlayerKilled( OnPlayerDied )
+	AddCallback_OnPlayerKilled( OnPlayerDied )
 }
 
 void function OnPlayerDied( entity player, entity attacker, var damageInfo )
 {
-    // todo: determine if hazard
-    RespawnPlayerHazard( player )
+	// todo: determine if hazard
+	RespawnPlayerHazard( player )
 }

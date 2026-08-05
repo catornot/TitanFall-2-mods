@@ -1,6 +1,7 @@
 global function CodeCallback_MapInit
 
-struct ROCKS {
+struct ROCKS
+{
 	int rock_id
 	int rock_type
 }
@@ -28,7 +29,7 @@ void function TrackWeaponThreaded( entity weapon )
 {
 	entity player = WaitUntilPlayerPicksUp( weapon )
 
-	weapon.SetOrigin( <0,0,-20000> )
+	weapon.SetOrigin( < 0, 0, -20000 > )
 
 	AddMoneyToPlayer( player, -100 )
 }

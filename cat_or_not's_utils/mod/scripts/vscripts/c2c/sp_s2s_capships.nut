@@ -59,7 +59,7 @@ struct
 {
 	table<string, array<ShipStruct> > capShipTemplates
 	array<string> liftExitAnims = [ "stand_2_run_180L", "stand_2_run_180R" ]
-}file
+} file
 
 void function S2S_CapShipsInit()
 {
@@ -112,17 +112,17 @@ void function EntitiesDidLoad()
 	ship = ShipTemplateSetup( template, null, CapShipSetup )
 	file.capShipTemplates[ "trinity" ] <- [ ship ]
 
-	foreach( shipArray in file.capShipTemplates )
+	foreach ( shipArray in file.capShipTemplates )
 	{
 		foreach ( ship in shipArray )
 		{
-			ship.defaultBehaviorFunc 	= DefaultBehavior_CapShip
-			ship.defaultEventFunc 		= DefaultEmptyFunc
-			ship.defAccMax 				= 13 	//50
-			ship.defSpeedMax 			= 120 	//200
-			ship.defRollMax 			= 35
-			ship.defPitchMax 			= 5
-			ship.defBankTime			= 15
+			ship.defaultBehaviorFunc = DefaultBehavior_CapShip
+			ship.defaultEventFunc = DefaultEmptyFunc
+			ship.defAccMax = 13 // 50
+			ship.defSpeedMax = 120 // 200
+			ship.defRollMax = 35
+			ship.defPitchMax = 5
+			ship.defBankTime = 15
 			ship.model.Hide()
 		}
 	}
@@ -131,23 +131,21 @@ void function EntitiesDidLoad()
 	template.kv.CollisionGroup = TRACE_COLLISION_GROUP_NONE
 	ship = ShipTemplateSetup( template, null, CapShipSetup )
 	file.capShipTemplates[ "LEW" ] <- [ ship ]
-	ship.defaultBehaviorFunc 	= DefaultBehavior_CapShip
-	ship.defaultEventFunc 		= DefaultEmptyFunc
-	ship.defAccMax 				= 75	//150
-	ship.defSpeedMax 			= 400	//400
-	ship.defRollMax 			= 35
-	ship.defPitchMax 			= 15
-	ship.defBankTime			= 3
+	ship.defaultBehaviorFunc = DefaultBehavior_CapShip
+	ship.defaultEventFunc = DefaultEmptyFunc
+	ship.defAccMax = 75 // 150
+	ship.defSpeedMax = 400 // 400
+	ship.defRollMax = 35
+	ship.defPitchMax = 15
+	ship.defBankTime = 3
 }
 
 void function DefaultBehavior_CapShip( ShipStruct ship, int behavior )
 {
-
 }
 
 void function DefaultEmptyFunc( ShipStruct ship, int id )
 {
-
 }
 
 /************************************************************************************************\
@@ -187,7 +185,7 @@ ShipStruct function SpawnTrinity( LocalVec ornull origin = null, vector angles =
 	EmitSoundOnEntity( ship.model, "scr_s2s_seyar_flight_lp_01" )
 
 	InitScript( "scr_trinity_node_1b" )
-	EnableScript( ship, "scr_trinity_node_1b" ) //the doors
+	EnableScript( ship, "scr_trinity_node_1b" ) // the doors
 
 	ship.mover.SetPusher( false )
 
@@ -197,7 +195,7 @@ ShipStruct function SpawnTrinity( LocalVec ornull origin = null, vector angles =
 ShipStruct function __SpawnCapShipGeneric( LocalVec ornull origin, vector angles, string name )
 {
 	if ( origin == null )
-		origin = CLVec( <0,0,0> )
+		origin = CLVec( < 0, 0, 0 > )
 	expect LocalVec( origin )
 
 	ShipStruct ship = GetFreeTemplate( file.capShipTemplates[ name ] )
@@ -205,8 +203,8 @@ ShipStruct function __SpawnCapShipGeneric( LocalVec ornull origin, vector angles
 	SetOriginLocal( mover, origin )
 	mover.SetAngles( angles )
 
-	//common
-	ship.FuncGetBankMagnitude 	= GetBankMagnitudeCapShip
+	// common
+	ship.FuncGetBankMagnitude = GetBankMagnitudeCapShip
 
 	thread ShipCommonFuncs( ship )
 	ship.model.Hide()
@@ -216,7 +214,7 @@ ShipStruct function __SpawnCapShipGeneric( LocalVec ornull origin, vector angles
 ShipStruct function SpawnBarkerShip( LocalVec ornull origin = null, vector angles = CONVOYDIR )
 {
 	if ( origin == null )
-		origin = CLVec( <0,0,0> )
+		origin = CLVec( < 0, 0, 0 > )
 	expect LocalVec( origin )
 
 	ShipStruct ship = GetFreeTemplate( file.capShipTemplates[ "LEW" ] )
@@ -224,8 +222,8 @@ ShipStruct function SpawnBarkerShip( LocalVec ornull origin = null, vector angle
 	SetOriginLocal( mover, origin )
 	mover.SetAngles( angles )
 
-	//common
-	ship.FuncGetBankMagnitude 	= GetBankMagnitudeLEW
+	// common
+	ship.FuncGetBankMagnitude = GetBankMagnitudeLEW
 
 	thread ShipCommonFuncs( ship )
 	ship.model.Hide()
@@ -254,7 +252,7 @@ float function GetBankMagnitudeLEW( float dist )
 
 void function CapShipSetup( ShipStruct ship, entity mover, entity ent )
 {
-	switch( ent.kv.script_noteworthy )
+	switch ( ent.kv.script_noteworthy )
 	{
 		case "launchHangardummy":
 			RecursivePropParenter( ship.model, ent )
@@ -270,7 +268,7 @@ void function CapShipSetup( ShipStruct ship, entity mover, entity ent )
 		case "lift_group":
 		case "cargoLift_group":
 			array<entity> liftEnts = ent.GetLinkEntArray()
-			foreach( entity liftEnt in liftEnts )
+			foreach ( entity liftEnt in liftEnts )
 				LiftSetup( ship, liftEnt )
 			break
 
@@ -295,7 +293,6 @@ void function CapShipSetup( ShipStruct ship, entity mover, entity ent )
 			break
 	}
 }
-
 
 /************************************************************************************************\
 
@@ -345,11 +342,11 @@ entity function SpawnSpectreFromHatch( LiftStruct liftData, entity spawner, void
 
 	wait 0.25
 
-	entity spectre 	= spawner.SpawnEntity()
+	entity spectre = spawner.SpawnEntity()
 	DispatchSpawn( spectre )
-	vector angles 	= liftData.hatch.GetAngles() + <0,180,0 >
-	vector forward 	= AnglesToForward( angles )
-	vector origin 	= liftData.hatch.GetOrigin() + ( forward * -80 )
+	vector angles = liftData.hatch.GetAngles() + < 0, 180, 0 >
+	vector forward = AnglesToForward( angles )
+	vector origin = liftData.hatch.GetOrigin() + ( forward * -80 )
 
 	thread PlayAnimTeleport( spectre, "sp_traverse_up_512", origin, angles )
 
@@ -364,8 +361,8 @@ entity function SpawnSpectreFromHatch( LiftStruct liftData, entity spawner, void
 
 void function SpawnGruntSpectreComboFromHatch( LiftStruct liftData, entity gruntSpawner, entity spectreSpawner, entity player, void functionref( entity ) ornull spawnFuncGrunt = null, void functionref( entity ) ornull spawnFuncSpectre = null )
 {
-	entity grunt 	= SpawnGruntFromHatch( liftData, gruntSpawner, spawnFuncGrunt )
-	entity spectre 	= SpawnSpectreFromHatch( liftData, spectreSpawner, spawnFuncSpectre )
+	entity grunt = SpawnGruntFromHatch( liftData, gruntSpawner, spawnFuncGrunt )
+	entity spectre = SpawnSpectreFromHatch( liftData, spectreSpawner, spawnFuncSpectre )
 
 	grunt.EndSignal( "OnDeath" )
 	spectre.EndSignal( "OnDeath" )
@@ -382,7 +379,6 @@ void function SpawnGruntSpectreComboFromHatch( LiftStruct liftData, entity grunt
 
 	GruntUsesSpectreAsShield( grunt, spectre, player )
 }
-
 
 void function GruntRidesDownLift( LiftStruct liftData, entity guy, void functionref( entity ) ornull spawnFunc = null )
 {
@@ -420,7 +416,6 @@ void function __SpawnGruntFromLiftBottomLockedThread( LiftStruct liftData, entit
 	guy.SetParent( liftData.lift )
 	thread LiftUnLock( liftData )
 
-
 	waitthread PlayAnimTeleport( guy, file.liftExitAnims.getrandom(), liftData.lift, "" )
 	guy.ClearParent()
 
@@ -444,12 +439,12 @@ void function __SpawnSpectreFromLiftBottomLockedThread( LiftStruct liftData, ent
 {
 	guy.EndSignal( "OnDeath" )
 
-	entity node = CreateScriptMover( liftData.lift.GetOrigin(), AnglesCompose( liftData.lift.GetAngles(), <0,180,0> ) )
+	entity node = CreateScriptMover( liftData.lift.GetOrigin(), AnglesCompose( liftData.lift.GetAngles(), < 0, 180, 0 > ) )
 	node.SetParent( liftData.lift, "", true )
 	guy.SetParent( node )
 
 	OnThreadEnd(
-	function() : ( node )
+		function() : ( node )
 		{
 			if ( IsValid( node ) )
 				node.Destroy()
@@ -488,7 +483,7 @@ void function GruntUsesSpectreAsShield( entity grunt, entity spectre, entity pla
 	entity mover
 
 	OnThreadEnd(
-	function() : ( grunt, spectre, mover )
+		function() : ( grunt, spectre, mover )
 		{
 			if ( IsAlive( grunt ) )
 			{
@@ -509,7 +504,7 @@ void function GruntUsesSpectreAsShield( entity grunt, entity spectre, entity pla
 
 	thread EndingSpectreShieldThread( grunt, spectre, player )
 
-	while( 1 )
+	while ( 1 )
 	{
 		mover = CreateScriptMover( spectre.GetOrigin(), spectre.GetAngles() )
 		mover.SetOrigin( spectre.GetOrigin() )
@@ -539,7 +534,7 @@ void function EndingSpectreShieldThread( entity grunt, entity spectre, entity pl
 	spectre.EndSignal( "StopShieldBehavior" )
 
 	OnThreadEnd(
-	function() : ( grunt, spectre )
+		function() : ( grunt, spectre )
 		{
 			if ( IsAlive( grunt ) )
 				grunt.Signal( "StopShieldBehavior" )
@@ -548,13 +543,13 @@ void function EndingSpectreShieldThread( entity grunt, entity spectre, entity pl
 		}
 	)
 
-	while( 1 )
+	while ( 1 )
 	{
-		//damaged spectre
+		// damaged spectre
 		if ( IsCrawling( spectre ) )
 			return
 
-		//too close
+		// too close
 		float dist1 = Distance( player.GetOrigin(), spectre.GetOrigin() )
 		if ( dist1 < SPECTRESHIELDTOOCLOSE )
 			return
@@ -563,10 +558,10 @@ void function EndingSpectreShieldThread( entity grunt, entity spectre, entity pl
 		if ( dist2 < SPECTRESHIELDTOOCLOSE )
 			return
 
-		//past them
-		vector dir 	= spectre.GetForwardVector()
+		// past them
+		vector dir = spectre.GetForwardVector()
 		vector dir2 = Normalize( player.GetOrigin() - spectre.GetOrigin() )
-		float dot 	= DotProduct( dir, dir2 )
+		float dot = DotProduct( dir, dir2 )
 		if ( dot < 0.25 )
 			return
 
@@ -582,7 +577,7 @@ void function TurnMoverTowardsPlayer( entity mover, entity grunt, entity spectre
 	spectre.EndSignal( "StopShieldBehavior" )
 	mover.EndSignal( "OnDestroy" )
 
-	while( 1 )
+	while ( 1 )
 	{
 		vector specOg = spectre.GetOrigin()
 		vector origin = player.GetOrigin()
@@ -596,7 +591,13 @@ void function TurnMoverTowardsPlayer( entity mover, entity grunt, entity spectre
 
 		vector newOrigin = specOg - ( dir * dist )
 
-		TraceResults result = TraceLine( specOg + Vector(0,0,500), specOg - Vector(0,0,1000), [ spectre, player ], TRACE_MASK_NPCSOLID, TRACE_COLLISION_GROUP_NPC )
+		TraceResults result = TraceLine(
+			specOg + Vector( 0, 0, 500 ),
+			specOg - Vector( 0, 0, 1000 ),
+			[ spectre, player ],
+			TRACE_MASK_NPCSOLID,
+			TRACE_COLLISION_GROUP_NPC
+		)
 		newOrigin = < newOrigin.x, newOrigin.y, result.endPos.z >
 
 		mover.NonPhysicsRotateTo( angles, 0.5, 0, 0 )
@@ -623,9 +624,9 @@ void function LiftUseTrigger( LiftStruct liftData )
 	entity player
 
 	table result
-	while( 1 )
+	while ( 1 )
 	{
-		wait FRAME_INTERVAL //to handle infinite loops
+		wait FRAME_INTERVAL // to handle infinite loops
 
 		if ( !trigger.IsTouched() )
 		{
@@ -634,7 +635,7 @@ void function LiftUseTrigger( LiftStruct liftData )
 		}
 		else
 		{
-			player = trigger.GetTouchingEntities()[0]
+			player = trigger.GetTouchingEntities()[ 0 ]
 		}
 
 		if ( liftData.liftState == eLiftState.MOVING )
@@ -652,7 +653,7 @@ void function LiftUseTrigger( LiftStruct liftData )
 
 void function WaittillLiftNotBusy( LiftStruct liftData )
 {
-	while( liftData.liftState == eLiftState.MOVING )
+	while ( liftData.liftState == eLiftState.MOVING )
 		WaitSignal( liftData, "UpdateLiftState" )
 }
 
@@ -673,7 +674,7 @@ void function LiftWaitForUse( LiftStruct liftData )
 	liftData.lift.AddUsableValue( USABLE_NO_FOV_REQUIREMENTS )
 
 	OnThreadEnd(
-	function() : ( liftData )
+		function() : ( liftData )
 		{
 			liftData.lift.UnsetUsable()
 		}
@@ -686,7 +687,7 @@ void function LiftWaitForUse( LiftStruct liftData )
 void function PlayerRidesLift( LiftStruct liftData )
 {
 	OnThreadEnd(
-	function() : ( liftData )
+		function() : ( liftData )
 		{
 			liftData.lift.UnsetUsable()
 		}
@@ -889,7 +890,7 @@ void function LiftCloseHatch( LiftStruct liftData )
 	if ( IsValid( liftData.hatch ) )
 		waitthread PlayAnimTeleport( liftData.hatch, "S2S_hatch_cover_close", liftData.upPos )
 
-	if( IsValid( liftData.separator ) )
+	if ( IsValid( liftData.separator ) )
 		ToggleNPCPathsForEntity( liftData.separator, true )
 }
 
@@ -913,12 +914,12 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 	string tag = "ORIGIN"
 	entity topPos
 
-	foreach( ent in links )
+	foreach ( ent in links )
 	{
 		ent.SetParent( model, tag, true )
 		ent.MarkAsNonMovingAttachment()
 
-		switch( ent.kv.script_noteworthy )
+		switch ( ent.kv.script_noteworthy )
 		{
 			case "hullHatch":
 				liftData.hatch = ent
@@ -938,7 +939,7 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 				liftData.lift = ent
 
 				liftData.lift.SetUsableByGroup( "pilot" )
-				liftData.lift.SetUsePrompts( "#HOLD_TO_USE_LIFT" , "#PRESS_TO_USE_LIFT" )
+				liftData.lift.SetUsePrompts( "#HOLD_TO_USE_LIFT", "#PRESS_TO_USE_LIFT" )
 				liftData.lift.UnsetUsable()
 				liftData.lift.AddUsableValue( USABLE_NO_FOV_REQUIREMENTS )
 				break
@@ -992,7 +993,7 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 	}
 	Assert( IsValid( liftData.lift ) )
 
-	//downPos
+	// downPos
 	entity downRef
 	if ( IsValid( liftData.doorBotR ) )
 	{
@@ -1006,7 +1007,7 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 	liftData.downPos = CreateScriptMover( downRef.GetOrigin(), downRef.GetAngles() )
 	liftData.downPos.SetParent( model, tag, true )
 
-	//upPos
+	// upPos
 	entity upRef
 	if ( IsValid( liftData.hatch ) )
 	{
@@ -1018,29 +1019,29 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 	}
 	else
 	{
-		Assert( IsValid( liftData.doorTopL) )
-		Assert( IsValid( liftData.doorTopR) )
+		Assert( IsValid( liftData.doorTopL ) )
+		Assert( IsValid( liftData.doorTopR ) )
 		upRef = liftData.doorTopR
 	}
 	Assert( IsValid( upRef ) )
-	liftData.upPos  = CreateScriptMover( upRef.GetOrigin(), upRef.GetAngles() )
+	liftData.upPos = CreateScriptMover( upRef.GetOrigin(), upRef.GetAngles() )
 	liftData.upPos.SetParent( model, tag, true )
 	Assert( liftData.upPos.GetOrigin().z > liftData.downPos.GetOrigin().z )
 	if ( IsValid( topPos ) )
 		topPos.Destroy()
 
-	//hatch
+	// hatch
 	if ( IsValid( liftData.hatch ) )
 		liftData.hatch.SetParent( liftData.upPos )
 
-	//useTrigger
+	// useTrigger
 	if ( IsValid( liftData.useTrigger ) )
 	{
 		liftData.useTrigger.SetParent( liftData.lift, "", true )
 		thread LiftUseTrigger( liftData )
 	}
 
-	//clip brush for the hatch door
+	// clip brush for the hatch door
 	if ( IsValid( liftData.clip ) )
 	{
 		Assert( IsValid( liftData.hatch ) )
@@ -1048,42 +1049,42 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 		liftData.clip.Solid()
 	}
 
-	//openBotL, openBotR
-	if( IsValid( liftData.doorBotL ) )
+	// openBotL, openBotR
+	if ( IsValid( liftData.doorBotL ) )
 	{
 		liftData.doorBotL.SetParent( liftData.downPos )
 		liftData.openBotL = CreateScriptMover( liftData.downPos.GetOrigin(), liftData.downPos.GetAngles() )
-		liftData.openBotL.SetAngles( AnglesCompose( liftData.downPos.GetAngles(), <0,50,0> ) )
+		liftData.openBotL.SetAngles( AnglesCompose( liftData.downPos.GetAngles(), < 0, 50, 0 > ) )
 		liftData.openBotL.SetParent( model, tag, true )
 	}
-	if( IsValid( liftData.doorBotR ) )
+	if ( IsValid( liftData.doorBotR ) )
 	{
 		liftData.doorBotR.SetParent( liftData.downPos )
 		liftData.openBotR = CreateScriptMover( liftData.downPos.GetOrigin(), liftData.downPos.GetAngles() )
-		liftData.openBotR.SetAngles( AnglesCompose( liftData.downPos.GetAngles(), <0,-50,0> ) )
+		liftData.openBotR.SetAngles( AnglesCompose( liftData.downPos.GetAngles(), < 0, -50, 0 > ) )
 		liftData.openBotR.SetParent( model, tag, true )
 	}
 
-	//openTopL, openTopR
-	if( IsValid( liftData.doorTopL ) )
+	// openTopL, openTopR
+	if ( IsValid( liftData.doorTopL ) )
 	{
 		liftData.doorTopL.SetParent( liftData.upPos )
 		liftData.openTopL = CreateScriptMover( liftData.upPos.GetOrigin(), liftData.upPos.GetAngles() )
-		liftData.openTopL.SetAngles( AnglesCompose( liftData.upPos.GetAngles(), <0,50,0> ) )
+		liftData.openTopL.SetAngles( AnglesCompose( liftData.upPos.GetAngles(), < 0, 50, 0 > ) )
 		liftData.openTopL.SetParent( model, tag, true )
 	}
-	if( IsValid( liftData.doorTopR ) )
+	if ( IsValid( liftData.doorTopR ) )
 	{
 		liftData.doorTopR.SetParent( liftData.upPos )
 		liftData.openTopR = CreateScriptMover( liftData.upPos.GetOrigin(), liftData.upPos.GetAngles() )
-		liftData.openTopR.SetAngles( AnglesCompose( liftData.upPos.GetAngles(), <0,-50,0> ) )
+		liftData.openTopR.SetAngles( AnglesCompose( liftData.upPos.GetAngles(), < 0, -50, 0 > ) )
 		liftData.openTopR.SetParent( model, tag, true )
 	}
 
-	//cages
-	if( IsValid( liftData.doorBotC ) )
+	// cages
+	if ( IsValid( liftData.doorBotC ) )
 	{
-		//specific to s2s
+		// specific to s2s
 		liftData.doorBotC.ClearParent()
 		liftData.doorBotC.SetOrigin( liftData.doorBotC.GetOrigin() + ( liftData.doorBotC.GetForwardVector() * -256 ) )
 
@@ -1094,7 +1095,7 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 		liftData.closeBotC.SetParent( model, tag, true )
 		liftData.doorBotC.SetParent( liftData.closeBotC )
 	}
-	if( IsValid( liftData.doorTopC ) )
+	if ( IsValid( liftData.doorTopC ) )
 	{
 		liftData.openTopC = CreateScriptMover( liftData.doorTopC.GetOrigin(), liftData.doorTopC.GetAngles() )
 		liftData.closeTopC = CreateScriptMover( liftData.doorTopC.GetOrigin(), liftData.doorTopC.GetAngles() )
@@ -1104,10 +1105,10 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 		liftData.doorTopC.SetParent( liftData.closeTopC )
 	}
 
-	//slides
-	if( IsValid( liftData.doorBotS ) )
+	// slides
+	if ( IsValid( liftData.doorBotS ) )
 	{
-		//specific to s2s
+		// specific to s2s
 		liftData.doorBotS.ClearParent()
 		liftData.doorBotS.SetOrigin( liftData.doorBotS.GetOrigin() + ( liftData.doorBotS.GetForwardVector() * -256 ) )
 
@@ -1118,7 +1119,7 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 		liftData.closeBotS.SetParent( model, tag, true )
 		liftData.doorBotS.SetParent( liftData.closeBotS )
 	}
-	if( IsValid( liftData.doorTopS ) )
+	if ( IsValid( liftData.doorTopS ) )
 	{
 		liftData.openTopS = CreateScriptMover( liftData.doorTopS.GetOrigin(), liftData.doorTopS.GetAngles() )
 		liftData.closeTopS = CreateScriptMover( liftData.doorTopS.GetOrigin(), liftData.doorTopS.GetAngles() )
@@ -1131,7 +1132,7 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 	liftData.travelTime = 2.0
 	liftData.lift.NonPhysicsSetMoveModeLocal( true )
 
-	//organize it into the ship struct
+	// organize it into the ship struct
 	string name = startEnt.GetScriptName()
 	if ( !( name in ship.lifts ) )
 	{
@@ -1143,7 +1144,6 @@ void function LiftSetup( ShipStruct ship, entity startEnt )
 	vector testOrigin = liftData.lift.GetOrigin() + model.GetRightVector() * -5000
 	ship.lifts[ name ] = ArrayClosestLift( ship.lifts[ name ], testOrigin )
 }
-
 
 /************************************************************************************************\
 
@@ -1172,9 +1172,9 @@ entity function SpawnOnShip( entity spawner, ShipStruct ship )
 	vector delta = npc.GetOrigin() - ship.templateOrigin
 	entity mover = ship.mover
 
-	vector right 	= mover.GetRightVector() 	* delta.x
-	vector forward 	= mover.GetForwardVector() 	* delta.y
-	vector up 		= mover.GetUpVector() 		* ( delta.z + 0.25 ) //quarter inch up to garauntee not in solid ( floating point error )
+	vector right = mover.GetRightVector() * delta.x
+	vector forward = mover.GetForwardVector() * delta.y
+	vector up = mover.GetUpVector() * ( delta.z + 0.25 ) // quarter inch up to garauntee not in solid ( floating point error )
 
 	npc.SetOrigin( mover.GetOrigin() + right + forward + up )
 
@@ -1185,11 +1185,11 @@ vector function InitScript( string name, entity ent = null, string tag = "" )
 {
 	array<entity> nodes = GetEntArrayByScriptName( name )
 	Assert( nodes.len() )
-	entity anchor 	= GetEntByScriptName( "GEO_CHUNK_HIDE_POS" )
+	entity anchor = GetEntByScriptName( "GEO_CHUNK_HIDE_POS" )
 
-	vector offset = <0,0,0>
+	vector offset = < 0, 0, 0 >
 
-	foreach ( node  in nodes )
+	foreach ( node in nodes )
 	{
 		if ( IsValid( ent ) )
 		{
@@ -1201,7 +1201,7 @@ vector function InitScript( string name, entity ent = null, string tag = "" )
 		array<entity> scriptEnts = node.GetLinkEntArray()
 		Assert( scriptEnts.len() )
 
-		foreach( ent in scriptEnts )
+		foreach ( ent in scriptEnts )
 		{
 			if ( IsValid( ent ) )
 			{
@@ -1217,7 +1217,7 @@ vector function InitScript( string name, entity ent = null, string tag = "" )
 	return offset
 }
 
-void function EnableScript( ShipStruct ship, string name, string tag = "", vector offset = <0,0,0> )
+void function EnableScript( ShipStruct ship, string name, string tag = "", vector offset = < 0, 0, 0 > )
 {
 	array<entity> nodes = GetEntArrayByScriptName( name )
 	entity mover = ship.model
@@ -1225,29 +1225,29 @@ void function EnableScript( ShipStruct ship, string name, string tag = "", vecto
 
 	if ( tag != "" )
 	{
-		int attachID 	= mover.LookupAttachment( tag )
-		angles 			= mover.GetAttachmentAngles( attachID )
-		vector pos 		= mover.GetAttachmentOrigin( attachID )
-		vector right 	= AnglesToRight( angles )
-		vector forward 	= AnglesToForward( angles )
-		vector up 		= AnglesToUp( angles )
+		int attachID = mover.LookupAttachment( tag )
+		angles = mover.GetAttachmentAngles( attachID )
+		vector pos = mover.GetAttachmentOrigin( attachID )
+		vector right = AnglesToRight( angles )
+		vector forward = AnglesToForward( angles )
+		vector up = AnglesToUp( angles )
 
 		origin = pos + ( right * offset.x ) + ( forward * offset.y ) + ( up * offset.z )
 	}
 
-	foreach ( node  in nodes )
+	foreach ( node in nodes )
 	{
 		if ( node.GetParent() == mover )
 			continue
 
 		array<entity> scriptEnts = node.GetLinkEntArray()
 
-/*		#if DEV
+		/*		#if DEV
 			Assert( scriptEnts.len() )
 			Assert( scriptEnts[0].GetParent() == node )
 		#endif*/
 
-		foreach( ent in scriptEnts )
+		foreach ( ent in scriptEnts )
 		{
 			if ( IsValid( ent ) )
 				ent.Show()
@@ -1270,9 +1270,9 @@ void function DisableScript( string name )
 {
 	array<entity> nodes = GetEntArrayByScriptName( name )
 	Assert( nodes.len() )
-	entity anchor 	= GetEntByScriptName( "GEO_CHUNK_HIDE_POS" )
+	entity anchor = GetEntByScriptName( "GEO_CHUNK_HIDE_POS" )
 
-	foreach ( node  in nodes )
+	foreach ( node in nodes )
 	{
 		node.ClearParent()
 		node.SetOrigin( anchor.GetOrigin() )
@@ -1282,9 +1282,9 @@ void function DisableScript( string name )
 void function CleanupScript( string name )
 {
 	array<entity> nodes = GetEntArrayByScriptName( name )
-	foreach ( node  in nodes )
+	foreach ( node in nodes )
 	{
-		node.Destroy() //it will take it's children with it
+		node.Destroy() // it will take it's children with it
 	}
 }
 
@@ -1326,7 +1326,7 @@ int function DistanceCompareClosestTurret( DistEntryTurret a, DistEntryTurret b 
 	else if ( a.distanceSqr < b.distanceSqr )
 		return -1
 
-	return 0;
+	return 0
 }
 
 array<LiftStruct> function ArrayClosestLift( array<LiftStruct> entArray, vector origin )
@@ -1367,7 +1367,7 @@ int function DistanceCompareClosestLift( DistEntryLift a, DistEntryLift b )
 	else if ( a.distanceSqr < b.distanceSqr )
 		return -1
 
-	return 0;
+	return 0
 }
 
 void function ShipGeoHide( ShipStruct ship, string chunkName )
@@ -1376,8 +1376,8 @@ void function ShipGeoHide( ShipStruct ship, string chunkName )
 
 	Assert( chunk.GetParent() == ship.model )
 
-	entity anchor 	= CreateScriptMover( ship.model.GetOrigin(), ship.model.GetAngles() )
-	entity node 	= GetEntByScriptName( "GEO_CHUNK_HIDE_POS" )
+	entity anchor = CreateScriptMover( ship.model.GetOrigin(), ship.model.GetAngles() )
+	entity node = GetEntByScriptName( "GEO_CHUNK_HIDE_POS" )
 
 	chunk.SetParent( anchor, "", true, 0 )
 	chunk.DontIncludeParentBbox()
@@ -1445,6 +1445,6 @@ void function Ship_SkyboxToWorld( ShipStruct ship )
 
 	ship.model.Show()
 
-	ship.mover.l.skyboxOffset = <0,0,0>
+	ship.mover.l.skyboxOffset = < 0, 0, 0 >
 	ship.mover.l.skyboxScale = 1.0
 }

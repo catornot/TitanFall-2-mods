@@ -17,7 +17,7 @@ void function GamemodeTdm_Init()
 	AddCallback_OnPlayerKilled( GiveScoreForPlayerKill )
 	ScoreEvent_SetupEarnMeterValuesForMixedModes()
 	SetTimeoutWinnerDecisionFunc( CheckScoreForDraw )
-	
+
 	AddCallback_GameStateEnter( eGameState.Playing, SetupMatch )
 	AddCallback_GameStateEnter( eGameState.WinnerDetermined, HACK_PlaceEveryoneOnSameTeam )
 }
@@ -36,13 +36,25 @@ void function RateSpawnpoints_Directional( int checkclass, array<entity> spawnpo
 
 int function CheckScoreForDraw()
 {
-	if ( GameRules_GetTeamScore( TEAM_IMC ) > GameRules_GetTeamScore( TEAM_MILITIA ) && GameRules_GetTeamScore( TEAM_IMC ) > GameRules_GetTeamScore( TEAM_GAMMA ) && GameRules_GetTeamScore( TEAM_IMC ) > GameRules_GetTeamScore( TEAM_ALPHA ) )
+	if (
+		GameRules_GetTeamScore( TEAM_IMC ) > GameRules_GetTeamScore( TEAM_MILITIA ) && GameRules_GetTeamScore( TEAM_IMC ) > GameRules_GetTeamScore( TEAM_GAMMA ) &&
+		GameRules_GetTeamScore( TEAM_IMC ) > GameRules_GetTeamScore( TEAM_ALPHA )
+	)
 		return TEAM_IMC
-	else if ( GameRules_GetTeamScore( TEAM_MILITIA ) > GameRules_GetTeamScore( TEAM_IMC ) && GameRules_GetTeamScore( TEAM_MILITIA ) > GameRules_GetTeamScore( TEAM_GAMMA ) && GameRules_GetTeamScore( TEAM_MILITIA ) > GameRules_GetTeamScore( TEAM_ALPHA ) )
+	else if (
+		GameRules_GetTeamScore( TEAM_MILITIA ) > GameRules_GetTeamScore( TEAM_IMC ) && GameRules_GetTeamScore( TEAM_MILITIA ) > GameRules_GetTeamScore( TEAM_GAMMA )
+		&& GameRules_GetTeamScore( TEAM_MILITIA ) > GameRules_GetTeamScore( TEAM_ALPHA )
+	)
 		return TEAM_MILITIA
-	else if ( GameRules_GetTeamScore( TEAM_GAMMA ) > GameRules_GetTeamScore( TEAM_IMC ) && GameRules_GetTeamScore( TEAM_MILITIA ) < GameRules_GetTeamScore( TEAM_GAMMA ) && GameRules_GetTeamScore( TEAM_GAMMA ) > GameRules_GetTeamScore( TEAM_ALPHA ) )
+	else if (
+		GameRules_GetTeamScore( TEAM_GAMMA ) > GameRules_GetTeamScore( TEAM_IMC ) && GameRules_GetTeamScore( TEAM_MILITIA ) < GameRules_GetTeamScore( TEAM_GAMMA ) &&
+		GameRules_GetTeamScore( TEAM_GAMMA ) > GameRules_GetTeamScore( TEAM_ALPHA )
+	)
 		return TEAM_GAMMA
-	else if ( GameRules_GetTeamScore( TEAM_ALPHA ) > GameRules_GetTeamScore( TEAM_IMC ) && GameRules_GetTeamScore( TEAM_ALPHA ) > GameRules_GetTeamScore( TEAM_GAMMA ) && GameRules_GetTeamScore( TEAM_MILITIA ) < GameRules_GetTeamScore( TEAM_ALPHA ) )
+	else if (
+		GameRules_GetTeamScore( TEAM_ALPHA ) > GameRules_GetTeamScore( TEAM_IMC ) && GameRules_GetTeamScore( TEAM_ALPHA ) > GameRules_GetTeamScore( TEAM_GAMMA ) &&
+		GameRules_GetTeamScore( TEAM_MILITIA ) < GameRules_GetTeamScore( TEAM_ALPHA )
+	)
 		return TEAM_ALPHA
 
 	return TEAM_UNASSIGNED
@@ -98,23 +110,26 @@ void function GiveTeam( entity player )
 		file.Militia.append( player )
 		return
 	}
-	
+
 	int team = [ TEAM_ALPHA, TEAM_GAMMA, TEAM_IMC, TEAM_MILITIA ].getrandom()
 	SetTeam( player, team )
 
 	Chat_ServerPrivateMessage( player, "Unbind scoreboard ;)", false )
-	
-	switch( team )
+
+	switch ( team )
 	{
 		case TEAM_IMC:
 			file.Imc.append( player )
 			return
+
 		case TEAM_MILITIA:
 			file.Militia.append( player )
 			return
+
 		case TEAM_GAMMA:
 			file.Gamma.append( player )
 			return
+
 		case TEAM_ALPHA:
 			file.Alpha.append( player )
 			return
@@ -127,15 +142,15 @@ void function SetupMatch()
 	AddCallback_OnClientConnected( GiveTeam )
 	AddCallback_OnPlayerRespawned( GiveTeam )
 
-	foreach( entity player in GetPlayerArray() )
+	foreach ( entity player in GetPlayerArray() )
 		GiveTeam( player )
 }
 
 void function ScoreDisplayThink()
 {
-	while( GetGameState() == eGameState.Playing )
+	while ( GetGameState() == eGameState.Playing )
 	{
-		foreach( entity player in GetPlayerArray() )
+		foreach ( entity player in GetPlayerArray() )
 		{
 			int s_gamma = GameRules_GetTeamScore( TEAM_GAMMA )
 			int s_alpha = GameRules_GetTeamScore( TEAM_ALPHA )
@@ -144,15 +159,63 @@ void function ScoreDisplayThink()
 
 			if ( !IsValid( player ) )
 				continue
-			
+
 			if ( file.Gamma.contains( player ) )
-				SendHudMessage( player, format( "< Gamma > : %d, Alpha : %d, IMC : %d, Militia : %d", s_gamma, s_alpha, s_imc, s_militia ) , -1, 0.2, 200, 200, 200, 0, 0, 10, 0 )
+				SendHudMessage(
+					player,
+					format( "< Gamma > : %d, Alpha : %d, IMC : %d, Militia : %d", s_gamma, s_alpha, s_imc, s_militia ),
+					-1,
+					0.2,
+					200,
+					200,
+					200,
+					0,
+					0,
+					10,
+					0
+				)
 			else if ( file.Alpha.contains( player ) )
-				SendHudMessage( player, format( "Gamma : %d, < Alpha > : %d, IMC : %d, Militia : %d", s_gamma, s_alpha, s_imc, s_militia ) , -1, 0.2, 200, 200, 200, 0, 0, 10, 0 )
+				SendHudMessage(
+					player,
+					format( "Gamma : %d, < Alpha > : %d, IMC : %d, Militia : %d", s_gamma, s_alpha, s_imc, s_militia ),
+					-1,
+					0.2,
+					200,
+					200,
+					200,
+					0,
+					0,
+					10,
+					0
+				)
 			else if ( file.Imc.contains( player ) )
-				SendHudMessage( player, format( "Gamma : %d, Alpha : %d, < IMC > : %d, Militia : %d", s_gamma, s_alpha, s_imc, s_militia ) , -1, 0.2, 200, 200, 200, 0, 0, 10, 0 )
+				SendHudMessage(
+					player,
+					format( "Gamma : %d, Alpha : %d, < IMC > : %d, Militia : %d", s_gamma, s_alpha, s_imc, s_militia ),
+					-1,
+					0.2,
+					200,
+					200,
+					200,
+					0,
+					0,
+					10,
+					0
+				)
 			else if ( file.Militia.contains( player ) )
-				SendHudMessage( player, format( "Gamma : %d, Alpha : %d, IMC : %d, < Militia > : %d", s_gamma, s_alpha, s_imc, s_militia ) , -1, 0.2, 200, 200, 200, 0, 0, 10, 0 )
+				SendHudMessage(
+					player,
+					format( "Gamma : %d, Alpha : %d, IMC : %d, < Militia > : %d", s_gamma, s_alpha, s_imc, s_militia ),
+					-1,
+					0.2,
+					200,
+					200,
+					200,
+					0,
+					0,
+					10,
+					0
+				)
 		}
 
 		wait 5
@@ -163,7 +226,7 @@ void function HACK_PlaceEveryoneOnSameTeam()
 {
 	int winningTeam = CheckScoreForDraw()
 
-	foreach( entity player in GetPlayerArray() )
+	foreach ( entity player in GetPlayerArray() )
 	{
 		if ( player.GetTeam() == winningTeam )
 			Chat_ServerPrivateMessage( player, "You Won :)", false )

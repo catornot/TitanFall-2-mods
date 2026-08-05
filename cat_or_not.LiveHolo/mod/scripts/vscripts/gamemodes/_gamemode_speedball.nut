@@ -1,6 +1,7 @@
 global function GamemodeSpeedball_Init
 
-struct {
+struct
+{
 	entity flagBase
 	entity flag
 	entity flagCarrier
@@ -21,12 +22,12 @@ void function GamemodeSpeedball_Init()
 	Riff_ForceTitanAvailability( eTitanAvailability.Never )
 	Riff_ForceSetEliminationMode( eEliminationMode.Pilots )
 	ScoreEvent_SetupEarnMeterValuesForMixedModes()
-	
+
 	AddSpawnCallbackEditorClass( "script_ref", "info_speedball_flag", CreateFlag )
-	
+
 	AddCallback_GameStateEnter( eGameState.Prematch, CreateFlagIfNoFlagSpawnpoint )
 	AddCallback_GameStateEnter( eGameState.Playing, ResetFlag )
-	AddCallback_GameStateEnter( eGameState.WinnerDetermined,GamemodeSpeedball_OnWinnerDetermined)
+	AddCallback_GameStateEnter( eGameState.WinnerDetermined, GamemodeSpeedball_OnWinnerDetermined )
 	AddCallback_GameStateEnter( 7, RemoveMasters )
 	AddCallback_GameStateEnter( 4, GiveHolo )
 	AddCallback_GameStateEnter( 4, SpawnPlayerOnHolo )
@@ -34,16 +35,16 @@ void function GamemodeSpeedball_Init()
 	AddCallback_OnPlayerKilled( OnPlayerKilled )
 	AddCallback_OnPlayerRespawned( handleRespawning )
 	SetTimeoutWinnerDecisionFunc( TimeoutCheckFlagHolder )
-	AddCallback_OnRoundEndCleanup ( ResetFlag )
+	AddCallback_OnRoundEndCleanup( ResetFlag )
 
 	ClassicMP_SetCustomIntro( ClassicMP_DefaultNoIntro_Setup, ClassicMP_DefaultNoIntro_GetLength() )
 	ClassicMP_ForceDisableEpilogue( true )
 }
 
 void function CreateFlag( entity flagSpawn )
-{ 
+{
 	entity flagBase = CreatePropDynamic( CTF_FLAG_BASE_MODEL, flagSpawn.GetOrigin(), flagSpawn.GetAngles() )
-	
+
 	entity flag = CreateEntity( "item_flag" )
 	flag.SetValueForModelKey( CTF_FLAG_MODEL )
 	flag.MarkAsNonMovingAttachment()
@@ -61,13 +62,13 @@ void function CreateFlag( entity flagSpawn )
 
 	file.IMC_Holo_Master = file.ref
 	file.Militia_Holo_Master = file.ref
-}	
+}
 
 bool function OnFlagCollected( entity player, entity flag )
 {
-	if ( !IsAlive( player ) || flag.GetParent() != null || player.IsTitan() || player.IsPhaseShifted() ) 
+	if ( !IsAlive( player ) || flag.GetParent() != null || player.IsTitan() || player.IsPhaseShifted() )
 		return false
-		
+
 	GiveFlag( player )
 	return false // so flag ent doesn't despawn
 }
@@ -76,7 +77,7 @@ void function OnPlayerKilled( entity victim, entity attacker, var damageInfo )
 {
 	if ( file.flagCarrier == victim )
 		DropFlag()
-		
+
 	if ( victim.IsPlayer() && GetGameState() == eGameState.Playing )
 		if ( GetPlayerArrayOfTeam_Alive( victim.GetTeam() ).len() == 1 )
 			foreach ( entity player in GetPlayerArray() )
@@ -90,12 +91,12 @@ void function GiveFlag( entity player )
 	SetTeam( file.flag, player.GetTeam() )
 	SetGlobalNetEnt( "flagCarrier", player )
 	thread DropFlagIfPhased( player )
-	
+
 	EmitSoundOnEntityOnlyToPlayer( player, player, "UI_CTF_1P_GrabFlag" )
 	foreach ( entity otherPlayer in GetPlayerArray() )
 	{
 		MessageToPlayer( otherPlayer, eEventNotifications.SPEEDBALL_FlagPickedUp, player )
-		
+
 		if ( otherPlayer.GetTeam() == player.GetTeam() )
 			EmitSoundOnEntityToTeamExceptPlayer( file.flag, "UI_CTF_3P_TeamGrabFlag", player.GetTeam(), player )
 	}
@@ -105,14 +106,16 @@ void function DropFlagIfPhased( entity player )
 {
 	player.EndSignal( "StartPhaseShift" )
 	player.EndSignal( "OnDestroy" )
-	
-	OnThreadEnd( function() : ( player ) 
-	{
-		if ( file.flag.GetParent() == player )
-			DropFlag()
-	})
-	
-	while( file.flag.GetParent() == player )
+
+	OnThreadEnd(
+		function() : ( player )
+		{
+			if ( file.flag.GetParent() == player )
+				DropFlag()
+		}
+	)
+
+	while ( file.flag.GetParent() == player )
 		WaitFrame()
 }
 
@@ -122,13 +125,13 @@ void function DropFlag()
 	file.flag.SetAngles( < 0, 0, 0 > )
 	SetTeam( file.flag, TEAM_UNASSIGNED )
 	SetGlobalNetEnt( "flagCarrier", file.flag )
-	
+
 	if ( IsValid( file.flagCarrier ) )
 		EmitSoundOnEntityOnlyToPlayer( file.flagCarrier, file.flagCarrier, "UI_CTF_1P_FlagDrop" )
-	
+
 	foreach ( entity player in GetPlayerArray() )
 		MessageToPlayer( player, eEventNotifications.SPEEDBALL_FlagDropped, file.flagCarrier )
-	
+
 	file.flagCarrier = null
 }
 
@@ -136,10 +139,10 @@ void function CreateFlagIfNoFlagSpawnpoint()
 {
 	if ( IsValid( file.flag ) )
 		return
-	
+
 	foreach ( entity hardpoint in GetEntArrayByClass_Expensive( "info_hardpoint" ) )
 	{
-		if ( GetHardpointGroup(hardpoint) == "B" )
+		if ( GetHardpointGroup( hardpoint ) == "B" )
 		{
 			CreateFlag( hardpoint )
 			return
@@ -162,39 +165,39 @@ int function TimeoutCheckFlagHolder()
 {
 	if ( file.flagCarrier == null )
 		return TEAM_UNASSIGNED
-		
+
 	return file.flagCarrier.GetTeam()
 }
 
 void function GamemodeSpeedball_OnWinnerDetermined()
 {
-	if(IsValid(file.flagCarrier))
+	if ( IsValid( file.flagCarrier ) )
 		file.flagCarrier.AddToPlayerGameStat( PGS_ASSAULT_SCORE, 1 )
 }
 
-string function GetHardpointGroup(entity hardpoint) //Hardpoint Entity B on Homestead is missing the Hardpoint Group KeyValue
+string function GetHardpointGroup( entity hardpoint ) // Hardpoint Entity B on Homestead is missing the Hardpoint Group KeyValue
 {
-	if((GetMapName()=="mp_homestead")&&(!hardpoint.HasKey("hardpointGroup")))
+	if ( ( GetMapName() == "mp_homestead" ) && ( !hardpoint.HasKey( "hardpointGroup" ) ) )
 		return "B"
 
-	return string(hardpoint.kv.hardpointGroup)
+	return string( hardpoint.kv.hardpointGroup )
 }
 
 void function handleRespawning( entity player )
 {
 	if ( GetGameState() != 3 )
 		return
-	
+
 	thread handleRespawningThreaded( player )
 }
 
 void function handleRespawningThreaded( entity player )
 {
 	EndSignal( player, "OnDestroy" )
-	
+
 	wait RandomFloat( 1.0 )
 
-	switch( player.GetTeam() )
+	switch ( player.GetTeam() )
 	{
 		case TEAM_IMC:
 			if ( IsValid( player ) && file.IMC_Holo_Master == file.ref )
@@ -202,8 +205,9 @@ void function handleRespawningThreaded( entity player )
 			else if ( IsValid( player ) )
 				thread DieOnMatchStart( player )
 			break
+
 		case TEAM_MILITIA:
-			if ( IsValid( player ) && file.Militia_Holo_Master == file.ref  )
+			if ( IsValid( player ) && file.Militia_Holo_Master == file.ref )
 				file.Militia_Holo_Master = player
 			else if ( IsValid( player ) )
 				thread DieOnMatchStart( player )
@@ -216,9 +220,9 @@ void function DieOnMatchStart( entity player )
 	EndSignal( player, "OnDestroy" )
 	EndSignal( player, "OnDeath" )
 
-	while( GetGameState() == 3 )
+	while ( GetGameState() == 3 )
 		WaitFrame()
-	
+
 	player.Die()
 }
 
@@ -246,13 +250,13 @@ void function GiveHolo()
 void function SpawnPlayerOnHolo()
 {
 	entity holo
-	while( GetGameState() == 4 )
+	while ( GetGameState() == 4 )
 	{
 		holo = GetEnt( "player_decoy" )
 		#if HOLOMIMIC
 			holo = GetEnt( "npc_pilot_elite" )
 		#endif
-		if ( IsValid( holo ) && IsAlive( holo) )
+		if ( IsValid( holo ) && IsAlive( holo ) )
 		{
 			SpawnPlayerOnHolo2( holo )
 		}
@@ -261,7 +265,7 @@ void function SpawnPlayerOnHolo()
 }
 void function SpawnPlayerOnHolo2( entity holo )
 {
-	foreach( entity player in GetPlayerArray() )
+	foreach ( entity player in GetPlayerArray() )
 	{
 		printt( "teams", player.GetTeam() == holo.GetTeam() )
 		printt( "team holo", holo.GetTeam() )

@@ -1,15 +1,15 @@
 untyped
 
-global const SCOREBOARD_LOCAL_PLAYER_COLOR = <LOCAL_R / 255.0, LOCAL_G / 255.0, LOCAL_B / 255.0>
-global const SCOREBOARD_PARTY_COLOR = <PARTY_R / 255.0, PARTY_G / 255.0, PARTY_B / 255.0>
-const SCOREBOARD_FRIENDLY_COLOR = <FRIENDLY_R / 255.0, FRIENDLY_G / 255.0, FRIENDLY_B / 255.0>
-const SCOREBOARD_FRIENDLY_SELECTED_COLOR = <0.6640625, 0.7578125, 0.85546875>
-const SCOREBOARD_ENEMY_COLOR = <ENEMY_R / 255.0, ENEMY_G / 255.0, ENEMY_B / 255.0>
-const SCOREBOARD_ENEMY_SELECTED_COLOR = <1.0, 0.7019, 0.592>
-const SCOREBOARD_DEAD_FONT_COLOR = <0.7, 0.7, 0.7>
-const SCOREBOARD_FFA_COLOR = <0.5, 0.5, 0.5>
+global const SCOREBOARD_LOCAL_PLAYER_COLOR = < LOCAL_R / 255.0, LOCAL_G / 255.0, LOCAL_B / 255.0 >
+global const SCOREBOARD_PARTY_COLOR = < PARTY_R / 255.0, PARTY_G / 255.0, PARTY_B / 255.0 >
+const SCOREBOARD_FRIENDLY_COLOR = < FRIENDLY_R / 255.0, FRIENDLY_G / 255.0, FRIENDLY_B / 255.0 >
+const SCOREBOARD_FRIENDLY_SELECTED_COLOR = < 0.6640625, 0.7578125, 0.85546875 >
+const SCOREBOARD_ENEMY_COLOR = < ENEMY_R / 255.0, ENEMY_G / 255.0, ENEMY_B / 255.0 >
+const SCOREBOARD_ENEMY_SELECTED_COLOR = < 1.0, 0.7019, 0.592 >
+const SCOREBOARD_DEAD_FONT_COLOR = < 0.7, 0.7, 0.7 >
+const SCOREBOARD_FFA_COLOR = < 0.5, 0.5, 0.5 >
 const SCOREBOARD_BG_ALPHA = 0.35
-const SCOREBOARD_EMPTY_COLOR = <0.0, 0.0, 0.0>
+const SCOREBOARD_EMPTY_COLOR = < 0.0, 0.0, 0.0 >
 const SCOREBOARD_EMPTY_BG_ALPHA = 0.35
 
 const SCOREBOARD_TITLE_HEIGHT = 50
@@ -39,7 +39,8 @@ global function ScoreboardSelectNextPlayer
 global function GetScoreBoardFooterRui
 global function SetScoreboardUpdateCallback
 
-struct {
+struct
+{
 	bool hasFocus = false
 	var selectedPlayer
 	var prevPlayer
@@ -52,12 +53,7 @@ struct {
 	array<var> scoreboardOverlays
 	array<var> scoreboardElems
 
-	table header = {
-		background = null
-		gametypeAndMap = null
-		gametypeDesc = null
-		scoreHeader = null
-	}
+	table header = { background = null, gametypeAndMap = null, gametypeDesc = null, scoreHeader = null }
 
 	var footer
 	var pingText
@@ -72,7 +68,7 @@ struct {
 
 	var scoreboardRUI
 
-	void functionref(entity,var) scoreboardUpdateCallback
+	void functionref( entity, var ) scoreboardUpdateCallback
 } file
 
 function ClScoreboardMp_Init()
@@ -122,8 +118,8 @@ void function ScoreboardLoseFocus( entity player )
 	SetScoreboardPlayer( null )
 
 	RuiSetString( Hud_GetRui( file.footer ), "footerText", "" )
-	//RuiSetGameTime( Hud_GetRui( file.footer ), "startFadeTime", Time() )
-	//RuiSetString( Hud_GetRui( file.footer ), "footerText", Localize( "#RIGHT_SCOREBOARD_FOCUS" ) )
+	// RuiSetGameTime( Hud_GetRui( file.footer ), "startFadeTime", Time() )
+	// RuiSetString( Hud_GetRui( file.footer ), "footerText", Localize( "#RIGHT_SCOREBOARD_FOCUS" ) )
 }
 
 void function ScoreboardToggleFocus( entity player )
@@ -154,7 +150,8 @@ void function InitScoreboardMP()
 	int myTeam = localPlayer.GetTeam()
 	int enemyTeam = GetEnemyScoreboardTeam()
 
-	if (myTeam == 0) {
+	if ( myTeam == 0 )
+	{
 		myTeam = 2
 		enemyTeam = 3
 	}
@@ -174,22 +171,16 @@ void function InitScoreboardMP()
 	file.footer = HudElement( "ScoreboardGamepadFooter", scoreboard )
 	file.pingText = HudElement( "ScoreboardPingText", scoreboard )
 
-	file.teamElems[myTeam] <- {
-		logo = HudElement( "ScoreboardMyTeamLogo", scoreboard )
-		score = HudElement( "ScoreboardMyTeamScore", scoreboard )
-	}
+	file.teamElems[ myTeam ] <- { logo = HudElement( "ScoreboardMyTeamLogo", scoreboard ), score = HudElement( "ScoreboardMyTeamScore", scoreboard ) }
 
-	file.teamElems[enemyTeam] <- {
-		logo = HudElement( "ScoreboardEnemyTeamLogo", scoreboard )
-		score = HudElement( "ScoreboardEnemyTeamScore", scoreboard )
-	}
+	file.teamElems[ enemyTeam ] <- { logo = HudElement( "ScoreboardEnemyTeamLogo", scoreboard ), score = HudElement( "ScoreboardEnemyTeamScore", scoreboard ) }
 
 	if ( !UseSingleTeamScoreboard() )
 	{
 		string myFaction = GetFactionChoice( localPlayer )
 		ItemDisplayData myDisplayData = GetItemDisplayData( myFaction )
 		asset myFactionLogo = myDisplayData.image
-		RuiSetImage( Hud_GetRui( file.teamElems[myTeam].logo ), "logo", myFactionLogo )
+		RuiSetImage( Hud_GetRui( file.teamElems[ myTeam ].logo ), "logo", myFactionLogo )
 	}
 
 	file.scoreboardElems.append( file.header.gametypeAndMap )
@@ -198,8 +189,8 @@ void function InitScoreboardMP()
 	file.scoreboardElems.append( file.footer )
 	file.scoreboardElems.append( file.pingText )
 
-	file.playerElems[myTeam] <- []
-	file.playerElems[enemyTeam] <- []
+	file.playerElems[ myTeam ] <- []
+	file.playerElems[ enemyTeam ] <- []
 
 	array<int> teams = [ myTeam, enemyTeam ]
 	local prefix
@@ -208,15 +199,15 @@ void function InitScoreboardMP()
 
 	foreach ( int team in teams )
 	{
-		file.scoreboardElems.append( file.teamElems[team].logo )
-		file.scoreboardElems.append( file.teamElems[team].score )
+		file.scoreboardElems.append( file.teamElems[ team ].logo )
+		file.scoreboardElems.append( file.teamElems[ team ].score )
 
 		if ( team == myTeam )
 			prefix = "ScoreboardTeammate"
 		else
 			prefix = "ScoreboardOpponent"
 
-		for ( int elem = 0; elem < maxPlayerDisplaySlots; elem++  )
+		for ( int elem = 0; elem < maxPlayerDisplaySlots; elem++ )
 		{
 			local elemNum = string( elem )
 
@@ -226,7 +217,7 @@ void function InitScoreboardMP()
 
 			file.scoreboardElems.append( Table.background )
 
-			file.playerElems[team].append( Table )
+			file.playerElems[ team ].append( Table )
 		}
 	}
 
@@ -235,20 +226,19 @@ void function InitScoreboardMP()
 
 	if ( UseSingleTeamScoreboard() )
 	{
-		file.teamElems[myTeam].logo.Hide()
-		file.teamElems[myTeam].score.Hide()
-		file.teamElems[enemyTeam].logo.Hide()
-		file.teamElems[enemyTeam].score.Hide()
+		file.teamElems[ myTeam ].logo.Hide()
+		file.teamElems[ myTeam ].score.Hide()
+		file.teamElems[ enemyTeam ].logo.Hide()
+		file.teamElems[ enemyTeam ].score.Hide()
 	}
 	else
 	{
-		file.teamElems[myTeam].logo.Show()
-		file.teamElems[myTeam].score.Show()
-		file.teamElems[enemyTeam].logo.Show()
-		file.teamElems[enemyTeam].score.Show()
+		file.teamElems[ myTeam ].logo.Show()
+		file.teamElems[ myTeam ].score.Show()
+		file.teamElems[ enemyTeam ].logo.Show()
+		file.teamElems[ enemyTeam ].score.Show()
 	}
 }
-
 
 array<var> function CreateScoreboardOverlays()
 {
@@ -258,10 +248,11 @@ array<var> function CreateScoreboardOverlays()
 	{
 		case ATTRITION:
 			overlays.extend( AT_CreateScoreboardOverlays() )
-			break;
+			break
+
 		default:
 
-			break;
+			break
 	}
 
 	return overlays
@@ -307,7 +298,8 @@ void function ShowScoreboardMP()
 	int myTeam = localPlayer.GetTeam()
 	int enemyTeam = GetEnemyScoreboardTeam()
 
-	if (myTeam == 0) {
+	if ( myTeam == 0 )
+	{
 		myTeam = 2
 		enemyTeam = 3
 	}
@@ -318,23 +310,26 @@ void function ShowScoreboardMP()
 			file.selectedPlayer = localPlayer
 		SetScoreboardPlayer( file.selectedPlayer )
 	} else {*/
-		RuiSetGameTime( Hud_GetRui( file.footer ), "startFadeTime", Time() )
-		RuiSetString( Hud_GetRui( file.footer ), "footerText", Localize( "#RIGHT_SCOREBOARD_FOCUS" ) )
-	//}
+	RuiSetGameTime( Hud_GetRui( file.footer ), "startFadeTime", Time() )
+	RuiSetString( Hud_GetRui( file.footer ), "footerText", Localize( "#RIGHT_SCOREBOARD_FOCUS" ) )
+	// }
 
 	EndSignal( clGlobal.signalDummy, "OnHideScoreboard" )
 
 	var screenSize = Hud.GetScreenSize()
-	float resMultX = float( screenSize[0] ) / 1920.0
-	float resMultY = float( screenSize[1] ) / 1080.0
+	float resMultX = float( screenSize[ 0 ] ) / 1920.0
+	float resMultY = float( screenSize[ 1 ] ) / 1080.0
 
 	int numTeamPlayersDisplayed = GetNumTeamPlayers()
-	int teamHeight = SCOREBOARD_TEAM_LOGO_HEIGHT + SCOREBOARD_PLAYER_ROW_OFFSET + ( SCOREBOARD_PLAYER_ROW_HEIGHT + SCOREBOARD_PLAYER_ROW_SPACING ) * numTeamPlayersDisplayed - SCOREBOARD_PLAYER_ROW_SPACING
+	int teamHeight = SCOREBOARD_TEAM_LOGO_HEIGHT + SCOREBOARD_PLAYER_ROW_OFFSET +
+		( SCOREBOARD_PLAYER_ROW_HEIGHT + SCOREBOARD_PLAYER_ROW_SPACING ) * numTeamPlayersDisplayed - SCOREBOARD_PLAYER_ROW_SPACING
 	int scoreboardHeight
 
 	if ( !UseSingleTeamScoreboard() )
 	{
-		scoreboardHeight = SCOREBOARD_TITLE_HEIGHT + SCOREBOARD_SUBTITLE_HEIGHT + SCOREBOARD_TEAM_LOGO_OFFSET + teamHeight + SCOREBOARD_TEAM_LOGO_OFFSET + teamHeight + SCOREBOARD_FOOTER_HEIGHT
+		scoreboardHeight =
+			SCOREBOARD_TITLE_HEIGHT + SCOREBOARD_SUBTITLE_HEIGHT + SCOREBOARD_TEAM_LOGO_OFFSET + teamHeight + SCOREBOARD_TEAM_LOGO_OFFSET + teamHeight +
+				SCOREBOARD_FOOTER_HEIGHT
 	}
 	else
 	{
@@ -350,16 +345,16 @@ void function ShowScoreboardMP()
 	var elemTable
 
 	table<int, array<entity> > teamPlayers
-	teamPlayers[myTeam] <- []
-	teamPlayers[enemyTeam] <- []
+	teamPlayers[ myTeam ] <- []
+	teamPlayers[ enemyTeam ] <- []
 
 	table playerSlotEmpty = {}
-	playerSlotEmpty[myTeam] <- SCOREBOARD_MATERIAL_FRIENDLY_SLOT
-	playerSlotEmpty[enemyTeam] <- SCOREBOARD_MATERIAL_ENEMY_SLOT
+	playerSlotEmpty[ myTeam ] <- SCOREBOARD_MATERIAL_FRIENDLY_SLOT
+	playerSlotEmpty[ enemyTeam ] <- SCOREBOARD_MATERIAL_ENEMY_SLOT
 
 	table teamScore = {}
-	teamScore[myTeam] <- []
-	teamScore[enemyTeam] <- []
+	teamScore[ myTeam ] <- []
+	teamScore[ enemyTeam ] <- []
 
 	int winningTeam
 	int losingTeam
@@ -375,7 +370,7 @@ void function ShowScoreboardMP()
 	string enemyFaction
 	string lastEnemyFaction
 
-	for ( ;; )
+	for ( ; ; )
 	{
 		localPlayer = GetLocalClientPlayer()
 
@@ -395,14 +390,14 @@ void function ShowScoreboardMP()
 
 		if ( UseSingleTeamScoreboard() )
 		{
-			teamPlayers[myTeam] = GetSortedPlayers( compareFunc, 0 )
-			teamPlayers[enemyTeam] = []
+			teamPlayers[ myTeam ] = GetSortedPlayers( compareFunc, 0 )
+			teamPlayers[ enemyTeam ] = []
 
 			winningTeam = myTeam
 			losingTeam = enemyTeam
 
-			if ( teamPlayers[myTeam].len() > 0 )
-				RuiSetBool( Hud_GetRui( file.header.scoreHeader ), "winningTeamIsFriendly", teamPlayers[myTeam][ 0 ] == GetLocalClientPlayer() )
+			if ( teamPlayers[ myTeam ].len() > 0 )
+				RuiSetBool( Hud_GetRui( file.header.scoreHeader ), "winningTeamIsFriendly", teamPlayers[ myTeam ][ 0 ] == GetLocalClientPlayer() )
 		}
 		else
 		{
@@ -411,25 +406,25 @@ void function ShowScoreboardMP()
 			{
 				ItemDisplayData enemyDisplayData = GetItemDisplayData( enemyFaction )
 				asset enemyFactionLogo = enemyDisplayData.image
-				RuiSetImage( Hud_GetRui( file.teamElems[enemyTeam].logo ), "logo", enemyFactionLogo )
+				RuiSetImage( Hud_GetRui( file.teamElems[ enemyTeam ].logo ), "logo", enemyFactionLogo )
 			}
 			lastEnemyFaction = enemyFaction
 
-			teamPlayers[myTeam] = GetSortedPlayers( compareFunc, myTeam )
-			teamPlayers[enemyTeam] = GetSortedPlayers( compareFunc, enemyTeam )
+			teamPlayers[ myTeam ] = GetSortedPlayers( compareFunc, myTeam )
+			teamPlayers[ enemyTeam ] = GetSortedPlayers( compareFunc, enemyTeam )
 
 			if ( IsRoundBased() )
 			{
-				teamScore[myTeam] <- GameRules_GetTeamScore2( myTeam )
-				teamScore[enemyTeam] <- GameRules_GetTeamScore2( enemyTeam )
+				teamScore[ myTeam ] <- GameRules_GetTeamScore2( myTeam )
+				teamScore[ enemyTeam ] <- GameRules_GetTeamScore2( enemyTeam )
 			}
 			else
 			{
-				teamScore[myTeam] <- GameRules_GetTeamScore( myTeam )
-				teamScore[enemyTeam] <- GameRules_GetTeamScore( enemyTeam )
+				teamScore[ myTeam ] <- GameRules_GetTeamScore( myTeam )
+				teamScore[ enemyTeam ] <- GameRules_GetTeamScore( enemyTeam )
 			}
 
-			if ( teamScore[myTeam] >= teamScore[enemyTeam] )
+			if ( teamScore[ myTeam ] >= teamScore[ enemyTeam ] )
 			{
 				winningTeam = myTeam
 				losingTeam = enemyTeam
@@ -445,18 +440,18 @@ void function ShowScoreboardMP()
 
 		if ( !UseSingleTeamScoreboard() )
 		{
-			RuiSetInt( Hud_GetRui( file.teamElems[winningTeam].score ), "score", teamScore[winningTeam] )
-			RuiSetInt( Hud_GetRui( file.teamElems[losingTeam].score ), "score", teamScore[losingTeam] )
+			RuiSetInt( Hud_GetRui( file.teamElems[ winningTeam ].score ), "score", teamScore[ winningTeam ] )
+			RuiSetInt( Hud_GetRui( file.teamElems[ losingTeam ].score ), "score", teamScore[ losingTeam ] )
 
-			file.teamElems[winningTeam].logo.SetY( winningTeamYOffset )
-			file.teamElems[losingTeam].logo.SetY( losingTeamYOffset )
+			file.teamElems[ winningTeam ].logo.SetY( winningTeamYOffset )
+			file.teamElems[ losingTeam ].logo.SetY( losingTeamYOffset )
 			file.header.gametypeAndMap.SetY( scoreboardYOffset )
 			file.footer.SetY( footerYOffset )
 		}
 		else
 		{
 			file.header.gametypeAndMap.SetY( -160 * resMultY )
-			file.teamElems[winningTeam].logo.SetY( winningTeamYOffset )
+			file.teamElems[ winningTeam ].logo.SetY( winningTeamYOffset )
 			file.footer.SetY( footerYOffset )
 		}
 
@@ -472,14 +467,14 @@ void function ShowScoreboardMP()
 				if ( !IsValid( player ) )
 					continue
 
-				elemTable = file.playerElems[team][index]
+				elemTable = file.playerElems[ team ][ index ]
 
 				var rui = Hud_GetRui( elemTable.background )
 				bool playerIsAlive = IsAlive( player )
 				if ( UseSingleTeamScoreboard() )
 				{
 					if ( !playerIsAlive )
-						RuiSetFloat3( rui, "bgColor", <0.5, 0.5, 0.5> )
+						RuiSetFloat3( rui, "bgColor", < 0.5, 0.5, 0.5 > )
 					else
 						RuiSetFloat3( rui, "bgColor", player.GetTeam() == myTeam ? SCOREBOARD_FRIENDLY_COLOR : SCOREBOARD_ENEMY_COLOR )
 
@@ -498,7 +493,7 @@ void function ShowScoreboardMP()
 					if ( player == file.selectedPlayer )
 					{
 						if ( !playerIsAlive )
-							RuiSetFloat3( rui, "bgColor", <0.5, 0.5, 0.5> )
+							RuiSetFloat3( rui, "bgColor", < 0.5, 0.5, 0.5 > )
 						else
 							RuiSetFloat3( rui, "bgColor", team == myTeam ? SCOREBOARD_FRIENDLY_SELECTED_COLOR : SCOREBOARD_ENEMY_SELECTED_COLOR )
 						RuiSetFloat( rui, "selectedAlpha", 1.0 )
@@ -507,7 +502,7 @@ void function ShowScoreboardMP()
 					else
 					{
 						if ( !playerIsAlive )
-							RuiSetFloat3( rui, "bgColor", <0.5, 0.5, 0.5> )
+							RuiSetFloat3( rui, "bgColor", < 0.5, 0.5, 0.5 > )
 						else
 							RuiSetFloat3( rui, "bgColor", team == myTeam ? SCOREBOARD_FRIENDLY_COLOR : SCOREBOARD_ENEMY_COLOR )
 						RuiSetFloat( rui, "selectedAlpha", 0.0 )
@@ -518,19 +513,21 @@ void function ShowScoreboardMP()
 
 				RuiSetImage( rui, "playerCard", CallsignIcon_GetSmallImage( PlayerCallsignIcon_GetActive( player ) ) )
 
-				//-------------------
+				// -------------------
 				// Update player icon
-				//-------------------
+				// -------------------
 
 				switch ( GetPilotTitanStatusForPlayer( player ) )
 				{
 					case ePlayerStatusType.PTS_TYPE_DEAD_READY:
 					case ePlayerStatusType.PTS_TYPE_DEAD:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/scoreboard/status_dead" )
-					break
+						break
+
 					case ePlayerStatusType.PTS_TYPE_DEAD_PILOT_TITAN:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/scoreboard/status_dead_with_titan" )
-					break
+						break
+
 					case ePlayerStatusType.PTS_TYPE_ION:
 					case ePlayerStatusType.PTS_TYPE_SCORCH:
 					case ePlayerStatusType.PTS_TYPE_RONIN:
@@ -539,23 +536,28 @@ void function ShowScoreboardMP()
 					case ePlayerStatusType.PTS_TYPE_NORTHSTAR:
 					case ePlayerStatusType.PTS_TYPE_VANGUARD:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/scoreboard/status_titan" )
-					break
+						break
+
 					case ePlayerStatusType.PTS_TYPE_PILOT_TITAN:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/scoreboard/status_alive_with_titan" )
-					break
+						break
+
 					case ePlayerStatusType.PTS_TYPE_EVAC:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/scoreboard/status_evac" )
-					break
+						break
+
 					case ePlayerStatusType.PTS_TYPE_READY:
 					case ePlayerStatusType.PTS_TYPE_PILOT:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/scoreboard/status_pilot" )
-					break
+						break
+
 					case ePlayerStatusType.PTS_TYPE_WAVE_READY:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/gametype_icons/bounty_hunt/bh_green_check" )
-					break
+						break
+
 					case ePlayerStatusType.PTS_TYPE_WAVE_NOT_READY:
 						RuiSetImage( rui, "playerStatus", $"rui/hud/gametype_icons/bounty_hunt/bh_grey_check" )
-					break
+						break
 				}
 
 				/*
@@ -590,7 +592,7 @@ void function ShowScoreboardMP()
 					else
 					{
 						if ( playerIsAlive )
-							RuiSetFloat3( rui, "textColor", <1.0, 1.0, 1.0> )
+							RuiSetFloat3( rui, "textColor", < 1.0, 1.0, 1.0 > )
 						else
 							RuiSetFloat3( rui, "textColor", SCOREBOARD_DEAD_FONT_COLOR )
 					}
@@ -653,21 +655,20 @@ void function ShowScoreboardMP()
 				loadingCount = GetTeamPendingPlayersLoading( team )
 			}
 
-			if ( team > 0
-				&& ( !UseSingleTeamScoreboard() || team == TEAM_MILITIA )  // if you run this block for both teams, then it will show players "connecting" for both teams
-				)
+			if ( team > 0 && ( !UseSingleTeamScoreboard() || team == TEAM_MILITIA ) // if you run this block for both teams, then it will show players "connecting" for both teams
+			)
 			{
 				local numDone = 0
-				for ( int idx = 0; idx < (reservedCount + connectingCount + loadingCount); idx++ )
+				for ( int idx = 0; idx < ( reservedCount + connectingCount + loadingCount ); idx++ )
 				{
 					if ( index >= maxPlayerDisplaySlots )
 						continue
 
-					elemTable = file.playerElems[team][index]
+					elemTable = file.playerElems[ team ][ index ]
 
 					if ( numDone < loadingCount )
 						RuiSetString( Hud_GetRui( elemTable.background ), "playerName", Localize( "#PENDING_PLAYER_STATUS_LOADING" ) )
-					else if ( numDone < (loadingCount + connectingCount) )
+					else if ( numDone < ( loadingCount + connectingCount ) )
 						RuiSetString( Hud_GetRui( elemTable.background ), "playerName", Localize( "#PENDING_PLAYER_STATUS_CONNECTING" ) )
 					else
 						RuiSetString( Hud_GetRui( elemTable.background ), "playerName", Localize( "#PENDING_PLAYER_STATUS_CONNECTING" ) )
@@ -679,17 +680,17 @@ void function ShowScoreboardMP()
 
 			while ( index < maxPlayerDisplaySlots )
 			{
-				elemTable = file.playerElems[team][index]
+				elemTable = file.playerElems[ team ][ index ]
 
 				var rui = Hud_GetRui( elemTable.background )
 				RuiSetString( rui, "playerName", "" )
 				RuiSetInt( rui, "micState", MIC_STATE_NO_MIC )
 				RuiSetImage( rui, "playerStatus", $"" )
-				for( int i=0; i<6; i++ )
+				for ( int i = 0; i < 6; i++ )
 					RuiSetImage( rui, "extraIcon" + i, $"" )
 				RuiSetFloat3( rui, "bgColor", SCOREBOARD_EMPTY_COLOR )
 				RuiSetFloat( rui, "bgAlpha", SCOREBOARD_EMPTY_BG_ALPHA )
-				if ( (UseSingleTeamScoreboard()) && team != myTeam )
+				if ( ( UseSingleTeamScoreboard() ) && team != myTeam )
 					RuiSetFloat( rui, "bgAlpha", 0.0 )
 				RuiSetImage( rui, "playerCard", $"" )
 				RuiSetInt( rui, "numScoreColumns", 0 )
@@ -702,8 +703,8 @@ void function ShowScoreboardMP()
 
 		if ( allPlayers.len() )
 		{
-			file.prevPlayer = allPlayers[ (selectedPlayerIndex + allPlayers.len() - 1) % allPlayers.len() ]
-			file.nextPlayer = allPlayers[ (selectedPlayerIndex + 1) % allPlayers.len() ]
+			file.prevPlayer = allPlayers[ ( selectedPlayerIndex + allPlayers.len() - 1 ) % allPlayers.len() ]
+			file.nextPlayer = allPlayers[ ( selectedPlayerIndex + 1 ) % allPlayers.len() ]
 		}
 		else
 		{
@@ -711,8 +712,8 @@ void function ShowScoreboardMP()
 			file.nextPlayer = file.selectedPlayer
 		}
 
-		teamPlayers[myTeam].clear()
-		teamPlayers[enemyTeam].clear()
+		teamPlayers[ myTeam ].clear()
+		teamPlayers[ enemyTeam ].clear()
 
 		firstUpdate = false
 		WaitFrame()
@@ -727,7 +728,7 @@ void function UpdateScoreboardForGamemode( entity player, var rowRui, var scoreH
 
 	Assert( headers.len() > 0 && headers.len() == playerGameStats.len() && headers.len() == numDigits.len() )
 
-	//int scoreboardWidth = 570
+	// int scoreboardWidth = 570
 	int playerScore1 = 0
 	int playerScore2 = 0
 	int playerScore3 = 0
@@ -813,7 +814,7 @@ void function UpdateScoreboardForGamemode( entity player, var rowRui, var scoreH
 void function HideScoreboardMP()
 {
 	ScoreboardFadeOut()
-	wait( 0.1 )
+	wait ( 0.1 )
 	file.hasFocus = false
 	file.selectedPlayer = null
 	SetScoreboardPlayer( null )
@@ -861,24 +862,34 @@ asset function GetPlayerGenIcon( entity player )
 	{
 		case 1:
 			return SCOREBOARD_MATERIAL_GEN1
+
 		case 2:
 			return SCOREBOARD_MATERIAL_GEN2
+
 		case 3:
 			return SCOREBOARD_MATERIAL_GEN3
+
 		case 4:
 			return SCOREBOARD_MATERIAL_GEN4
+
 		case 5:
 			return SCOREBOARD_MATERIAL_GEN5
+
 		case 6:
 			return SCOREBOARD_MATERIAL_GEN6
+
 		case 7:
 			return SCOREBOARD_MATERIAL_GEN7
+
 		case 8:
 			return SCOREBOARD_MATERIAL_GEN8
+
 		case 9:
 			return SCOREBOARD_MATERIAL_GEN9
+
 		case 10:
 			return SCOREBOARD_MATERIAL_GEN10
+
 		default:
 			Assert( 0, "GetGen( player ) did not return a value between 0 and 9" )
 	}
@@ -898,7 +909,7 @@ void function ScoreboardInputMP( int key )
 
 	entity player = GetLocalClientPlayer()
 
-	switch( key )
+	switch ( key )
 	{
 		case SCOREBOARD_INPUT_SELECT_PREV:
 			ScoreboardSelectPrevPlayer( player )

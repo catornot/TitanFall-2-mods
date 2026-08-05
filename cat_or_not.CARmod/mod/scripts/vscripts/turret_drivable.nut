@@ -2,92 +2,87 @@ untyped
 
 global function SetupTurretStuff
 
-const vector turret_offset = <0,-100,50>
+const vector turret_offset = < 0, -100, 50 >
 
-const array<int> MYOWNTURRET_CANCEL_BUTTONS =
-[
-	IN_USE
-]
+const array<int> MYOWNTURRET_CANCEL_BUTTONS = [ IN_USE ]
 
 struct
 {
-    table<entity,entity> turretsPerPlayer
+	table<entity, entity> turretsPerPlayer
 } file
 
 void function SetupTurretStuff( CARstruct CAR, vector origin )
 {
-    CAR.turret = CreateNPC( "npc_turret_sentry", TEAM_BOTH, origin + turret_offset, <0,90,0> )
-    SetSpawnOption_AISettings( CAR.turret, "npc_turret_sentry")
+	CAR.turret = CreateNPC( "npc_turret_sentry", TEAM_BOTH, origin + turret_offset, < 0, 90, 0 > )
+	SetSpawnOption_AISettings( CAR.turret, "npc_turret_sentry" )
 	CAR.turret.kv.teamnumber = 0
-    CAR.turret.kv.modelscale = 2
+	CAR.turret.kv.modelscale = 2
 	CAR.turret.kv.origin = origin + turret_offset
-	CAR.turret.kv.angles = <0,90,0>
+	CAR.turret.kv.angles = < 0, 90, 0 >
 	DispatchSpawn( CAR.turret )
 
-    CAR.turret.EnableTurret()
-    thread FinalTurretSetup( CAR )
+	CAR.turret.EnableTurret()
+	thread FinalTurretSetup( CAR )
 }
 
 void function FinalTurretSetup( CARstruct CAR )
 {
-    CAR.turret.SetUsable()
-    CAR.turret.SetUsableByGroup( "pilot" )
-    CAR.turret.SetUsePrompts( "Hold %use% to use Turret", "Press %use% to use Turret" )
-    AddCallback_OnUseEntity( CAR.turret, playerDriveTurret )
-    CAR.turret.SetParent( CAR.CARmover )
-    CAR.turret.SetTitle( "" )
-    WaitFrame()
-    CAR.turret.DisableTurret()
-
+	CAR.turret.SetUsable()
+	CAR.turret.SetUsableByGroup( "pilot" )
+	CAR.turret.SetUsePrompts( "Hold %use% to use Turret", "Press %use% to use Turret" )
+	AddCallback_OnUseEntity( CAR.turret, playerDriveTurret )
+	CAR.turret.SetParent( CAR.CARmover )
+	CAR.turret.SetTitle( "" )
+	WaitFrame()
+	CAR.turret.DisableTurret()
 }
 
 function playerDriveTurret( turret, player )
 {
-    Assert( player.IsPlayer() )
-    expect entity( player )
-    expect entity( turret )
+	Assert( player.IsPlayer() )
+	expect entity( player )
+	expect entity( turret )
 
-    print( player.GetPlayerName() )
+	print( player.GetPlayerName() )
 
-    if ( turret.GetOwner() == player )
+	if ( turret.GetOwner() == player )
 	{
 		DismebarkTurret( player )
-        print( player.GetPlayerName() )
+		print( player.GetPlayerName() )
 	}
 	else
 	{
 		if ( turret.GetOwner() == null )
 		{
-            player.ForceStand()
-            entity playerMover = CreateOwnedScriptMover( player )
-            player.SetParent( playerMover, "ref", true )
-            vector forward = turret.GetForwardVector()
-            vector basePos = turret.GetOrigin() + (forward * -30) + <0,0,30>
-            vector startOrigin = player.GetOrigin()
-            float moveTime = 0.1
-            playerMover.NonPhysicsMoveTo( basePos, moveTime, 0.0, 0.0 )
-            playerMover.NonPhysicsRotateTo( turret.GetAngles(), moveTime, 0, 0 )
-            // player.FreezeControlsOnServer()
-            turret.SetOwner( player )
+			player.ForceStand()
+			entity playerMover = CreateOwnedScriptMover( player )
+			player.SetParent( playerMover, "ref", true )
+			vector forward = turret.GetForwardVector()
+			vector basePos = turret.GetOrigin() + ( forward * -30 ) + < 0, 0, 30 >
+			vector startOrigin = player.GetOrigin()
+			float moveTime = 0.1
+			playerMover.NonPhysicsMoveTo( basePos, moveTime, 0.0, 0.0 )
+			playerMover.NonPhysicsRotateTo( turret.GetAngles(), moveTime, 0, 0 )
+			// player.FreezeControlsOnServer()
+			turret.SetOwner( player )
 
-            if ( !(player in file.turretsPerPlayer) )
-            {
-                file.turretsPerPlayer[player] <- turret
-            }
-            else
-            {
-                file.turretsPerPlayer[player] = turret
-            }
-        
+			if ( !( player in file.turretsPerPlayer ) )
+			{
+				file.turretsPerPlayer[ player ] <- turret
+			}
+			else
+			{
+				file.turretsPerPlayer[ player ] = turret
+			}
 
-            StorePilotWeapons( player )
-            
+			StorePilotWeapons( player )
+
 			AddEntityCallback_OnDamaged( player, playerDamagedOnTurret )
-			
-            player.GiveWeapon( "mp_weapon_arena1", [] )
-            player.SetActiveWeaponByName( "mp_weapon_arena1" )
 
-            thread ClearPlayerFromTurretOnDeathAndOtherStuff( turret, player )
+			player.GiveWeapon( "mp_weapon_arena1", [] )
+			player.SetActiveWeaponByName( "mp_weapon_arena1" )
+
+			thread ClearPlayerFromTurretOnDeathAndOtherStuff( turret, player )
 		}
 		else
 		{
@@ -98,92 +93,93 @@ function playerDriveTurret( turret, player )
 
 void function ClearPlayerFromTurretOnDeathAndOtherStuff( entity turret, entity player )
 {
-    wait 0.5
-    // player.UnfreezeControlsOnServer()
-    foreach( int button in MYOWNTURRET_CANCEL_BUTTONS )
-        AddButtonPressedPlayerInputCallback( player, button, DismebarkTurret )
-    
-    entity Pmover = player.GetParent()
-    vector MoverOffset 
-    
-    for(;;)
-    {
-        if ( !IsValid( turret ) || !IsAlive( turret ) )
-        {
-            player.ClearParent()
-            Pmover.Destroy()
-            player.Die()
-            break
-        }
+	wait 0.5
+	// player.UnfreezeControlsOnServer()
+	foreach ( int button in MYOWNTURRET_CANCEL_BUTTONS )
+		AddButtonPressedPlayerInputCallback( player, button, DismebarkTurret )
 
-        MoverOffset = turret.GetOrigin() + (turret.GetForwardVector() * -30) + <0,0,50>
-            
-        if ( !IsAlive( player ) )
-            break
+	entity Pmover = player.GetParent()
+	vector MoverOffset
 
-        if ( turret.GetOwner() != player )
-            return
-        
-        if ( player.EyeAngles().y != turret.GetAngles().y ) // this does turret spin uwu
-        {
-            vector angle = <0,player.EyeAngles().y,0>
-            turret.SetAngles( angle )
-            // Pmover.RotateTo( angle, 0.1, 0.05, 0.05 )
-            player.SetOrigin( MoverOffset )
-        }
+	for ( ; ; )
+	{
+		if ( !IsValid( turret ) || !IsAlive( turret ) )
+		{
+			player.ClearParent()
+			Pmover.Destroy()
+			player.Die()
+			break
+		}
 
-        Pmover.MoveTo( MoverOffset, 0.1, 0.05, 0.05 )
+		MoverOffset = turret.GetOrigin() + ( turret.GetForwardVector() * -30 ) + < 0, 0, 50 >
 
-        WaitFrame()
-    }
+		if ( !IsAlive( player ) )
+			break
+
+		if ( turret.GetOwner() != player )
+			return
+
+		if ( player.EyeAngles().y != turret.GetAngles().y ) // this does turret spin uwu
+		{
+			vector angle = < 0, player.EyeAngles().y, 0 >
+			turret.SetAngles( angle )
+			// Pmover.RotateTo( angle, 0.1, 0.05, 0.05 )
+			player.SetOrigin( MoverOffset )
+		}
+
+		Pmover.MoveTo( MoverOffset, 0.1, 0.05, 0.05 )
+
+		WaitFrame()
+	}
 
 	if ( IsValid( turret ) && IsAlive( turret ) )
-        turret.SetOwner( null )
+		turret.SetOwner( null )
 
-    if ( IsValid( player ) )
-    {
-        foreach( int button in MYOWNTURRET_CANCEL_BUTTONS )
-            RemoveButtonPressedPlayerInputCallback( player, button, DismebarkTurret )
-    }
+	if ( IsValid( player ) )
+	{
+		foreach ( int button in MYOWNTURRET_CANCEL_BUTTONS )
+			RemoveButtonPressedPlayerInputCallback( player, button, DismebarkTurret )
+	}
 }
 
 void function playerDamagedOnTurret( entity player, var damageInfo )
 {
-    DismebarkTurret( player )
+	DismebarkTurret( player )
 }
 
 void function DismebarkTurret( entity player )
 {
-    if ( IsValid( player ) )
-    {
-        RetrievePilotWeapons( player )
-        entity Pmover = player.GetParent()
-        player.ClearParent()
-        player.UnforceStand()
-        // PutEntityInSafeSpot( player, player, null, player.GetOrigin(), player.GetOrigin() )
-        ScreenFade( player, 0, 0, 0, 255, 0.3, 0.3, (FFADE_IN | FFADE_PURGE) )
+	if ( IsValid( player ) )
+	{
+		RetrievePilotWeapons( player )
+		entity Pmover = player.GetParent()
+		player.ClearParent()
+		player.UnforceStand()
+		// PutEntityInSafeSpot( player, player, null, player.GetOrigin(), player.GetOrigin() )
+		ScreenFade( player, 0, 0, 0, 255, 0.3, 0.3, ( FFADE_IN | FFADE_PURGE ) )
 
-        foreach( int button in MYOWNTURRET_CANCEL_BUTTONS )
-            RemoveButtonPressedPlayerInputCallback( player, button, DismebarkTurret )
-        
-        try{
-            Pmover.Destroy()
-            RemoveEntityCallback_OnDamaged( player, playerDamagedOnTurret )
-        }
-        catch( exception )
-        {
-            print( exception )
-        }
-    }
+		foreach ( int button in MYOWNTURRET_CANCEL_BUTTONS )
+			RemoveButtonPressedPlayerInputCallback( player, button, DismebarkTurret )
 
-    if ( player in file.turretsPerPlayer )
-    {
-        if ( !IsAlive( file.turretsPerPlayer[player] ) )
-            return
+		try
+		{
+			Pmover.Destroy()
+			RemoveEntityCallback_OnDamaged( player, playerDamagedOnTurret )
+		}
+		catch ( exception )
+		{
+			print( exception )
+		}
+	}
 
-        if ( file.turretsPerPlayer[player].GetOwner() == player )
-            file.turretsPerPlayer[player].SetOwner( null )
-    }
+	if ( player in file.turretsPerPlayer )
+	{
+		if ( !IsAlive( file.turretsPerPlayer[ player ] ) )
+			return
+
+		if ( file.turretsPerPlayer[ player ].GetOwner() == player )
+			file.turretsPerPlayer[ player ].SetOwner( null )
+	}
 }
 
 // function TurretPanelActivateThread( turret, player )
@@ -343,7 +339,6 @@ void function DismebarkTurret( entity player )
 
 // 	// PROTO: Supporting ability to pick different turret weapons for turrets in LevelEd and the legacy Defender prototype turret
 // 	// We need a predator cannon style turret in SP.
-	
 
 // 	wait 0.1
 
